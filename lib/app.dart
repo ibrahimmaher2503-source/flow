@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'core/theme/app_theme.dart';
 import 'core/theme/app_colors.dart';
 import 'features/dashboard/dashboard_screen.dart';
 import 'features/transactions/transactions_screen.dart';
+import 'features/transactions/add_transaction_screen.dart';
 import 'features/installments/installments_hub_screen.dart';
 import 'features/budgets/budgets_screen.dart';
 import 'features/settings/settings_screen.dart';
+import 'providers/transaction_provider.dart';
+import 'providers/wallet_provider.dart';
 
 class FlowSpendApp extends StatelessWidget {
   const FlowSpendApp({super.key});
@@ -80,8 +84,16 @@ class _AppShellState extends State<AppShell> {
         ],
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          // TODO: Navigate to add transaction
+        onPressed: () async {
+          final result = await Navigator.push<bool>(
+            context,
+            MaterialPageRoute(
+              builder: (_) => const AddTransactionScreen(),
+            ),
+          );
+          if (result == true && context.mounted) {
+            // Providers auto-refresh via invalidation in the screen
+          }
         },
         child: const Icon(Icons.add),
       ),
