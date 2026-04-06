@@ -2,19 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/theme/app_colors.dart';
 import '../../data/models/recurring_transaction_model.dart';
-import '../../data/repositories/recurring_repo.dart';
-import '../../data/services/isar_service.dart';
+import '../../providers/recurring_provider.dart';
 import '../../shared/widgets/empty_state.dart';
 import 'widgets/recurring_tile.dart';
-
-final recurringRepoProvider = Provider<RecurringRepo>((ref) {
-  return RecurringRepo(ref.watch(isarProvider));
-});
-
-final activeRecurringProvider =
-    FutureProvider<List<RecurringTransaction>>((ref) async {
-  return ref.watch(recurringRepoProvider).getActive();
-});
 
 class RecurringScreen extends ConsumerWidget {
   const RecurringScreen({super.key});

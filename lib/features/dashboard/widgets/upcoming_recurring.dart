@@ -3,12 +3,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/utils/currency_formatter.dart';
 import '../../../core/utils/app_date_utils.dart';
-import '../../../data/repositories/recurring_repo.dart';
-import '../../../data/services/isar_service.dart';
+import '../../../providers/recurring_provider.dart';
 import '../../../shared/widgets/app_card.dart';
 
 final _upcomingRecurringProvider = FutureProvider((ref) async {
-  final repo = RecurringRepo(ref.watch(isarProvider));
+  final repo = ref.watch(recurringRepoProvider);
   final active = await repo.getActive();
   active.sort((a, b) => a.nextDueDate.compareTo(b.nextDueDate));
   return active.take(3).toList();

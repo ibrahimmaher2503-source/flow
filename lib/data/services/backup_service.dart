@@ -43,46 +43,52 @@ class BackupService {
   }
 
   Future<bool> importFromJson(File file) async {
-    final content = await file.readAsString();
-    final data = jsonDecode(content) as Map<String, dynamic>;
+    try {
+      final content = await file.readAsString();
+      final data = jsonDecode(content) as Map<String, dynamic>;
 
-    if (data['app'] != 'FlowSpend') return false;
+      if (data['app'] != 'FlowSpend') return false;
 
-    await isar.writeTxn(() async {
-      await isar.transactions.clear();
-      await isar.categorys.clear();
-      await isar.budgets.clear();
-      await isar.wallets.clear();
-      await isar.recurringTransactions.clear();
-      await isar.savingsGoals.clear();
-      await isar.installmentProviders.clear();
-      await isar.installmentPlans.clear();
+      await isar.writeTxn(() async {
+        await isar.transactions.clear();
+        await isar.categorys.clear();
+        await isar.budgets.clear();
+        await isar.wallets.clear();
+        await isar.recurringTransactions.clear();
+        await isar.savingsGoals.clear();
+        await isar.installmentProviders.clear();
+        await isar.installmentPlans.clear();
+        await isar.appSettings.clear();
 
-      await _importTransactions(data['transactions'] as List?);
-      await _importCategories(data['categories'] as List?);
-      await _importBudgets(data['budgets'] as List?);
-      await _importWallets(data['wallets'] as List?);
-      await _importRecurring(data['recurringTransactions'] as List?);
-      await _importGoals(data['savingsGoals'] as List?);
+        await _importTransactions(data['transactions'] as List?);
+        await _importCategories(data['categories'] as List?);
+        await _importBudgets(data['budgets'] as List?);
+        await _importWallets(data['wallets'] as List?);
+        await _importRecurring(data['recurringTransactions'] as List?);
+        await _importGoals(data['savingsGoals'] as List?);
 
-      if (data.containsKey('installmentProviders')) {
-        await _importInstallmentProviders(
-            data['installmentProviders'] as List?);
-      }
-      if (data.containsKey('installmentPlans')) {
-        await _importInstallmentPlans(data['installmentPlans'] as List?);
-      }
+        if (data.containsKey('installmentProviders')) {
+          await _importInstallmentProviders(
+              data['installmentProviders'] as List?);
+        }
+        if (data.containsKey('installmentPlans')) {
+          await _importInstallmentPlans(data['installmentPlans'] as List?);
+        }
 
-      if (data.containsKey('settings')) {
-        final s = data['settings'] as Map<String, dynamic>;
+        // Always restore settings (use defaults if missing from backup)
+        final s = data['settings'] as Map<String, dynamic>? ?? {};
         await isar.appSettings.put(AppSettings()
-          ..currency = s['currency'] ?? 'EGP'
-          ..language = s['language'] ?? 'ar'
-          ..monthStartDay = s['monthStartDay'] ?? 1);
-      }
-    });
+          ..currency = s['currency'] as String? ?? 'EGP'
+          ..language = s['language'] as String? ?? 'ar'
+          ..monthStartDay = s['monthStartDay'] as int? ?? 1
+          ..smsParsingEnabled = s['smsParsingEnabled'] as bool? ?? true
+          ..notificationsEnabled = s['notificationsEnabled'] as bool? ?? true);
+      });
 
-    return true;
+      return true;
+    } catch (_) {
+      return false;
+    }
   }
 
   Future<void> shareBackup() async {

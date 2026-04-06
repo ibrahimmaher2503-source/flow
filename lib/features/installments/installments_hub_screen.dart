@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/utils/currency_formatter.dart';
 import '../../data/models/installment_plan_model.dart';
+import '../../data/models/installment_provider_model.dart';
 import '../../providers/installment_provider.dart';
 import '../../shared/widgets/empty_state.dart';
 import 'add_installment_screen.dart';
@@ -158,7 +159,7 @@ class _InstallmentsHubScreenState
 
   Widget _buildPlanList(
     AsyncValue<List<InstallmentPlan>> plansAsync,
-    AsyncValue<List<dynamic>> providersAsync, {
+    AsyncValue<List<InstallmentProvider>> providersAsync, {
     required String isEmpty,
   }) {
     return plansAsync.when(
@@ -167,7 +168,7 @@ class _InstallmentsHubScreenState
           return EmptyState(icon: Icons.credit_card, message: isEmpty);
         }
 
-        final providerMap = <int, dynamic>{};
+        final providerMap = <int, InstallmentProvider>{};
         final providerList = providersAsync.valueOrNull;
         if (providerList != null) {
           for (final p in providerList) {

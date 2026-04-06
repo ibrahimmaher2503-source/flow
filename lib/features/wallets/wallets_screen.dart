@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/utils/currency_formatter.dart';
+import '../../core/utils/extensions.dart';
 import '../../core/utils/icon_resolver.dart';
 import '../../data/models/wallet_model.dart';
 import '../../providers/wallet_provider.dart';
@@ -88,12 +89,28 @@ class WalletsScreen extends ConsumerWidget {
     );
   }
 
+  static const _walletColors = [
+    '#10B981', '#6C63FF', '#EF4444', '#F59E0B', '#3B82F6', '#EC4899',
+  ];
+
+  static String _iconForType(String type) {
+    switch (type) {
+      case 'cash':
+        return 'wallet';
+      case 'bank':
+        return 'account_balance';
+      case 'ewallet':
+        return 'phone_android';
+      default:
+        return 'wallet';
+    }
+  }
+
   void _showAddWalletDialog(BuildContext context, WidgetRef ref) {
     final nameController = TextEditingController();
     final balanceController = TextEditingController(text: '0');
     String selectedType = 'cash';
-    String selectedIcon = 'wallet';
-    String selectedColor = '#10B981';
+    String selectedColor = _walletColors[0];
 
     showDialog(
       context: context,
@@ -137,6 +154,29 @@ class WalletsScreen extends ConsumerWidget {
                         (v) => setDialogState(() => selectedType = v)),
                   ],
                 ),
+                const SizedBox(height: 12),
+                // Color picker
+                Wrap(
+                  spacing: 8,
+                  children: _walletColors.map((hex) {
+                    final color = hex.toColor;
+                    final isSelected = selectedColor == hex;
+                    return GestureDetector(
+                      onTap: () => setDialogState(() => selectedColor = hex),
+                      child: Container(
+                        width: 32,
+                        height: 32,
+                        decoration: BoxDecoration(
+                          color: color,
+                          shape: BoxShape.circle,
+                          border: isSelected
+                              ? Border.all(color: Colors.white, width: 2)
+                              : null,
+                        ),
+                      ),
+                    );
+                  }).toList(),
+                ),
               ],
             ),
           ),
@@ -158,7 +198,7 @@ class WalletsScreen extends ConsumerWidget {
                   ..name = nameController.text
                   ..type = selectedType
                   ..balance = balance
-                  ..icon = selectedIcon
+                  ..icon = _iconForType(selectedType)
                   ..color = selectedColor
                   ..sortOrder = wallets.length);
                 refreshWallets(ref);

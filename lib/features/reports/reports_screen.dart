@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:fl_chart/fl_chart.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/utils/currency_formatter.dart';
 import '../../core/utils/extensions.dart';
-import '../../data/models/transaction_model.dart';
 import '../../providers/transaction_provider.dart';
 import '../../providers/installment_provider.dart';
 import '../../providers/category_provider.dart';
-import '../../shared/widgets/app_card.dart';
+import 'widgets/category_pie_chart.dart';
+import 'widgets/installment_pie_chart.dart';
+import 'widgets/interest_bar_chart.dart';
 
 class ReportsScreen extends ConsumerWidget {
   const ReportsScreen({super.key});
@@ -31,7 +31,7 @@ class ReportsScreen extends ConsumerWidget {
             ],
           ),
         ),
-        body: TabBarView(
+        body: const TabBarView(
           children: [
             _GeneralReportTab(),
             _InstallmentReportTab(),
@@ -43,6 +43,8 @@ class ReportsScreen extends ConsumerWidget {
 }
 
 class _GeneralReportTab extends ConsumerWidget {
+  const _GeneralReportTab();
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final transactionsAsync = ref.watch(monthlyTransactionsProvider);
@@ -111,7 +113,7 @@ class _GeneralReportTab extends ConsumerWidget {
 
               const SizedBox(height: 16),
 
-              // Pie chart
+              // Pie chart using widget
               const Text('التوزيع بالفئات',
                   style: TextStyle(
                       fontFamily: 'Cairo',
@@ -119,37 +121,14 @@ class _GeneralReportTab extends ConsumerWidget {
                       fontWeight: FontWeight.w600,
                       color: Colors.white)),
               const SizedBox(height: 12),
-              SizedBox(
-                height: 200,
-                child: PieChart(
-                  PieChartData(
-                    sectionsSpace: 2,
-                    centerSpaceRadius: 40,
-                    sections: sortedCategories.take(6).map((entry) {
-                      final color =
-                          catColorMap[entry.key]?.toColor ?? AppColors.primary;
-                      final percent = totalExpense > 0
-                          ? (entry.value / totalExpense * 100)
-                          : 0.0;
-                      return PieChartSectionData(
-                        value: entry.value,
-                        color: color,
-                        title: '${percent.toStringAsFixed(0)}%',
-                        titleStyle: const TextStyle(
-                            fontFamily: 'Cairo',
-                            fontSize: 11,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white),
-                        radius: 50,
-                      );
-                    }).toList(),
-                  ),
-                ),
+              CategoryPieChart(
+                data: categoryTotals,
+                colorMap: catColorMap,
               ),
 
               const SizedBox(height: 16),
 
-              // Category list
+              // Category breakdown list
               ...sortedCategories.map((entry) {
                 final color =
                     catColorMap[entry.key]?.toColor ?? AppColors.textMuted;
@@ -224,6 +203,8 @@ class _GeneralReportTab extends ConsumerWidget {
 }
 
 class _InstallmentReportTab extends ConsumerWidget {
+  const _InstallmentReportTab();
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final debtByProv = ref.watch(debtByProviderProvider);
@@ -300,7 +281,7 @@ class _InstallmentReportTab extends ConsumerWidget {
 
           const SizedBox(height: 20),
 
-          // Debt by provider
+          // Provider pie chart
           const Text('التوزيع حسب المقدم',
               style: TextStyle(
                   fontFamily: 'Cairo',
@@ -308,6 +289,15 @@ class _InstallmentReportTab extends ConsumerWidget {
                   fontWeight: FontWeight.w600,
                   color: Colors.white)),
           const SizedBox(height: 12),
+          debtByProv.when(
+            data: (map) => InstallmentPieChart(debtByProvider: map),
+            loading: () => const Center(child: CircularProgressIndicator()),
+            error: (e, _) => Text('$e'),
+          ),
+
+          const SizedBox(height: 16),
+
+          // Debt by provider list
           debtByProv.when(
             data: (map) {
               if (map.isEmpty) {

@@ -65,23 +65,26 @@ class RecurringService {
 
   Future<Transaction> _createTransaction(
       RecurringTransaction recurring) async {
+    // Use first available wallet instead of hardcoded ID
+    final wallets = await isar.wallets.where().findAll();
+    final walletId = wallets.isNotEmpty ? wallets.first.id : 1;
+
     final transaction = Transaction()
       ..amount = recurring.amount
       ..type = recurring.type
       ..category = recurring.category
       ..note = recurring.name
       ..date = DateTime.now()
-      ..walletId = 1 // Default wallet
+      ..walletId = walletId
       ..source = 'recurring'
       ..createdAt = DateTime.now();
 
     await isar.writeTxn(() async {
       await isar.transactions.put(transaction);
 
-      // Update wallet balance
-      final wallets = await isar.wallets.where().findAll();
-      if (wallets.isNotEmpty) {
-        final wallet = wallets.first;
+      // Update the specific wallet used
+      final wallet = await isar.wallets.get(walletId);
+      if (wallet != null) {
         if (recurring.type == 'expense') {
           wallet.balance -= recurring.amount;
         } else {

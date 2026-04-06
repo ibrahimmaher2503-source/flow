@@ -6,10 +6,12 @@ import '../../data/models/transaction_model.dart';
 import '../../data/models/category_model.dart';
 import '../../data/models/wallet_model.dart';
 import '../../data/repositories/transaction_repo.dart';
+import '../../data/repositories/category_repo.dart';
 import '../../data/repositories/wallet_repo.dart';
 import '../../data/repositories/settings_repo.dart';
 import '../../data/services/isar_service.dart';
 import '../../providers/transaction_provider.dart';
+import '../../providers/category_provider.dart';
 import '../../providers/wallet_provider.dart';
 import '../../providers/settings_provider.dart';
 import 'widgets/number_pad.dart';
@@ -45,6 +47,25 @@ class _AddTransactionScreenState extends ConsumerState<AddTransactionScreen> {
       _date = t.date;
       _noteController.text = t.note ?? '';
       _selectedSubcategory = t.subcategory;
+      // Load category and wallet objects after frame
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _loadEditData(t);
+      });
+    }
+  }
+
+  Future<void> _loadEditData(Transaction t) async {
+    final catRepo = ref.read(categoryRepoProvider);
+    final walletRepo = ref.read(walletRepoProvider);
+    final cat = await catRepo.getByName(t.category);
+    final wallet = await walletRepo.getById(t.walletId);
+    if (mounted) {
+      setState(() {
+        _selectedCategory = cat;
+        _selectedWallet = wallet;
+        _showSubcategories =
+            cat != null && cat.subcategories.isNotEmpty;
+      });
     }
   }
 
