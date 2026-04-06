@@ -6,6 +6,7 @@ import '../reports/reports_screen.dart';
 import '../goals/goals_screen.dart';
 import '../recurring/recurring_screen.dart';
 import '../sms/sms_inbox_screen.dart';
+import 'categories_screen.dart';
 import 'widgets/preferences_section.dart';
 import 'widgets/installment_providers_section.dart';
 import 'widgets/backup_section.dart';
@@ -61,6 +62,14 @@ class SettingsScreen extends ConsumerWidget {
               'كشف وإضافة معاملات من SMS',
               () => Navigator.push(context,
                   MaterialPageRoute(builder: (_) => const SmsInboxScreen())),
+            ),
+            _buildNavTile(
+              context,
+              Icons.category_rounded,
+              'إدارة الفئات',
+              'إضافة وتعديل الفئات والفئات الفرعية',
+              () => Navigator.push(context,
+                  MaterialPageRoute(builder: (_) => const CategoriesScreen())),
             ),
           ]),
 

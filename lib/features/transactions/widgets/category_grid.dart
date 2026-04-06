@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../core/constants/app_constants.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/utils/extensions.dart';
 import '../../../core/utils/icon_resolver.dart';
 import '../../../data/models/category_model.dart';
 import '../../../providers/category_provider.dart';
+import '../../settings/categories_screen.dart';
 
 class CategoryGrid extends ConsumerWidget {
   final String type;
@@ -20,7 +22,7 @@ class CategoryGrid extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final categoriesAsync = type == 'expense'
+    final categoriesAsync = type == TransactionType.expense
         ? ref.watch(expenseCategoriesProvider)
         : ref.watch(incomeCategoriesProvider);
 
@@ -34,8 +36,48 @@ class CategoryGrid extends ConsumerWidget {
           crossAxisSpacing: 8,
           mainAxisSpacing: 8,
         ),
-        itemCount: categories.length,
+        itemCount: categories.length + 1, // +1 for "add" button
         itemBuilder: (context, index) {
+          // Last item = add new category
+          if (index == categories.length) {
+            return GestureDetector(
+              onTap: () async {
+                await Navigator.push<void>(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => const CategoriesScreen(),
+                  ),
+                );
+              },
+              child: Container(
+                decoration: BoxDecoration(
+                  color: AppColors.primary.withValues(alpha: 0.1),
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(
+                    color: AppColors.primary.withValues(alpha: 0.3),
+                    style: BorderStyle.solid,
+                  ),
+                ),
+                child: const Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(Icons.add_rounded,
+                        color: AppColors.primary, size: 28),
+                    SizedBox(height: 4),
+                    Text(
+                      'إضافة',
+                      style: TextStyle(
+                        fontFamily: 'Cairo',
+                        fontSize: 11,
+                        color: AppColors.primary,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          }
+
           final cat = categories[index];
           final isSelected = selectedCategory == cat.name;
           final color = cat.color.toColor;
@@ -73,7 +115,8 @@ class CategoryGrid extends ConsumerWidget {
                     style: TextStyle(
                       fontFamily: 'Cairo',
                       fontSize: 11,
-                      color: isSelected ? Colors.white : AppColors.textSecondary,
+                      color:
+                          isSelected ? Colors.white : AppColors.textSecondary,
                     ),
                     textAlign: TextAlign.center,
                     maxLines: 1,

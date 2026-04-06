@@ -11,6 +11,7 @@ import '../../features/goals/goals_screen.dart';
 import '../../features/recurring/recurring_screen.dart';
 import '../../features/sms/sms_inbox_screen.dart';
 import '../../features/settings/settings_screen.dart';
+import '../../features/settings/categories_screen.dart';
 
 class AppRouter {
   static const dashboard = '/';
@@ -24,6 +25,7 @@ class AppRouter {
   static const goals = '/goals';
   static const recurring = '/recurring';
   static const smsInbox = '/sms';
+  static const categories = '/categories';
   static const settings = '/settings';
 
   static Route<dynamic> generateRoute(RouteSettings routeSettings) {
@@ -54,6 +56,9 @@ class AppRouter {
       case smsInbox:
         return MaterialPageRoute(
             builder: (_) => const SmsInboxScreen());
+      case categories:
+        return MaterialPageRoute(
+            builder: (_) => const CategoriesScreen());
       case settings:
         return MaterialPageRoute(builder: (_) => const SettingsScreen());
       default:
