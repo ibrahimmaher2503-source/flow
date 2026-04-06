@@ -1,4 +1,5 @@
 import 'package:isar/isar.dart';
+import '../../core/constants/app_constants.dart';
 import '../models/installment_provider_model.dart';
 import '../models/installment_plan_model.dart';
 
@@ -42,14 +43,14 @@ class InstallmentRepo {
   Future<List<InstallmentPlan>> getActivePlans() async {
     return isar.installmentPlans
         .where()
-        .statusIndexEqualTo('active')
+        .statusIndexEqualTo(PlanStatus.active)
         .findAll();
   }
 
   Future<List<InstallmentPlan>> getCompletedPlans() async {
     return isar.installmentPlans
         .where()
-        .statusIndexEqualTo('completed')
+        .statusIndexEqualTo(PlanStatus.completed)
         .findAll();
   }
 

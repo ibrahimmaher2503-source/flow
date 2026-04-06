@@ -51,7 +51,7 @@ class TransactionRepo {
         .findAll();
   }
 
-  Future<List<Transaction>> search(String query) async {
+  Future<List<Transaction>> search(String query, {int limit = 100}) async {
     return isar.transactions
         .filter()
         .noteContains(query, caseSensitive: false)
@@ -60,6 +60,7 @@ class TransactionRepo {
         .or()
         .merchantContains(query, caseSensitive: false)
         .sortByDateDesc()
+        .limit(limit)
         .findAll();
   }
 

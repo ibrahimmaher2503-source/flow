@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../core/constants/app_constants.dart';
 import '../data/models/budget_model.dart';
 import '../data/repositories/budget_repo.dart';
 import '../data/services/isar_service.dart';
@@ -19,7 +20,7 @@ final budgetUsageProvider =
   final transactions = await transRepo.getByMonth(now.year, now.month);
   double total = 0;
   for (final t in transactions) {
-    if (t.type == 'expense' && t.category == categoryName) {
+    if (t.type == TransactionType.expense && t.category == categoryName) {
       total += t.amount;
     }
   }

@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../core/theme/app_colors.dart';
 import '../../shared/widgets/empty_state.dart';
-import 'widgets/sms_tile.dart';
 
 class SmsInboxScreen extends StatelessWidget {
   const SmsInboxScreen({super.key});

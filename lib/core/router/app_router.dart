@@ -4,7 +4,6 @@ import '../../features/transactions/transactions_screen.dart';
 import '../../features/transactions/add_transaction_screen.dart';
 import '../../features/installments/installments_hub_screen.dart';
 import '../../features/installments/add_installment_screen.dart';
-import '../../features/installments/installment_details_screen.dart';
 import '../../features/budgets/budgets_screen.dart';
 import '../../features/wallets/wallets_screen.dart';
 import '../../features/reports/reports_screen.dart';

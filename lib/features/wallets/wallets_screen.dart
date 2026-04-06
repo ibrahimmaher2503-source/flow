@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/utils/currency_formatter.dart';
 import '../../core/utils/extensions.dart';
-import '../../core/utils/icon_resolver.dart';
 import '../../data/models/wallet_model.dart';
 import '../../providers/wallet_provider.dart';
 import '../../shared/widgets/empty_state.dart';

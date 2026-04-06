@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../core/constants/app_constants.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/utils/app_date_utils.dart';
 import '../../core/utils/currency_formatter.dart';
 import '../../data/models/transaction_model.dart';
-import '../../data/repositories/transaction_repo.dart';
 import '../../providers/transaction_provider.dart';
 import '../../providers/wallet_provider.dart';
 import '../../providers/category_provider.dart';
@@ -28,12 +28,12 @@ class _TransactionsScreenState extends ConsumerState<TransactionsScreen> {
       case TransactionFilter.all:
         return transactions;
       case TransactionFilter.income:
-        return transactions.where((t) => t.type == 'income').toList();
+        return transactions.where((t) => t.type == TransactionType.income).toList();
       case TransactionFilter.expense:
-        return transactions.where((t) => t.type == 'expense').toList();
+        return transactions.where((t) => t.type == TransactionType.expense).toList();
       case TransactionFilter.installment:
         return transactions
-            .where((t) => t.source == 'installment')
+            .where((t) => t.source == TransactionSource.installment)
             .toList();
     }
   }
@@ -76,7 +76,7 @@ class _TransactionsScreenState extends ConsumerState<TransactionsScreen> {
       final walletRepo = ref.read(walletRepoProvider);
 
       // Reverse wallet effect
-      final revert = t.type == 'income' ? -t.amount : t.amount;
+      final revert = t.type == TransactionType.income ? -t.amount : t.amount;
       await walletRepo.updateBalance(t.walletId, revert);
       await repo.delete(t.id);
 

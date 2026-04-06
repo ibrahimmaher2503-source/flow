@@ -1,4 +1,5 @@
 import 'package:isar/isar.dart';
+import '../../core/constants/app_constants.dart';
 import '../models/transaction_model.dart';
 import '../models/installment_plan_model.dart';
 import '../models/installment_provider_model.dart';
@@ -11,37 +12,33 @@ class InstallmentService {
 
   Future<void> recordPayment(int planId, int walletId) async {
     await isar.writeTxn(() async {
-      // Re-fetch plan inside transaction for fresh data
       final plan = await isar.installmentPlans.get(planId);
       if (plan == null) return;
 
-      // 1. Create transaction
       final transaction = Transaction()
         ..amount = plan.monthlyAmount
-        ..type = 'expense'
+        ..type = TransactionType.expense
         ..category = plan.category
         ..note =
             'قسط ${plan.paidInstallments + 1}/${plan.totalInstallments} — ${plan.itemName}'
         ..date = DateTime.now()
         ..walletId = walletId
-        ..source = 'installment'
+        ..source = TransactionSource.installment
         ..installmentPlanId = plan.id
         ..createdAt = DateTime.now();
 
       await isar.transactions.put(transaction);
 
-      // 2. Update wallet
       final wallet = await isar.wallets.get(walletId);
       if (wallet != null) {
         wallet.balance -= plan.monthlyAmount;
         await isar.wallets.put(wallet);
       }
 
-      // 3. Update plan
       plan.paidInstallments++;
       plan.paidAmount += plan.monthlyAmount;
       if (plan.paidInstallments >= plan.totalInstallments) {
-        plan.status = 'completed';
+        plan.status = PlanStatus.completed;
       }
       await isar.installmentPlans.put(plan);
     });
@@ -50,7 +47,7 @@ class InstallmentService {
   Future<double> totalRemainingDebt() async {
     final plans = await isar.installmentPlans
         .where()
-        .statusIndexEqualTo('active')
+        .statusIndexEqualTo(PlanStatus.active)
         .findAll();
     double total = 0;
     for (final p in plans) {
@@ -62,7 +59,7 @@ class InstallmentService {
   Future<double> monthlyInstallmentTotal() async {
     final plans = await isar.installmentPlans
         .where()
-        .statusIndexEqualTo('active')
+        .statusIndexEqualTo(PlanStatus.active)
         .findAll();
     double total = 0;
     for (final p in plans) {
@@ -86,13 +83,19 @@ class InstallmentService {
   Future<Map<String, double>> debtByProvider() async {
     final plans = await isar.installmentPlans
         .where()
-        .statusIndexEqualTo('active')
+        .statusIndexEqualTo(PlanStatus.active)
         .findAll();
+
+    // Batch-fetch all providers to avoid N+1 queries
+    final providers = await isar.installmentProviders.where().findAll();
+    final providerMap = <int, String>{};
+    for (final p in providers) {
+      providerMap[p.id] = p.name;
+    }
 
     final Map<String, double> result = {};
     for (final plan in plans) {
-      final provider = await isar.installmentProviders.get(plan.providerId);
-      final name = provider?.name ?? 'غير معروف';
+      final name = providerMap[plan.providerId] ?? 'غير معروف';
       result[name] = (result[name] ?? 0) + plan.remainingAmount;
     }
     return result;

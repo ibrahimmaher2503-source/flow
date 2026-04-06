@@ -8,7 +8,6 @@ import '../../providers/installment_provider.dart';
 import '../../providers/category_provider.dart';
 import 'widgets/category_pie_chart.dart';
 import 'widgets/installment_pie_chart.dart';
-import 'widgets/interest_bar_chart.dart';
 
 class ReportsScreen extends ConsumerWidget {
   const ReportsScreen({super.key});

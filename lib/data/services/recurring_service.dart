@@ -1,4 +1,5 @@
 import 'package:isar/isar.dart';
+import '../../core/constants/app_constants.dart';
 import '../models/transaction_model.dart';
 import '../models/recurring_transaction_model.dart';
 import '../models/wallet_model.dart';
@@ -76,7 +77,7 @@ class RecurringService {
       ..note = recurring.name
       ..date = DateTime.now()
       ..walletId = walletId
-      ..source = 'recurring'
+      ..source = TransactionSource.recurring
       ..createdAt = DateTime.now();
 
     await isar.writeTxn(() async {
@@ -86,7 +87,7 @@ class RecurringService {
       // 2. Update wallet balance
       final wallet = await isar.wallets.get(walletId);
       if (wallet != null) {
-        if (recurring.type == 'expense') {
+        if (recurring.type == TransactionType.expense) {
           wallet.balance -= recurring.amount;
         } else {
           wallet.balance += recurring.amount;
@@ -112,15 +113,15 @@ class RecurringService {
   /// Advance nextDueDate with proper day clamping for monthly/yearly
   void _advanceNextDate(RecurringTransaction recurring) {
     switch (recurring.frequency) {
-      case 'daily':
+      case Frequency.daily:
         recurring.nextDueDate =
             recurring.nextDueDate.add(const Duration(days: 1));
         break;
-      case 'weekly':
+      case Frequency.weekly:
         recurring.nextDueDate =
             recurring.nextDueDate.add(const Duration(days: 7));
         break;
-      case 'monthly':
+      case Frequency.monthly:
         final targetMonth = recurring.nextDueDate.month + 1;
         final targetYear = recurring.nextDueDate.year;
         final maxDay =
@@ -129,7 +130,7 @@ class RecurringService {
             recurring.nextDueDate.day > maxDay ? maxDay : recurring.nextDueDate.day;
         recurring.nextDueDate = DateTime(targetYear, targetMonth, day);
         break;
-      case 'yearly':
+      case Frequency.yearly:
         final targetYear = recurring.nextDueDate.year + 1;
         final targetMonth = recurring.nextDueDate.month;
         final maxDay = DateTime(targetYear, targetMonth + 1, 0).day;

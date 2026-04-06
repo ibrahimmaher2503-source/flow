@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../core/constants/app_constants.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/utils/currency_formatter.dart';
 import '../../core/utils/installment_calculator.dart';
@@ -8,7 +9,6 @@ import '../../data/models/installment_provider_model.dart';
 import '../../data/models/wallet_model.dart';
 import '../../providers/installment_provider.dart';
 import '../../providers/wallet_provider.dart';
-import '../../providers/category_provider.dart';
 import '../../shared/widgets/app_button.dart';
 import 'widgets/provider_selector.dart';
 
@@ -110,7 +110,7 @@ class _AddInstallmentScreenState extends ConsumerState<AddInstallmentScreen> {
       ..dayOfMonth = _dayOfMonth
       ..walletId = _selectedWallet!.id
       ..autoAdd = _autoAdd
-      ..status = 'active'
+      ..status = PlanStatus.active
       ..createdAt = DateTime.now();
 
     await ref.read(installmentRepoProvider).addPlan(plan);

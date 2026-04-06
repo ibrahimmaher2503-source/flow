@@ -1,15 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/theme/app_colors.dart';
-import '../../core/utils/currency_formatter.dart';
 import '../../data/models/transaction_model.dart';
 import '../../data/models/category_model.dart';
 import '../../data/models/wallet_model.dart';
-import '../../data/repositories/transaction_repo.dart';
-import '../../data/repositories/category_repo.dart';
-import '../../data/repositories/wallet_repo.dart';
-import '../../data/repositories/settings_repo.dart';
-import '../../data/services/isar_service.dart';
+import '../../core/constants/app_constants.dart';
 import '../../providers/transaction_provider.dart';
 import '../../providers/category_provider.dart';
 import '../../providers/wallet_provider.dart';
@@ -28,14 +23,16 @@ class AddTransactionScreen extends ConsumerStatefulWidget {
 }
 
 class _AddTransactionScreenState extends ConsumerState<AddTransactionScreen> {
-  String _type = 'expense';
+  String _type = TransactionType.expense;
   String _amount = '0';
   Category? _selectedCategory;
   String? _selectedSubcategory;
   Wallet? _selectedWallet;
   DateTime _date = DateTime.now();
   final _noteController = TextEditingController();
-  bool _showSubcategories = false;
+
+  bool get _showSubcategories =>
+      _selectedCategory != null && _selectedCategory!.subcategories.isNotEmpty;
 
   @override
   void initState() {
@@ -63,8 +60,6 @@ class _AddTransactionScreenState extends ConsumerState<AddTransactionScreen> {
       setState(() {
         _selectedCategory = cat;
         _selectedWallet = wallet;
-        _showSubcategories =
-            cat != null && cat.subcategories.isNotEmpty;
       });
     }
   }
@@ -114,7 +109,7 @@ class _AddTransactionScreenState extends ConsumerState<AddTransactionScreen> {
       // Reverse old wallet effect
       final oldAmount = widget.editTransaction!.amount;
       final oldType = widget.editTransaction!.type;
-      final balanceRevert = oldType == 'income' ? -oldAmount : oldAmount;
+      final balanceRevert = oldType == TransactionType.income ? -oldAmount : oldAmount;
       await walletRepo.updateBalance(
           widget.editTransaction!.walletId, balanceRevert);
 
@@ -124,11 +119,11 @@ class _AddTransactionScreenState extends ConsumerState<AddTransactionScreen> {
     }
 
     // Update wallet balance
-    final balanceChange = _type == 'income' ? amount : -amount;
+    final balanceChange = _type == TransactionType.income ? amount : -amount;
     await walletRepo.updateBalance(_selectedWallet!.id, balanceChange);
 
     // Update streak
-    final settingsRepo = SettingsRepo(ref.read(isarProvider));
+    final settingsRepo = ref.read(settingsRepoProvider);
     await settingsRepo.updateStreak();
 
     if (mounted) {
@@ -187,15 +182,14 @@ class _AddTransactionScreenState extends ConsumerState<AddTransactionScreen> {
                   Expanded(
                     child: GestureDetector(
                       onTap: () => setState(() {
-                        _type = 'expense';
+                        _type = TransactionType.expense;
                         _selectedCategory = null;
                         _selectedSubcategory = null;
-                        _showSubcategories = false;
                       }),
                       child: Container(
                         padding: const EdgeInsets.symmetric(vertical: 12),
                         decoration: BoxDecoration(
-                          color: _type == 'expense'
+                          color: _type == TransactionType.expense
                               ? AppColors.danger
                               : Colors.transparent,
                           borderRadius: BorderRadius.circular(12),
@@ -215,15 +209,14 @@ class _AddTransactionScreenState extends ConsumerState<AddTransactionScreen> {
                   Expanded(
                     child: GestureDetector(
                       onTap: () => setState(() {
-                        _type = 'income';
+                        _type = TransactionType.income;
                         _selectedCategory = null;
                         _selectedSubcategory = null;
-                        _showSubcategories = false;
                       }),
                       child: Container(
                         padding: const EdgeInsets.symmetric(vertical: 12),
                         decoration: BoxDecoration(
-                          color: _type == 'income'
+                          color: _type == TransactionType.income
                               ? AppColors.success
                               : Colors.transparent,
                           borderRadius: BorderRadius.circular(12),
@@ -262,7 +255,7 @@ class _AddTransactionScreenState extends ConsumerState<AddTransactionScreen> {
                       fontSize: 40,
                       fontWeight: FontWeight.bold,
                       color:
-                          _type == 'income' ? AppColors.secondary : AppColors.danger,
+                          _type == TransactionType.income ? AppColors.secondary : AppColors.danger,
                     ),
                   ),
                   Text(
@@ -305,7 +298,6 @@ class _AddTransactionScreenState extends ConsumerState<AddTransactionScreen> {
                 setState(() {
                   _selectedCategory = cat;
                   _selectedSubcategory = null;
-                  _showSubcategories = cat.subcategories.isNotEmpty;
                 });
               },
             ),
