@@ -126,7 +126,7 @@ class InstallmentProvidersSection extends ConsumerWidget {
     final nameController = TextEditingController();
     final limitController = TextEditingController();
 
-    showDialog(
+    showDialog<void>(
       context: context,
       builder: (ctx) => AlertDialog(
         backgroundColor: AppColors.surface,
@@ -179,6 +179,9 @@ class InstallmentProvidersSection extends ConsumerWidget {
           ),
         ],
       ),
-    );
+    ).then((_) {
+      nameController.dispose();
+      limitController.dispose();
+    });
   }
 }

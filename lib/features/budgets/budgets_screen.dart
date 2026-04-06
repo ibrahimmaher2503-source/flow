@@ -82,7 +82,7 @@ class BudgetsScreen extends ConsumerWidget {
     final limitController = TextEditingController();
     String? selectedCategory;
 
-    showDialog(
+    showDialog<void>(
       context: context,
       builder: (ctx) => StatefulBuilder(
         builder: (ctx, setDialogState) {
@@ -177,6 +177,6 @@ class BudgetsScreen extends ConsumerWidget {
           );
         },
       ),
-    );
+    ).then((_) => limitController.dispose());
   }
 }

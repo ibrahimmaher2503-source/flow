@@ -52,7 +52,7 @@ class GoalsScreen extends ConsumerWidget {
   void _showContributeDialog(
       BuildContext context, WidgetRef ref, SavingsGoal goal) {
     final controller = TextEditingController();
-    showDialog(
+    showDialog<void>(
       context: context,
       builder: (ctx) => AlertDialog(
         backgroundColor: AppColors.surface,
@@ -86,14 +86,14 @@ class GoalsScreen extends ConsumerWidget {
           ),
         ],
       ),
-    );
+    ).then((_) => controller.dispose());
   }
 
   void _showAddGoalDialog(BuildContext context, WidgetRef ref) {
     final nameController = TextEditingController();
     final targetController = TextEditingController();
 
-    showDialog(
+    showDialog<void>(
       context: context,
       builder: (ctx) => AlertDialog(
         backgroundColor: AppColors.surface,
@@ -143,6 +143,9 @@ class GoalsScreen extends ConsumerWidget {
           ),
         ],
       ),
-    );
+    ).then((_) {
+      nameController.dispose();
+      targetController.dispose();
+    });
   }
 }

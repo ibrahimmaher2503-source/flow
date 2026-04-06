@@ -73,10 +73,11 @@ class RecurringScreen extends ConsumerWidget {
           ),
           TextButton(
             onPressed: () async {
+              // Close dialog first, then update to avoid stale state
+              Navigator.pop(ctx);
               recurring.isActive = !recurring.isActive;
               await ref.read(recurringRepoProvider).update(recurring);
               ref.invalidate(activeRecurringProvider);
-              if (ctx.mounted) Navigator.pop(ctx);
             },
             child: Text(
               recurring.isActive ? 'إيقاف' : 'تفعيل',
@@ -102,7 +103,7 @@ class RecurringScreen extends ConsumerWidget {
     String category = 'فواتير';
     bool autoAdd = false;
 
-    showDialog(
+    showDialog<void>(
       context: context,
       builder: (ctx) => StatefulBuilder(
         builder: (ctx, setDialogState) => AlertDialog(
@@ -206,7 +207,10 @@ class RecurringScreen extends ConsumerWidget {
           ],
         ),
       ),
-    );
+    ).then((_) {
+      nameController.dispose();
+      amountController.dispose();
+    });
   }
 
   Widget _chip(String label, bool selected, VoidCallback onTap) {

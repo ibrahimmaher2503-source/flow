@@ -80,16 +80,13 @@ class _AppShellState extends State<AppShell> {
         ],
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-          final result = await Navigator.push<bool>(
+        onPressed: () {
+          Navigator.push<bool>(
             context,
             MaterialPageRoute(
               builder: (_) => const AddTransactionScreen(),
             ),
           );
-          if (result == true && context.mounted) {
-            // Providers auto-refresh via invalidation in the screen
-          }
         },
         child: const Icon(Icons.add),
       ),

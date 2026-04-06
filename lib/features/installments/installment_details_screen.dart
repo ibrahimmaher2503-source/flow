@@ -10,6 +10,11 @@ import '../../providers/wallet_provider.dart';
 import 'widgets/payment_timeline.dart';
 import 'widgets/interest_summary.dart';
 
+final _planProvider =
+    FutureProvider.family<InstallmentPlan?, int>((ref, planId) async {
+  return ref.watch(installmentRepoProvider).getPlan(planId);
+});
+
 class InstallmentDetailsScreen extends ConsumerWidget {
   final int planId;
 
@@ -17,20 +22,29 @@ class InstallmentDetailsScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final repo = ref.watch(installmentRepoProvider);
+    final planAsync = ref.watch(_planProvider(planId));
     final service = ref.watch(installmentServiceProvider);
+    final providersAsync = ref.watch(installmentProvidersListProvider);
 
-    return FutureBuilder<InstallmentPlan?>(
-      future: repo.getPlan(planId),
-      builder: (context, snapshot) {
-        if (!snapshot.hasData) {
-          return const Scaffold(
-            body: Center(child: CircularProgressIndicator()),
+    return planAsync.when(
+      loading: () => const Scaffold(
+        body: Center(child: CircularProgressIndicator()),
+      ),
+      error: (e, _) => Scaffold(
+        appBar: AppBar(),
+        body: Center(child: Text('خطأ: $e')),
+      ),
+      data: (plan) {
+        if (plan == null) {
+          return Scaffold(
+            appBar: AppBar(),
+            body: const Center(
+              child: Text('الخطة غير موجودة',
+                  style: TextStyle(
+                      fontFamily: 'Cairo', color: AppColors.textMuted)),
+            ),
           );
         }
-
-        final plan = snapshot.data!;
-        final providersAsync = ref.watch(installmentProvidersListProvider);
 
         return Scaffold(
           appBar: AppBar(
@@ -68,7 +82,9 @@ class InstallmentDetailsScreen extends ConsumerWidget {
                     ),
                   );
                   if (confirmed == true) {
-                    await repo.deletePlan(planId);
+                    await ref
+                        .read(installmentRepoProvider)
+                        .deletePlan(planId);
                     refreshInstallments(ref);
                     if (context.mounted) Navigator.pop(context, true);
                   }
@@ -81,143 +97,148 @@ class InstallmentDetailsScreen extends ConsumerWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-              // Provider info
-              providersAsync.when(
-                data: (providers) {
-                  final provider = providers
-                      .where((p) => p.id == plan.providerId)
-                      .firstOrNull;
-                  if (provider == null) return const SizedBox();
-                  final color = provider.color.toColor;
-                  return Container(
-                    padding: const EdgeInsets.all(12),
-                    margin: const EdgeInsets.only(bottom: 16),
-                    decoration: BoxDecoration(
-                      color: color.withValues(alpha: 0.1),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Row(
-                      children: [
-                        Icon(IconResolver.resolve(provider.icon),
-                            color: color),
-                        const SizedBox(width: 8),
-                        Text(provider.name,
-                            style: TextStyle(
-                                fontFamily: 'Cairo',
-                                fontSize: 16,
-                                fontWeight: FontWeight.w600,
-                                color: color)),
-                        const Spacer(),
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 10, vertical: 4),
-                          decoration: BoxDecoration(
-                            color: plan.status == 'completed'
-                                ? AppColors.success.withValues(alpha: 0.2)
-                                : AppColors.primary.withValues(alpha: 0.2),
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          child: Text(
-                            plan.status == 'completed' ? 'مكتمل' : 'نشط',
-                            style: TextStyle(
-                              fontFamily: 'Cairo',
-                              fontSize: 12,
-                              color: plan.status == 'completed'
-                                  ? AppColors.success
-                                  : AppColors.primary,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  );
-                },
-                loading: () => const SizedBox(),
-                error: (_, __) => const SizedBox(),
-              ),
-
-              // Interest summary
-              InterestSummary(plan: plan),
-
-              const SizedBox(height: 16),
-
-              // Record payment button
-              if (plan.status == 'active' && !plan.autoAdd)
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 16),
-                  child: SizedBox(
-                    height: 48,
-                    width: double.infinity,
-                    child: ElevatedButton.icon(
-                      onPressed: () async {
-                        final confirmed = await showDialog<bool>(
-                          context: context,
-                          builder: (ctx) => AlertDialog(
-                            backgroundColor: AppColors.surface,
-                            title: const Text('تسجيل دفع القسط؟',
-                                style: TextStyle(
-                                    fontFamily: 'Cairo',
-                                    color: Colors.white)),
-                            content: Text(
-                              'قسط ${plan.paidInstallments + 1} من ${plan.totalInstallments}',
-                              style: const TextStyle(
+                // Provider info
+                providersAsync.when(
+                  data: (providers) {
+                    final provider = providers
+                        .where((p) => p.id == plan.providerId)
+                        .firstOrNull;
+                    if (provider == null) return const SizedBox();
+                    final color = provider.color.toColor;
+                    return Container(
+                      padding: const EdgeInsets.all(12),
+                      margin: const EdgeInsets.only(bottom: 16),
+                      decoration: BoxDecoration(
+                        color: color.withValues(alpha: 0.1),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Row(
+                        children: [
+                          Icon(IconResolver.resolve(provider.icon),
+                              color: color),
+                          const SizedBox(width: 8),
+                          Text(provider.name,
+                              style: TextStyle(
                                   fontFamily: 'Cairo',
-                                  color: AppColors.textSecondary),
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w600,
+                                  color: color)),
+                          const Spacer(),
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 10, vertical: 4),
+                            decoration: BoxDecoration(
+                              color: plan.status == 'completed'
+                                  ? AppColors.success.withValues(alpha: 0.2)
+                                  : AppColors.primary.withValues(alpha: 0.2),
+                              borderRadius: BorderRadius.circular(20),
                             ),
-                            actions: [
-                              TextButton(
-                                onPressed: () => Navigator.pop(ctx, false),
-                                child: const Text('لا',
-                                    style: TextStyle(fontFamily: 'Cairo')),
+                            child: Text(
+                              plan.status == 'completed' ? 'مكتمل' : 'نشط',
+                              style: TextStyle(
+                                fontFamily: 'Cairo',
+                                fontSize: 12,
+                                color: plan.status == 'completed'
+                                    ? AppColors.success
+                                    : AppColors.primary,
                               ),
-                              TextButton(
-                                onPressed: () => Navigator.pop(ctx, true),
-                                child: const Text('نعم، سجل',
-                                    style: TextStyle(
-                                        fontFamily: 'Cairo',
-                                        color: AppColors.success)),
-                              ),
-                            ],
+                            ),
                           ),
-                        );
-                        if (confirmed == true) {
-                          await service.recordPayment(plan, plan.walletId);
-                          refreshInstallments(ref);
-                          refreshTransactions(ref);
-                          refreshWallets(ref);
-                          if (context.mounted) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                  content: Text('تم تسجيل دفع القسط')),
-                            );
-                            Navigator.pop(context, true);
+                        ],
+                      ),
+                    );
+                  },
+                  loading: () => const SizedBox(),
+                  error: (_, __) => const SizedBox(),
+                ),
+
+                // Interest summary
+                InterestSummary(plan: plan),
+
+                const SizedBox(height: 16),
+
+                // Record payment button
+                if (plan.status == 'active' && !plan.autoAdd)
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 16),
+                    child: SizedBox(
+                      height: 48,
+                      width: double.infinity,
+                      child: ElevatedButton.icon(
+                        onPressed: () async {
+                          final confirmed = await showDialog<bool>(
+                            context: context,
+                            builder: (ctx) => AlertDialog(
+                              backgroundColor: AppColors.surface,
+                              title: const Text('تسجيل دفع القسط؟',
+                                  style: TextStyle(
+                                      fontFamily: 'Cairo',
+                                      color: Colors.white)),
+                              content: Text(
+                                'قسط ${plan.paidInstallments + 1} من ${plan.totalInstallments}',
+                                style: const TextStyle(
+                                    fontFamily: 'Cairo',
+                                    color: AppColors.textSecondary),
+                              ),
+                              actions: [
+                                TextButton(
+                                  onPressed: () =>
+                                      Navigator.pop(ctx, false),
+                                  child: const Text('لا',
+                                      style:
+                                          TextStyle(fontFamily: 'Cairo')),
+                                ),
+                                TextButton(
+                                  onPressed: () =>
+                                      Navigator.pop(ctx, true),
+                                  child: const Text('نعم، سجل',
+                                      style: TextStyle(
+                                          fontFamily: 'Cairo',
+                                          color: AppColors.success)),
+                                ),
+                              ],
+                            ),
+                          );
+                          if (confirmed == true) {
+                            await service.recordPayment(
+                                plan, plan.walletId);
+                            refreshInstallments(ref);
+                            refreshTransactions(ref);
+                            refreshWallets(ref);
+                            ref.invalidate(_planProvider(planId));
+                            if (context.mounted) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                    content: Text('تم تسجيل دفع القسط')),
+                              );
+                              Navigator.pop(context, true);
+                            }
                           }
-                        }
-                      },
-                      icon: const Icon(Icons.check_circle),
-                      label: const Text('سجل دفع القسط',
-                          style: TextStyle(fontFamily: 'Cairo')),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: AppColors.success,
-                        foregroundColor: Colors.white,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
+                        },
+                        icon: const Icon(Icons.check_circle),
+                        label: const Text('سجل دفع القسط',
+                            style: TextStyle(fontFamily: 'Cairo')),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: AppColors.success,
+                          foregroundColor: Colors.white,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
                         ),
                       ),
                     ),
                   ),
-                ),
 
-              // Timeline
-              const Text('جدول الأقساط',
-                  style: TextStyle(
-                      fontFamily: 'Cairo',
-                      fontSize: 18,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.white)),
-              const SizedBox(height: 12),
-              PaymentTimeline(plan: plan),
-            ],
+                // Timeline
+                const Text('جدول الأقساط',
+                    style: TextStyle(
+                        fontFamily: 'Cairo',
+                        fontSize: 18,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.white)),
+                const SizedBox(height: 12),
+                PaymentTimeline(plan: plan),
+              ],
             ),
           ),
         );

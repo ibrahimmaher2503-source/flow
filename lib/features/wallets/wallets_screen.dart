@@ -112,7 +112,7 @@ class WalletsScreen extends ConsumerWidget {
     String selectedType = 'cash';
     String selectedColor = _walletColors[0];
 
-    showDialog(
+    showDialog<void>(
       context: context,
       builder: (ctx) => StatefulBuilder(
         builder: (ctx, setDialogState) => AlertDialog(
@@ -211,14 +211,17 @@ class WalletsScreen extends ConsumerWidget {
           ],
         ),
       ),
-    );
+    ).then((_) {
+      nameController.dispose();
+      balanceController.dispose();
+    });
   }
 
   void _showEditWalletDialog(
       BuildContext context, WidgetRef ref, Wallet wallet) {
     final nameController = TextEditingController(text: wallet.name);
 
-    showDialog(
+    showDialog<void>(
       context: context,
       builder: (ctx) => AlertDialog(
         backgroundColor: AppColors.surface,
@@ -285,7 +288,7 @@ class WalletsScreen extends ConsumerWidget {
           ),
         ],
       ),
-    );
+    ).then((_) => nameController.dispose());
   }
 
   Widget _typeChip(

@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:file_picker/file_picker.dart';
 import 'dart:io';
+import 'package:isar/isar.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../data/models/wallet_model.dart';
 import '../../../data/services/backup_service.dart';
 import '../../../data/services/isar_service.dart';
 import '../../../providers/transaction_provider.dart';
@@ -178,6 +180,12 @@ class BackupSection extends ConsumerWidget {
         await isar.recurringTransactions.clear();
         await isar.savingsGoals.clear();
         await isar.installmentPlans.clear();
+        // Reset wallet balances to 0 instead of deleting
+        final wallets = await isar.wallets.where().findAll();
+        for (final w in wallets) {
+          w.balance = 0;
+          await isar.wallets.put(w);
+        }
       });
       refreshTransactions(ref);
       refreshWallets(ref);

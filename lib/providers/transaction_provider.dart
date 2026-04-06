@@ -43,9 +43,6 @@ final transactionSearchProvider =
   return repo.search(query);
 });
 
-// Notifier to trigger refreshes
-final transactionRefreshProvider = StateProvider<int>((ref) => 0);
-
 void refreshTransactions(WidgetRef ref) {
   ref.invalidate(monthlyTransactionsProvider);
   ref.invalidate(recentTransactionsProvider);
