@@ -11,14 +11,14 @@ class LoadingShimmer extends StatelessWidget {
     super.key,
     this.height = 80,
     this.width = double.infinity,
-    this.borderRadius = 16,
+    this.borderRadius = 20,
   });
 
   @override
   Widget build(BuildContext context) {
     return Shimmer.fromColors(
       baseColor: AppColors.surface,
-      highlightColor: AppColors.surface.withValues(alpha: 0.5),
+      highlightColor: AppColors.surfaceLight,
       child: Container(
         height: height,
         width: width,
@@ -30,15 +30,19 @@ class LoadingShimmer extends StatelessWidget {
     );
   }
 
-  static Widget list({int count = 3}) {
+  static Widget list({int count = 3, double itemHeight = 80}) {
     return Column(
       children: List.generate(
         count,
         (index) => Padding(
           padding: const EdgeInsets.only(bottom: 12),
-          child: LoadingShimmer(height: 80),
+          child: LoadingShimmer(height: itemHeight),
         ),
       ),
     );
+  }
+
+  static Widget card() {
+    return const LoadingShimmer(height: 160);
   }
 }

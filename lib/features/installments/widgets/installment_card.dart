@@ -35,11 +35,25 @@ class InstallmentCard extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(18),
         decoration: BoxDecoration(
-          color: AppColors.surface,
-          borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: color.withValues(alpha: 0.3)),
+          gradient: LinearGradient(
+            colors: [
+              color.withValues(alpha: 0.1),
+              AppColors.surface.withValues(alpha: 0.8),
+            ],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(color: color.withValues(alpha: 0.2)),
+          boxShadow: [
+            BoxShadow(
+              color: color.withValues(alpha: 0.1),
+              blurRadius: 16,
+              offset: const Offset(0, 4),
+            ),
+          ],
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -48,16 +62,21 @@ class InstallmentCard extends StatelessWidget {
             Row(
               children: [
                 Container(
-                  width: 40,
-                  height: 40,
+                  width: 44,
+                  height: 44,
                   decoration: BoxDecoration(
-                    color: color.withValues(alpha: 0.2),
-                    borderRadius: BorderRadius.circular(10),
+                    gradient: LinearGradient(
+                      colors: [
+                        color.withValues(alpha: 0.25),
+                        color.withValues(alpha: 0.1),
+                      ],
+                    ),
+                    borderRadius: BorderRadius.circular(12),
                   ),
                   child: Icon(
                     IconResolver.resolve(providerIcon ?? 'credit_card'),
                     color: color,
-                    size: 20,
+                    size: 22,
                   ),
                 ),
                 const SizedBox(width: 12),
@@ -70,7 +89,7 @@ class InstallmentCard extends StatelessWidget {
                         style: const TextStyle(
                           fontFamily: 'Cairo',
                           fontSize: 16,
-                          fontWeight: FontWeight.w600,
+                          fontWeight: FontWeight.w700,
                           color: Colors.white,
                         ),
                       ),
@@ -80,7 +99,8 @@ class InstallmentCard extends StatelessWidget {
                           style: TextStyle(
                             fontFamily: 'Cairo',
                             fontSize: 12,
-                            color: color,
+                            fontWeight: FontWeight.w500,
+                            color: color.withValues(alpha: 0.8),
                           ),
                         ),
                     ],
@@ -91,19 +111,19 @@ class InstallmentCard extends StatelessWidget {
                   children: [
                     Text(
                       CurrencyFormatter.format(plan.monthlyAmount),
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontFamily: 'Cairo',
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: AppColors.installment,
+                        fontSize: 17,
+                        fontWeight: FontWeight.w800,
+                        color: color,
                       ),
                     ),
-                    const Text(
+                    Text(
                       '/شهر',
                       style: TextStyle(
                         fontFamily: 'Cairo',
                         fontSize: 11,
-                        color: AppColors.textMuted,
+                        color: AppColors.textMuted.withValues(alpha: 0.7),
                       ),
                     ),
                   ],
@@ -111,20 +131,36 @@ class InstallmentCard extends StatelessWidget {
               ],
             ),
 
-            const SizedBox(height: 12),
+            const SizedBox(height: 14),
 
             // Progress bar
-            ClipRRect(
-              borderRadius: BorderRadius.circular(4),
-              child: LinearProgressIndicator(
-                value: plan.progressPercent,
-                backgroundColor: AppColors.background,
-                valueColor: AlwaysStoppedAnimation<Color>(color),
-                minHeight: 6,
+            Container(
+              height: 6,
+              decoration: BoxDecoration(
+                color: AppColors.background,
+                borderRadius: BorderRadius.circular(3),
+              ),
+              child: FractionallySizedBox(
+                alignment: AlignmentDirectional.centerStart,
+                widthFactor: plan.progressPercent.clamp(0.0, 1.0),
+                child: Container(
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [color, color.withValues(alpha: 0.6)],
+                    ),
+                    borderRadius: BorderRadius.circular(3),
+                    boxShadow: [
+                      BoxShadow(
+                        color: color.withValues(alpha: 0.4),
+                        blurRadius: 6,
+                      ),
+                    ],
+                  ),
+                ),
               ),
             ),
 
-            const SizedBox(height: 8),
+            const SizedBox(height: 10),
 
             // Footer
             Row(
@@ -135,21 +171,32 @@ class InstallmentCard extends StatelessWidget {
                   style: const TextStyle(
                     fontFamily: 'Cairo',
                     fontSize: 12,
+                    fontWeight: FontWeight.w500,
                     color: AppColors.textSecondary,
                   ),
                 ),
                 if (plan.status == 'active')
-                  Text(
-                    daysLeft <= 0
-                        ? 'مستحق اليوم!'
-                        : 'القادم: $daysLeft يوم',
-                    style: TextStyle(
-                      fontFamily: 'Cairo',
-                      fontSize: 12,
-                      fontWeight: FontWeight.w500,
+                  Container(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                    decoration: BoxDecoration(
                       color: daysLeft <= 3
-                          ? AppColors.warning
-                          : AppColors.textMuted,
+                          ? AppColors.warning.withValues(alpha: 0.15)
+                          : Colors.white.withValues(alpha: 0.05),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Text(
+                      daysLeft <= 0
+                          ? 'مستحق اليوم!'
+                          : 'القادم: $daysLeft يوم',
+                      style: TextStyle(
+                        fontFamily: 'Cairo',
+                        fontSize: 11,
+                        fontWeight: FontWeight.w600,
+                        color: daysLeft <= 3
+                            ? AppColors.warning
+                            : AppColors.textMuted,
+                      ),
                     ),
                   ),
                 Text(
@@ -157,6 +204,7 @@ class InstallmentCard extends StatelessWidget {
                   style: const TextStyle(
                     fontFamily: 'Cairo',
                     fontSize: 12,
+                    fontWeight: FontWeight.w500,
                     color: AppColors.textSecondary,
                   ),
                 ),

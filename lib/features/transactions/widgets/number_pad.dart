@@ -28,7 +28,6 @@ class NumberPad extends StatelessWidget {
       if (value == '0') {
         onChanged(key);
       } else {
-        // Limit decimal places to 2
         if (value.contains('.')) {
           final parts = value.split('.');
           if (parts[1].length >= 2) return;
@@ -51,23 +50,44 @@ class NumberPad extends StatelessWidget {
       children: keys.map((row) {
         return Row(
           children: row.map((key) {
+            final isBackspace = key == '⌫';
             return Expanded(
               child: Padding(
                 padding: const EdgeInsets.all(4),
                 child: Material(
-                  color: key == '⌫'
-                      ? AppColors.danger.withValues(alpha: 0.2)
-                      : AppColors.surface,
-                  borderRadius: BorderRadius.circular(12),
+                  color: Colors.transparent,
                   child: InkWell(
                     onTap: () => _onKey(key),
-                    borderRadius: BorderRadius.circular(12),
+                    borderRadius: BorderRadius.circular(14),
+                    splashColor: AppColors.primary.withValues(alpha: 0.2),
+                    highlightColor: AppColors.primary.withValues(alpha: 0.1),
                     child: Container(
-                      height: 56,
+                      height: 58,
                       alignment: Alignment.center,
-                      child: key == '⌫'
-                          ? const Icon(Icons.backspace_outlined,
-                              color: AppColors.danger, size: 24)
+                      decoration: BoxDecoration(
+                        gradient: isBackspace
+                            ? LinearGradient(
+                                colors: [
+                                  AppColors.danger.withValues(alpha: 0.15),
+                                  AppColors.danger.withValues(alpha: 0.05),
+                                ],
+                              )
+                            : LinearGradient(
+                                colors: [
+                                  AppColors.surface.withValues(alpha: 0.8),
+                                  AppColors.surface.withValues(alpha: 0.4),
+                                ],
+                              ),
+                        borderRadius: BorderRadius.circular(14),
+                        border: Border.all(
+                          color: isBackspace
+                              ? AppColors.danger.withValues(alpha: 0.2)
+                              : Colors.white.withValues(alpha: 0.04),
+                        ),
+                      ),
+                      child: isBackspace
+                          ? const Icon(Icons.backspace_rounded,
+                              color: AppColors.danger, size: 22)
                           : Text(
                               key,
                               style: const TextStyle(

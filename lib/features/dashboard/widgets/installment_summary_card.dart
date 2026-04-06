@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/utils/currency_formatter.dart';
 import '../../../providers/installment_provider.dart';
-import '../../../shared/widgets/app_card.dart';
 
 class InstallmentSummaryCard extends ConsumerWidget {
   const InstallmentSummaryCard({super.key});
@@ -14,39 +13,68 @@ class InstallmentSummaryCard extends ConsumerWidget {
     final monthlyTotal = ref.watch(monthlyInstallmentTotalProvider);
     final activePlans = ref.watch(activePlansProvider);
 
-    return AppCard(
+    return Container(
+      padding: const EdgeInsets.all(18),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: [
+            AppColors.installment.withValues(alpha: 0.12),
+            AppColors.surface.withValues(alpha: 0.8),
+          ],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(
+          color: AppColors.installment.withValues(alpha: 0.15),
+        ),
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             children: [
               Container(
-                padding: const EdgeInsets.all(8),
+                padding: const EdgeInsets.all(10),
                 decoration: BoxDecoration(
-                  color: AppColors.installment.withValues(alpha: 0.2),
-                  borderRadius: BorderRadius.circular(8),
+                  gradient: LinearGradient(
+                    colors: [
+                      AppColors.installment.withValues(alpha: 0.25),
+                      AppColors.installment.withValues(alpha: 0.1),
+                    ],
+                  ),
+                  borderRadius: BorderRadius.circular(12),
                 ),
-                child: const Icon(Icons.credit_card,
+                child: const Icon(Icons.credit_card_rounded,
                     color: AppColors.installment, size: 20),
               ),
-              const SizedBox(width: 10),
+              const SizedBox(width: 12),
               const Text(
                 'الأقساط',
                 style: TextStyle(
                   fontFamily: 'Cairo',
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
+                  fontSize: 17,
+                  fontWeight: FontWeight.w700,
                   color: Colors.white,
                 ),
               ),
               const Spacer(),
               activePlans.when(
-                data: (plans) => Text(
-                  '${plans.length} نشطة',
-                  style: const TextStyle(
-                    fontFamily: 'Cairo',
-                    fontSize: 12,
-                    color: AppColors.textMuted,
+                data: (plans) => Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                  decoration: BoxDecoration(
+                    color: AppColors.installment.withValues(alpha: 0.15),
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Text(
+                    '${plans.length} نشطة',
+                    style: const TextStyle(
+                      fontFamily: 'Cairo',
+                      fontSize: 11,
+                      fontWeight: FontWeight.w600,
+                      color: AppColors.installment,
+                    ),
                   ),
                 ),
                 loading: () => const SizedBox(),
@@ -54,63 +82,56 @@ class InstallmentSummaryCard extends ConsumerWidget {
               ),
             ],
           ),
-          const SizedBox(height: 12),
+          const SizedBox(height: 16),
           Row(
             children: [
               Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text('إجمالي الالتزامات',
-                        style: TextStyle(
-                            fontFamily: 'Cairo',
-                            fontSize: 12,
-                            color: AppColors.textMuted)),
-                    totalDebt.when(
-                      data: (v) => Text(
-                        CurrencyFormatter.format(v),
-                        style: const TextStyle(
-                          fontFamily: 'Cairo',
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          color: AppColors.installment,
-                        ),
-                      ),
-                      loading: () => const Text('...'),
-                      error: (_, __) => const Text('--'),
-                    ),
-                  ],
+                child: _miniStat(
+                  'إجمالي الالتزامات',
+                  totalDebt,
+                  AppColors.installment,
                 ),
               ),
+              const SizedBox(width: 12),
               Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text('أقساط الشهر',
-                        style: TextStyle(
-                            fontFamily: 'Cairo',
-                            fontSize: 12,
-                            color: AppColors.textMuted)),
-                    monthlyTotal.when(
-                      data: (v) => Text(
-                        CurrencyFormatter.format(v),
-                        style: const TextStyle(
-                          fontFamily: 'Cairo',
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          color: AppColors.warning,
-                        ),
-                      ),
-                      loading: () => const Text('...'),
-                      error: (_, __) => const Text('--'),
-                    ),
-                  ],
+                child: _miniStat(
+                  'أقساط الشهر',
+                  monthlyTotal,
+                  AppColors.warning,
                 ),
               ),
             ],
           ),
         ],
       ),
+    );
+  }
+
+  Widget _miniStat(String label, AsyncValue<double> value, Color color) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(label,
+            style: TextStyle(
+                fontFamily: 'Cairo',
+                fontSize: 11,
+                fontWeight: FontWeight.w500,
+                color: AppColors.textMuted.withValues(alpha: 0.8))),
+        const SizedBox(height: 4),
+        value.when(
+          data: (v) => Text(
+            CurrencyFormatter.format(v),
+            style: TextStyle(
+              fontFamily: 'Cairo',
+              fontSize: 18,
+              fontWeight: FontWeight.w800,
+              color: color,
+            ),
+          ),
+          loading: () => const Text('...'),
+          error: (_, __) => const Text('--'),
+        ),
+      ],
     );
   }
 }

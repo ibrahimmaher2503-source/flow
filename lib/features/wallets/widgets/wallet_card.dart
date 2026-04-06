@@ -24,27 +24,39 @@ class WalletCard extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(18),
         decoration: BoxDecoration(
           gradient: LinearGradient(
             colors: [
-              color.withValues(alpha: 0.3),
-              color.withValues(alpha: 0.1),
+              color.withValues(alpha: 0.2),
+              color.withValues(alpha: 0.05),
             ],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
           ),
-          borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: color.withValues(alpha: 0.3)),
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(color: color.withValues(alpha: 0.2)),
+          boxShadow: [
+            BoxShadow(
+              color: color.withValues(alpha: 0.1),
+              blurRadius: 16,
+              offset: const Offset(0, 4),
+            ),
+          ],
         ),
         child: Row(
           children: [
             Container(
-              width: 48,
-              height: 48,
+              width: 50,
+              height: 50,
               decoration: BoxDecoration(
-                color: color.withValues(alpha: 0.2),
-                borderRadius: BorderRadius.circular(12),
+                gradient: LinearGradient(
+                  colors: [
+                    color.withValues(alpha: 0.3),
+                    color.withValues(alpha: 0.1),
+                  ],
+                ),
+                borderRadius: BorderRadius.circular(14),
               ),
               child: Icon(
                 IconResolver.resolve(wallet.icon),
@@ -62,16 +74,16 @@ class WalletCard extends StatelessWidget {
                     style: const TextStyle(
                       fontFamily: 'Cairo',
                       fontSize: 16,
-                      fontWeight: FontWeight.w600,
+                      fontWeight: FontWeight.w700,
                       color: Colors.white,
                     ),
                   ),
                   Text(
                     _typeLabel(wallet.type),
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontFamily: 'Cairo',
                       fontSize: 12,
-                      color: AppColors.textMuted,
+                      color: AppColors.textMuted.withValues(alpha: 0.8),
                     ),
                   ),
                 ],
@@ -81,9 +93,10 @@ class WalletCard extends StatelessWidget {
               CurrencyFormatter.format(wallet.balance),
               style: TextStyle(
                 fontFamily: 'Cairo',
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                color: wallet.balance >= 0 ? AppColors.secondary : AppColors.danger,
+                fontSize: 19,
+                fontWeight: FontWeight.w800,
+                color:
+                    wallet.balance >= 0 ? AppColors.secondary : AppColors.danger,
               ),
             ),
           ],
