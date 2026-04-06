@@ -247,7 +247,7 @@ class BackupService {
         ..note = m['note']
         ..merchant = m['merchant']
         ..date = DateTime.parse(m['date'])
-        ..walletId = m['walletId']
+        ..walletId = (m['walletId'] as int?) ?? 1
         ..source = m['source'] ?? 'manual'
         ..installmentPlanId = m['installmentPlanId']
         ..isInterest = m['isInterest'] ?? false
@@ -360,7 +360,7 @@ class BackupService {
         ..paidInstallments = m['paidInstallments'] ?? 0
         ..paidAmount = (m['paidAmount'] as num?)?.toDouble() ?? 0
         ..status = m['status'] ?? 'active'
-        ..walletId = m['walletId'] ?? 1
+        ..walletId = (m['walletId'] as int?) ?? 1
         ..autoAdd = m['autoAdd'] ?? false
         ..createdAt = DateTime.now());
     }

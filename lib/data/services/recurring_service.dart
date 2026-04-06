@@ -29,19 +29,18 @@ class RecurringService {
       if (dueDate.isAfter(today)) continue;
 
       if (recurring.autoAdd) {
-        final transaction = await _createTransaction(recurring);
+        final transaction = await _createAndAdvance(recurring);
         created.add(transaction);
-        await _advanceNextDate(recurring);
       }
-      // For non-autoAdd, notification would be triggered separately
     }
 
     return created;
   }
 
-  /// Get upcoming recurring transactions within N days
+  /// Get upcoming recurring transactions within N days (excludes overdue)
   Future<List<RecurringTransaction>> getUpcoming(int days) async {
     final now = DateTime.now();
+    final today = DateTime(now.year, now.month, now.day);
     final cutoff = now.add(Duration(days: days));
 
     final active = await isar.recurringTransactions
@@ -50,22 +49,23 @@ class RecurringService {
         .findAll();
 
     return active
-        .where((r) =>
-            r.nextDueDate.isBefore(cutoff) || r.nextDueDate == cutoff)
+        .where((r) {
+          final due = DateTime(
+              r.nextDueDate.year, r.nextDueDate.month, r.nextDueDate.day);
+          return !due.isBefore(today) && !due.isAfter(cutoff);
+        })
         .toList()
       ..sort((a, b) => a.nextDueDate.compareTo(b.nextDueDate));
   }
 
   /// Manually confirm and create a recurring transaction
   Future<Transaction> confirmRecurring(RecurringTransaction recurring) async {
-    final transaction = await _createTransaction(recurring);
-    await _advanceNextDate(recurring);
-    return transaction;
+    return _createAndAdvance(recurring);
   }
 
-  Future<Transaction> _createTransaction(
+  /// Atomic: create transaction + update wallet + advance date in one writeTxn
+  Future<Transaction> _createAndAdvance(
       RecurringTransaction recurring) async {
-    // Use first available wallet instead of hardcoded ID
     final wallets = await isar.wallets.where().findAll();
     final walletId = wallets.isNotEmpty ? wallets.first.id : 1;
 
@@ -80,9 +80,10 @@ class RecurringService {
       ..createdAt = DateTime.now();
 
     await isar.writeTxn(() async {
+      // 1. Save transaction
       await isar.transactions.put(transaction);
 
-      // Update the specific wallet used
+      // 2. Update wallet balance
       final wallet = await isar.wallets.get(walletId);
       if (wallet != null) {
         if (recurring.type == 'expense') {
@@ -92,39 +93,11 @@ class RecurringService {
         }
         await isar.wallets.put(wallet);
       }
-    });
 
-    return transaction;
-  }
+      // 3. Advance next due date (atomic with above)
+      _advanceNextDate(recurring);
 
-  Future<void> _advanceNextDate(RecurringTransaction recurring) async {
-    await isar.writeTxn(() async {
-      switch (recurring.frequency) {
-        case 'daily':
-          recurring.nextDueDate =
-              recurring.nextDueDate.add(const Duration(days: 1));
-          break;
-        case 'weekly':
-          recurring.nextDueDate =
-              recurring.nextDueDate.add(const Duration(days: 7));
-          break;
-        case 'monthly':
-          recurring.nextDueDate = DateTime(
-            recurring.nextDueDate.year,
-            recurring.nextDueDate.month + 1,
-            recurring.nextDueDate.day,
-          );
-          break;
-        case 'yearly':
-          recurring.nextDueDate = DateTime(
-            recurring.nextDueDate.year + 1,
-            recurring.nextDueDate.month,
-            recurring.nextDueDate.day,
-          );
-          break;
-      }
-
-      // Check if ended
+      // 4. Check if ended
       if (recurring.endDate != null &&
           recurring.nextDueDate.isAfter(recurring.endDate!)) {
         recurring.isActive = false;
@@ -132,5 +105,38 @@ class RecurringService {
 
       await isar.recurringTransactions.put(recurring);
     });
+
+    return transaction;
+  }
+
+  /// Advance nextDueDate with proper day clamping for monthly/yearly
+  void _advanceNextDate(RecurringTransaction recurring) {
+    switch (recurring.frequency) {
+      case 'daily':
+        recurring.nextDueDate =
+            recurring.nextDueDate.add(const Duration(days: 1));
+        break;
+      case 'weekly':
+        recurring.nextDueDate =
+            recurring.nextDueDate.add(const Duration(days: 7));
+        break;
+      case 'monthly':
+        final targetMonth = recurring.nextDueDate.month + 1;
+        final targetYear = recurring.nextDueDate.year;
+        final maxDay =
+            DateTime(targetYear, targetMonth + 1, 0).day; // last day of target
+        final day =
+            recurring.nextDueDate.day > maxDay ? maxDay : recurring.nextDueDate.day;
+        recurring.nextDueDate = DateTime(targetYear, targetMonth, day);
+        break;
+      case 'yearly':
+        final targetYear = recurring.nextDueDate.year + 1;
+        final targetMonth = recurring.nextDueDate.month;
+        final maxDay = DateTime(targetYear, targetMonth + 1, 0).day;
+        final day =
+            recurring.nextDueDate.day > maxDay ? maxDay : recurring.nextDueDate.day;
+        recurring.nextDueDate = DateTime(targetYear, targetMonth, day);
+        break;
+    }
   }
 }

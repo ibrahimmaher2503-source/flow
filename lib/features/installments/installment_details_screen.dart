@@ -201,7 +201,7 @@ class InstallmentDetailsScreen extends ConsumerWidget {
                           );
                           if (confirmed == true) {
                             await service.recordPayment(
-                                plan, plan.walletId);
+                                plan.id, plan.walletId);
                             refreshInstallments(ref);
                             refreshTransactions(ref);
                             refreshWallets(ref);

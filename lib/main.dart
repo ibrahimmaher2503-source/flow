@@ -89,9 +89,9 @@ Future<void> _seedDefaults(Isar isar) async {
     for (final provider in defaultInstallmentProviders) {
       await isar.installmentProviders.put(
         InstallmentProvider()
-          ..name = provider['name']!
-          ..icon = provider['icon']!
-          ..color = provider['color']!
+          ..name = provider['name'] as String
+          ..icon = provider['icon'] as String
+          ..color = provider['color'] as String
           ..createdAt = DateTime.now(),
       );
     }

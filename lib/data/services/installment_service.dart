@@ -9,8 +9,12 @@ class InstallmentService {
 
   InstallmentService(this.isar);
 
-  Future<void> recordPayment(InstallmentPlan plan, int walletId) async {
+  Future<void> recordPayment(int planId, int walletId) async {
     await isar.writeTxn(() async {
+      // Re-fetch plan inside transaction for fresh data
+      final plan = await isar.installmentPlans.get(planId);
+      if (plan == null) return;
+
       // 1. Create transaction
       final transaction = Transaction()
         ..amount = plan.monthlyAmount
@@ -45,7 +49,7 @@ class InstallmentService {
 
   Future<double> totalRemainingDebt() async {
     final plans = await isar.installmentPlans
-        .filter()
+        .where()
         .statusIndexEqualTo('active')
         .findAll();
     double total = 0;
@@ -57,7 +61,7 @@ class InstallmentService {
 
   Future<double> monthlyInstallmentTotal() async {
     final plans = await isar.installmentPlans
-        .filter()
+        .where()
         .statusIndexEqualTo('active')
         .findAll();
     double total = 0;
@@ -81,7 +85,7 @@ class InstallmentService {
 
   Future<Map<String, double>> debtByProvider() async {
     final plans = await isar.installmentPlans
-        .filter()
+        .where()
         .statusIndexEqualTo('active')
         .findAll();
 

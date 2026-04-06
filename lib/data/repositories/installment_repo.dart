@@ -41,21 +41,21 @@ class InstallmentRepo {
 
   Future<List<InstallmentPlan>> getActivePlans() async {
     return isar.installmentPlans
-        .filter()
+        .where()
         .statusIndexEqualTo('active')
         .findAll();
   }
 
   Future<List<InstallmentPlan>> getCompletedPlans() async {
     return isar.installmentPlans
-        .filter()
+        .where()
         .statusIndexEqualTo('completed')
         .findAll();
   }
 
   Future<List<InstallmentPlan>> getByProvider(int providerId) async {
     return isar.installmentPlans
-        .filter()
+        .where()
         .providerIndexEqualTo(providerId)
         .findAll();
   }

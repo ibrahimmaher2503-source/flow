@@ -1,4 +1,4 @@
-final List<Map<String, String>> defaultInstallmentProviders = [
+final List<Map<String, dynamic>> defaultInstallmentProviders = [
   {'name': 'سهولة', 'icon': 'credit_score', 'color': '#FF6B6B'},
   {'name': 'فاليو', 'icon': 'account_balance', 'color': '#F59E0B'},
   {'name': 'كونتكت', 'icon': 'phone_android', 'color': '#3B82F6'},

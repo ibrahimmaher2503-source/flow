@@ -13,7 +13,7 @@ class TransactionRepo {
   Future<List<Transaction>> getByMonth(int year, int month) async {
     final monthKey = '$year-${month.toString().padLeft(2, '0')}';
     return isar.transactions
-        .filter()
+        .where()
         .monthKeyEqualTo(monthKey)
         .sortByDateDesc()
         .findAll();
@@ -21,7 +21,7 @@ class TransactionRepo {
 
   Future<List<Transaction>> getByCategory(String category) async {
     return isar.transactions
-        .filter()
+        .where()
         .categoryIndexEqualTo(category)
         .sortByDateDesc()
         .findAll();
@@ -29,7 +29,7 @@ class TransactionRepo {
 
   Future<List<Transaction>> getBySource(String source) async {
     return isar.transactions
-        .filter()
+        .where()
         .sourceIndexEqualTo(source)
         .sortByDateDesc()
         .findAll();
@@ -44,7 +44,11 @@ class TransactionRepo {
   }
 
   Future<List<Transaction>> getRecent(int limit) async {
-    return isar.transactions.where().sortByDateDesc().limit(limit).findAll();
+    return isar.transactions
+        .where()
+        .sortByDateDesc()
+        .limit(limit)
+        .findAll();
   }
 
   Future<List<Transaction>> search(String query) async {
@@ -80,8 +84,9 @@ class TransactionRepo {
   Future<double> getTotalByType(String type, int year, int month) async {
     final monthKey = '$year-${month.toString().padLeft(2, '0')}';
     final transactions = await isar.transactions
-        .filter()
+        .where()
         .monthKeyEqualTo(monthKey)
+        .filter()
         .typeEqualTo(type)
         .findAll();
     double total = 0;
