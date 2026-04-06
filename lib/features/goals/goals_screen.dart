@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:percent_indicator/circular_percent_indicator.dart';
 import '../../core/theme/app_colors.dart';
-import '../../core/utils/currency_formatter.dart';
 import '../../data/models/savings_goal_model.dart';
 import '../../providers/goal_provider.dart';
 import '../../shared/widgets/empty_state.dart';
+import 'widgets/goal_card.dart';
 
 class GoalsScreen extends ConsumerWidget {
   const GoalsScreen({super.key});
@@ -29,62 +28,12 @@ class GoalsScreen extends ConsumerWidget {
             itemCount: goals.length,
             itemBuilder: (context, index) {
               final goal = goals[index];
-              final percent = goal.targetAmount > 0
-                  ? (goal.currentAmount / goal.targetAmount).clamp(0.0, 1.0)
-                  : 0.0;
-
-              return Container(
-                margin: const EdgeInsets.only(bottom: 12),
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  color: AppColors.surface,
-                  borderRadius: BorderRadius.circular(16),
-                ),
-                child: Row(
-                  children: [
-                    CircularPercentIndicator(
-                      radius: 32,
-                      lineWidth: 5,
-                      percent: percent,
-                      center: Text(
-                        '${(percent * 100).toInt()}%',
-                        style: const TextStyle(
-                            fontFamily: 'Cairo',
-                            fontSize: 12,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white),
-                      ),
-                      progressColor: AppColors.secondary,
-                      backgroundColor: AppColors.background,
-                    ),
-                    const SizedBox(width: 16),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(goal.name,
-                              style: const TextStyle(
-                                  fontFamily: 'Cairo',
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w600,
-                                  color: Colors.white)),
-                          Text(
-                            '${CurrencyFormatter.format(goal.currentAmount)} / ${CurrencyFormatter.format(goal.targetAmount)}',
-                            style: const TextStyle(
-                                fontFamily: 'Cairo',
-                                fontSize: 13,
-                                color: AppColors.textSecondary),
-                          ),
-                        ],
-                      ),
-                    ),
-                    IconButton(
-                      icon: const Icon(Icons.add_circle,
-                          color: AppColors.primary),
-                      onPressed: () =>
-                          _showContributeDialog(context, ref, goal),
-                    ),
-                  ],
+              return Padding(
+                padding: const EdgeInsets.only(bottom: 12),
+                child: GoalCard(
+                  goal: goal,
+                  onContribute: () =>
+                      _showContributeDialog(context, ref, goal),
                 ),
               );
             },

@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/theme/app_colors.dart';
-import '../../core/utils/currency_formatter.dart';
-import '../../core/utils/app_date_utils.dart';
 import '../../data/models/recurring_transaction_model.dart';
 import '../../data/repositories/recurring_repo.dart';
 import '../../data/services/isar_service.dart';
 import '../../shared/widgets/empty_state.dart';
+import 'widgets/recurring_tile.dart';
 
 final recurringRepoProvider = Provider<RecurringRepo>((ref) {
   return RecurringRepo(ref.watch(isarProvider));
@@ -38,66 +37,11 @@ class RecurringScreen extends ConsumerWidget {
             padding: const EdgeInsets.all(16),
             itemCount: items.length,
             itemBuilder: (context, index) {
-              final r = items[index];
-              return Container(
-                margin: const EdgeInsets.only(bottom: 12),
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  color: AppColors.surface,
-                  borderRadius: BorderRadius.circular(16),
-                ),
-                child: Row(
-                  children: [
-                    Container(
-                      width: 44,
-                      height: 44,
-                      decoration: BoxDecoration(
-                        color: (r.type == 'income'
-                                ? AppColors.success
-                                : AppColors.danger)
-                            .withValues(alpha: 0.2),
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: Icon(
-                        Icons.repeat,
-                        color: r.type == 'income'
-                            ? AppColors.success
-                            : AppColors.danger,
-                      ),
-                    ),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(r.name,
-                              style: const TextStyle(
-                                  fontFamily: 'Cairo',
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.w500,
-                                  color: Colors.white)),
-                          Text(
-                            '${_freqLabel(r.frequency)} · القادم: ${AppDateUtils.formatDate(r.nextDueDate)}',
-                            style: const TextStyle(
-                                fontFamily: 'Cairo',
-                                fontSize: 12,
-                                color: AppColors.textMuted),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Text(
-                      CurrencyFormatter.format(r.amount),
-                      style: TextStyle(
-                        fontFamily: 'Cairo',
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: r.type == 'income'
-                            ? AppColors.secondary
-                            : AppColors.danger,
-                      ),
-                    ),
-                  ],
+              return Padding(
+                padding: const EdgeInsets.only(bottom: 12),
+                child: RecurringTile(
+                  recurring: items[index],
+                  onTap: () => _showEditDialog(context, ref, items[index]),
                 ),
               );
             },
@@ -113,19 +57,51 @@ class RecurringScreen extends ConsumerWidget {
     );
   }
 
-  String _freqLabel(String freq) {
-    switch (freq) {
-      case 'daily':
-        return 'يومي';
-      case 'weekly':
-        return 'أسبوعي';
-      case 'monthly':
-        return 'شهري';
-      case 'yearly':
-        return 'سنوي';
-      default:
-        return freq;
-    }
+  void _showEditDialog(
+      BuildContext context, WidgetRef ref, RecurringTransaction recurring) {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        backgroundColor: AppColors.surface,
+        title: Text(recurring.name,
+            style: const TextStyle(fontFamily: 'Cairo', color: Colors.white)),
+        content: Text(
+          'تلقائي: ${recurring.autoAdd ? "نعم" : "لا"}\nنشط: ${recurring.isActive ? "نعم" : "لا"}',
+          style:
+              const TextStyle(fontFamily: 'Cairo', color: AppColors.textSecondary),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () async {
+              await ref.read(recurringRepoProvider).delete(recurring.id);
+              ref.invalidate(activeRecurringProvider);
+              if (ctx.mounted) Navigator.pop(ctx);
+            },
+            child: const Text('حذف',
+                style: TextStyle(
+                    fontFamily: 'Cairo', color: AppColors.danger)),
+          ),
+          TextButton(
+            onPressed: () async {
+              recurring.isActive = !recurring.isActive;
+              await ref.read(recurringRepoProvider).update(recurring);
+              ref.invalidate(activeRecurringProvider);
+              if (ctx.mounted) Navigator.pop(ctx);
+            },
+            child: Text(
+              recurring.isActive ? 'إيقاف' : 'تفعيل',
+              style: const TextStyle(
+                  fontFamily: 'Cairo', color: AppColors.primary),
+            ),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(ctx),
+            child: const Text('إغلاق',
+                style: TextStyle(fontFamily: 'Cairo')),
+          ),
+        ],
+      ),
+    );
   }
 
   void _showAddDialog(BuildContext context, WidgetRef ref) {
@@ -134,6 +110,7 @@ class RecurringScreen extends ConsumerWidget {
     String type = 'expense';
     String frequency = 'monthly';
     String category = 'فواتير';
+    bool autoAdd = false;
 
     showDialog(
       context: context,
@@ -160,39 +137,48 @@ class RecurringScreen extends ConsumerWidget {
                       fontFamily: 'Cairo', color: Colors.white),
                   decoration: const InputDecoration(hintText: 'المبلغ'),
                 ),
+                const SizedBox(height: 12),
+
+                // Type toggle
+                Row(
+                  children: [
+                    _chip('مصروف', type == 'expense',
+                        () => setDialogState(() => type = 'expense')),
+                    const SizedBox(width: 8),
+                    _chip('دخل', type == 'income',
+                        () => setDialogState(() => type = 'income')),
+                  ],
+                ),
                 const SizedBox(height: 8),
+
+                // Frequency
                 Row(
                   children: ['monthly', 'weekly', 'yearly'].map((f) {
-                    final isSelected = frequency == f;
                     return Padding(
                       padding: const EdgeInsetsDirectional.only(end: 8),
-                      child: GestureDetector(
-                        onTap: () => setDialogState(() => frequency = f),
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 12, vertical: 6),
-                          decoration: BoxDecoration(
-                            color: isSelected
-                                ? AppColors.primary
-                                : Colors.transparent,
-                            borderRadius: BorderRadius.circular(8),
-                            border: isSelected
-                                ? null
-                                : Border.all(color: AppColors.textMuted),
-                          ),
-                          child: Text(
-                            _freqLabel(f),
-                            style: TextStyle(
-                                fontFamily: 'Cairo',
-                                fontSize: 13,
-                                color: isSelected
-                                    ? Colors.white
-                                    : AppColors.textSecondary),
-                          ),
-                        ),
+                      child: _chip(
+                        _freqLabel(f),
+                        frequency == f,
+                        () => setDialogState(() => frequency = f),
                       ),
                     );
                   }).toList(),
+                ),
+                const SizedBox(height: 8),
+
+                // Auto-add
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text('تسجيل تلقائي',
+                        style: TextStyle(
+                            fontFamily: 'Cairo', color: Colors.white)),
+                    Switch(
+                      value: autoAdd,
+                      onChanged: (v) => setDialogState(() => autoAdd = v),
+                      activeColor: AppColors.primary,
+                    ),
+                  ],
                 ),
               ],
             ),
@@ -216,6 +202,7 @@ class RecurringScreen extends ConsumerWidget {
                         ..type = type
                         ..category = category
                         ..frequency = frequency
+                        ..autoAdd = autoAdd
                         ..startDate = DateTime.now()
                         ..nextDueDate = DateTime.now(),
                     );
@@ -230,5 +217,43 @@ class RecurringScreen extends ConsumerWidget {
         ),
       ),
     );
+  }
+
+  Widget _chip(String label, bool selected, VoidCallback onTap) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+        decoration: BoxDecoration(
+          color: selected ? AppColors.primary : Colors.transparent,
+          borderRadius: BorderRadius.circular(8),
+          border:
+              selected ? null : Border.all(color: AppColors.textMuted),
+        ),
+        child: Text(
+          label,
+          style: TextStyle(
+            fontFamily: 'Cairo',
+            fontSize: 13,
+            color: selected ? Colors.white : AppColors.textSecondary,
+          ),
+        ),
+      ),
+    );
+  }
+
+  String _freqLabel(String freq) {
+    switch (freq) {
+      case 'daily':
+        return 'يومي';
+      case 'weekly':
+        return 'أسبوعي';
+      case 'monthly':
+        return 'شهري';
+      case 'yearly':
+        return 'سنوي';
+      default:
+        return freq;
+    }
   }
 }
