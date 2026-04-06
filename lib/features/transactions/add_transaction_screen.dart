@@ -7,8 +7,11 @@ import '../../data/models/category_model.dart';
 import '../../data/models/wallet_model.dart';
 import '../../data/repositories/transaction_repo.dart';
 import '../../data/repositories/wallet_repo.dart';
+import '../../data/repositories/settings_repo.dart';
+import '../../data/services/isar_service.dart';
 import '../../providers/transaction_provider.dart';
 import '../../providers/wallet_provider.dart';
+import '../../providers/settings_provider.dart';
 import 'widgets/number_pad.dart';
 import 'widgets/category_grid.dart';
 
@@ -103,9 +106,14 @@ class _AddTransactionScreenState extends ConsumerState<AddTransactionScreen> {
     final balanceChange = _type == 'income' ? amount : -amount;
     await walletRepo.updateBalance(_selectedWallet!.id, balanceChange);
 
+    // Update streak
+    final settingsRepo = SettingsRepo(ref.read(isarProvider));
+    await settingsRepo.updateStreak();
+
     if (mounted) {
       refreshTransactions(ref);
       refreshWallets(ref);
+      refreshSettings(ref);
       Navigator.of(context).pop(true);
     }
   }

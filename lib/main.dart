@@ -4,6 +4,7 @@ import 'package:isar/isar.dart';
 import 'package:path_provider/path_provider.dart';
 
 import 'app.dart';
+import 'data/services/notification_service.dart';
 import 'data/models/transaction_model.dart';
 import 'data/models/category_model.dart';
 import 'data/models/budget_model.dart';
@@ -19,6 +20,7 @@ import 'data/seeds/default_installment_providers.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await NotificationService.init();
 
   final dir = await getApplicationDocumentsDirectory();
   final isar = await Isar.open(
