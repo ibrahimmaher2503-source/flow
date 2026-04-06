@@ -109,10 +109,10 @@ class _TransactionsScreenState extends ConsumerState<TransactionsScreen> {
                   onPressed: () {
                     ref.read(selectedMonthProvider.notifier).state = DateTime(
                       selectedMonth.year,
-                      selectedMonth.month - 1,
+                      selectedMonth.month + 1,
                     );
                   },
-                  icon: const Icon(Icons.chevron_right, color: Colors.white),
+                  icon: const Icon(Icons.chevron_right, color: AppColors.textPrimary),
                 ),
                 Text(
                   AppDateUtils.formatMonth(selectedMonth),
@@ -120,17 +120,17 @@ class _TransactionsScreenState extends ConsumerState<TransactionsScreen> {
                     fontFamily: 'Cairo',
                     fontSize: 18,
                     fontWeight: FontWeight.w600,
-                    color: Colors.white,
+                    color: AppColors.textPrimary,
                   ),
                 ),
                 IconButton(
                   onPressed: () {
                     ref.read(selectedMonthProvider.notifier).state = DateTime(
                       selectedMonth.year,
-                      selectedMonth.month + 1,
+                      selectedMonth.month - 1,
                     );
                   },
-                  icon: const Icon(Icons.chevron_left, color: Colors.white),
+                  icon: const Icon(Icons.chevron_left, color: AppColors.textPrimary),
                 ),
               ],
             ),

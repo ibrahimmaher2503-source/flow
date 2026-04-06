@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'core/router/app_router.dart';
+import 'core/theme/app_colors.dart';
 import 'core/theme/app_theme.dart';
 import 'features/dashboard/dashboard_screen.dart';
 import 'features/transactions/transactions_screen.dart';
@@ -17,6 +19,7 @@ class FlowSpendApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: AppTheme.darkTheme,
       locale: const Locale('ar'),
+      onGenerateRoute: AppRouter.generateRoute,
       home: const AppShell(),
       builder: (context, child) {
         return Directionality(
@@ -45,6 +48,9 @@ class _AppShellState extends State<AppShell> {
     BudgetsScreen(),
     SettingsScreen(),
   ];
+
+  // FAB only on Dashboard (0) and Transactions (1) tabs
+  bool get _showFab => _currentIndex == 0 || _currentIndex == 1;
 
   @override
   Widget build(BuildContext context) {
@@ -79,17 +85,20 @@ class _AppShellState extends State<AppShell> {
           ),
         ],
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.push<bool>(
-            context,
-            MaterialPageRoute(
-              builder: (_) => const AddTransactionScreen(),
-            ),
-          );
-        },
-        child: const Icon(Icons.add),
-      ),
+      floatingActionButton: _showFab
+          ? FloatingActionButton(
+              onPressed: () {
+                Navigator.push<bool>(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => const AddTransactionScreen(),
+                  ),
+                );
+              },
+              backgroundColor: AppColors.primary,
+              child: const Icon(Icons.add),
+            )
+          : null,
     );
   }
 }
