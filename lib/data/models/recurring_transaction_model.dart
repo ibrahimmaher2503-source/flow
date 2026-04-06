@@ -14,6 +14,7 @@ class RecurringTransaction {
   late DateTime nextDueDate;
   late DateTime startDate;
   DateTime? endDate;
+  int? walletId;
   bool isActive = true;
   bool autoAdd = false;
 }

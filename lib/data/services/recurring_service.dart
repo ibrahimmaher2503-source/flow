@@ -67,8 +67,14 @@ class RecurringService {
   /// Atomic: create transaction + update wallet + advance date in one writeTxn
   Future<Transaction> _createAndAdvance(
       RecurringTransaction recurring) async {
-    final wallets = await isar.wallets.where().findAll();
-    final walletId = wallets.isNotEmpty ? wallets.first.id : 1;
+    // Use recurring's walletId if set, otherwise first available wallet
+    int walletId;
+    if (recurring.walletId != null) {
+      walletId = recurring.walletId!;
+    } else {
+      final wallets = await isar.wallets.where().findAll();
+      walletId = wallets.isNotEmpty ? wallets.first.id : 1;
+    }
 
     final transaction = Transaction()
       ..amount = recurring.amount

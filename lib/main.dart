@@ -40,7 +40,8 @@ Future<void> main() async {
   );
 
   final settingsCount = await isar.appSettings.count();
-  if (settingsCount == 0) {
+  final isFirstLaunch = settingsCount == 0;
+  if (isFirstLaunch) {
     await _seedDefaults(isar);
   }
 
@@ -49,7 +50,7 @@ Future<void> main() async {
       overrides: [
         isarProvider.overrideWithValue(isar),
       ],
-      child: const FlowSpendApp(),
+      child: FlowSpendApp(showOnboarding: isFirstLaunch),
     ),
   );
 }

@@ -8,9 +8,12 @@ import 'features/transactions/add_transaction_screen.dart';
 import 'features/installments/installments_hub_screen.dart';
 import 'features/budgets/budgets_screen.dart';
 import 'features/settings/settings_screen.dart';
+import 'features/onboarding/onboarding_screen.dart';
 
 class FlowSpendApp extends StatelessWidget {
-  const FlowSpendApp({super.key});
+  final bool showOnboarding;
+
+  const FlowSpendApp({super.key, this.showOnboarding = false});
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +23,7 @@ class FlowSpendApp extends StatelessWidget {
       theme: AppTheme.darkTheme,
       locale: const Locale('ar'),
       onGenerateRoute: AppRouter.generateRoute,
-      home: const AppShell(),
+      home: showOnboarding ? _OnboardingWrapper() : const AppShell(),
       builder: (context, child) {
         return Directionality(
           textDirection: TextDirection.rtl,
@@ -125,6 +128,19 @@ class _AppShellState extends State<AppShell> {
               ),
             )
           : null,
+    );
+  }
+}
+
+class _OnboardingWrapper extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return OnboardingScreen(
+      onComplete: () {
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (_) => const AppShell()),
+        );
+      },
     );
   }
 }

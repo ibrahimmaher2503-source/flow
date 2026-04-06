@@ -67,6 +67,11 @@ const RecurringTransactionSchema = CollectionSchema(
       id: 9,
       name: r'type',
       type: IsarType.string,
+    ),
+    r'walletId': PropertySchema(
+      id: 10,
+      name: r'walletId',
+      type: IsarType.long,
     )
   },
   estimateSize: _recurringTransactionEstimateSize,
@@ -112,6 +117,7 @@ void _recurringTransactionSerialize(
   writer.writeDateTime(offsets[7], object.nextDueDate);
   writer.writeDateTime(offsets[8], object.startDate);
   writer.writeString(offsets[9], object.type);
+  writer.writeLong(offsets[10], object.walletId);
 }
 
 RecurringTransaction _recurringTransactionDeserialize(
@@ -132,6 +138,7 @@ RecurringTransaction _recurringTransactionDeserialize(
   object.nextDueDate = reader.readDateTime(offsets[7]);
   object.startDate = reader.readDateTime(offsets[8]);
   object.type = reader.readString(offsets[9]);
+  object.walletId = reader.readLongOrNull(offsets[10]);
   return object;
 }
 
@@ -162,6 +169,8 @@ P _recurringTransactionDeserializeProp<P>(
       return (reader.readDateTime(offset)) as P;
     case 9:
       return (reader.readString(offset)) as P;
+    case 10:
+      return (reader.readLongOrNull(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
   }
@@ -1143,6 +1152,80 @@ extension RecurringTransactionQueryFilter on QueryBuilder<RecurringTransaction,
       ));
     });
   }
+
+  QueryBuilder<RecurringTransaction, RecurringTransaction,
+      QAfterFilterCondition> walletIdIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'walletId',
+      ));
+    });
+  }
+
+  QueryBuilder<RecurringTransaction, RecurringTransaction,
+      QAfterFilterCondition> walletIdIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'walletId',
+      ));
+    });
+  }
+
+  QueryBuilder<RecurringTransaction, RecurringTransaction,
+      QAfterFilterCondition> walletIdEqualTo(int? value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'walletId',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<RecurringTransaction, RecurringTransaction,
+      QAfterFilterCondition> walletIdGreaterThan(
+    int? value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'walletId',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<RecurringTransaction, RecurringTransaction,
+      QAfterFilterCondition> walletIdLessThan(
+    int? value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'walletId',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<RecurringTransaction, RecurringTransaction,
+      QAfterFilterCondition> walletIdBetween(
+    int? lower,
+    int? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'walletId',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+      ));
+    });
+  }
 }
 
 extension RecurringTransactionQueryObject on QueryBuilder<RecurringTransaction,
@@ -1290,6 +1373,20 @@ extension RecurringTransactionQuerySortBy
       sortByTypeDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'type', Sort.desc);
+    });
+  }
+
+  QueryBuilder<RecurringTransaction, RecurringTransaction, QAfterSortBy>
+      sortByWalletId() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'walletId', Sort.asc);
+    });
+  }
+
+  QueryBuilder<RecurringTransaction, RecurringTransaction, QAfterSortBy>
+      sortByWalletIdDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'walletId', Sort.desc);
     });
   }
 }
@@ -1449,6 +1546,20 @@ extension RecurringTransactionQuerySortThenBy
       return query.addSortBy(r'type', Sort.desc);
     });
   }
+
+  QueryBuilder<RecurringTransaction, RecurringTransaction, QAfterSortBy>
+      thenByWalletId() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'walletId', Sort.asc);
+    });
+  }
+
+  QueryBuilder<RecurringTransaction, RecurringTransaction, QAfterSortBy>
+      thenByWalletIdDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'walletId', Sort.desc);
+    });
+  }
 }
 
 extension RecurringTransactionQueryWhereDistinct
@@ -1520,6 +1631,13 @@ extension RecurringTransactionQueryWhereDistinct
       distinctByType({bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'type', caseSensitive: caseSensitive);
+    });
+  }
+
+  QueryBuilder<RecurringTransaction, RecurringTransaction, QDistinct>
+      distinctByWalletId() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'walletId');
     });
   }
 }
@@ -1596,6 +1714,13 @@ extension RecurringTransactionQueryProperty on QueryBuilder<
   QueryBuilder<RecurringTransaction, String, QQueryOperations> typeProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'type');
+    });
+  }
+
+  QueryBuilder<RecurringTransaction, int?, QQueryOperations>
+      walletIdProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'walletId');
     });
   }
 }

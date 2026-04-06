@@ -77,12 +77,16 @@ class BackupService {
 
         // Always restore settings (use defaults if missing from backup)
         final s = data['settings'] as Map<String, dynamic>? ?? {};
+        final lastLog = s['lastLogDate'] as String?;
         await isar.appSettings.put(AppSettings()
           ..currency = s['currency'] as String? ?? 'EGP'
           ..language = s['language'] as String? ?? 'ar'
-          ..monthStartDay = s['monthStartDay'] as int? ?? 1
           ..smsParsingEnabled = s['smsParsingEnabled'] as bool? ?? true
-          ..notificationsEnabled = s['notificationsEnabled'] as bool? ?? true);
+          ..notificationsEnabled = s['notificationsEnabled'] as bool? ?? true
+          ..monthStartDay = s['monthStartDay'] as int? ?? 1
+          ..defaultWallet = s['defaultWallet'] as String? ?? 'cash'
+          ..streakDays = s['streakDays'] as int? ?? 0
+          ..lastLogDate = lastLog != null ? DateTime.parse(lastLog) : null);
       });
 
       return true;
@@ -170,6 +174,8 @@ class BackupService {
               'frequency': r.frequency,
               'nextDueDate': r.nextDueDate.toIso8601String(),
               'startDate': r.startDate.toIso8601String(),
+              'endDate': r.endDate?.toIso8601String(),
+              'walletId': r.walletId,
               'isActive': r.isActive,
               'autoAdd': r.autoAdd,
             })
@@ -220,6 +226,7 @@ class BackupService {
               'status': p.status,
               'walletId': p.walletId,
               'autoAdd': p.autoAdd,
+              'createdAt': p.createdAt.toIso8601String(),
             })
         .toList();
   }
@@ -229,8 +236,12 @@ class BackupService {
     return {
       'currency': s.currency,
       'language': s.language,
+      'smsParsingEnabled': s.smsParsingEnabled,
+      'notificationsEnabled': s.notificationsEnabled,
       'monthStartDay': s.monthStartDay,
+      'defaultWallet': s.defaultWallet,
       'streakDays': s.streakDays,
+      'lastLogDate': s.lastLogDate?.toIso8601String(),
     };
   }
 
@@ -301,6 +312,7 @@ class BackupService {
     if (items == null) return;
     for (final item in items) {
       final m = item as Map<String, dynamic>;
+      final endDateStr = m['endDate'] as String?;
       await isar.recurringTransactions.put(RecurringTransaction()
         ..amount = (m['amount'] as num).toDouble()
         ..type = m['type']
@@ -309,6 +321,8 @@ class BackupService {
         ..frequency = m['frequency']
         ..nextDueDate = DateTime.parse(m['nextDueDate'])
         ..startDate = DateTime.parse(m['startDate'])
+        ..endDate = endDateStr != null ? DateTime.parse(endDateStr) : null
+        ..walletId = m['walletId'] as int?
         ..isActive = m['isActive'] ?? true
         ..autoAdd = m['autoAdd'] ?? false);
     }
@@ -362,7 +376,9 @@ class BackupService {
         ..status = m['status'] ?? 'active'
         ..walletId = (m['walletId'] as int?) ?? 1
         ..autoAdd = m['autoAdd'] ?? false
-        ..createdAt = DateTime.now());
+        ..createdAt = m['createdAt'] != null
+            ? DateTime.parse(m['createdAt'])
+            : DateTime.now());
     }
   }
 }

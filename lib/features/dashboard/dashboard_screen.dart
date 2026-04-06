@@ -7,6 +7,7 @@ import 'widgets/streak_badge.dart';
 import 'widgets/installment_summary_card.dart';
 import 'widgets/recent_transactions.dart';
 import 'widgets/upcoming_recurring.dart';
+import 'widgets/finance_score_card.dart';
 
 class DashboardScreen extends ConsumerWidget {
   const DashboardScreen({super.key});
@@ -31,6 +32,8 @@ class DashboardScreen extends ConsumerWidget {
               ),
               children: const [
                 BalanceCard(),
+                SizedBox(height: 12),
+                FinanceScoreCard(),
                 SizedBox(height: 12),
                 StreakBadge(),
                 SizedBox(height: 12),
