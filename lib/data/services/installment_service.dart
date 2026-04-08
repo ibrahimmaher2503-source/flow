@@ -1,5 +1,6 @@
 import 'package:isar/isar.dart';
 import '../../core/constants/app_constants.dart';
+import '../../core/utils/report_calculations.dart';
 import '../models/transaction_model.dart';
 import '../models/installment_plan_model.dart';
 import '../models/installment_provider_model.dart';
@@ -99,5 +100,63 @@ class InstallmentService {
       result[name] = (result[name] ?? 0) + plan.remainingAmount;
     }
     return result;
+  }
+
+  /// Get upcoming payments for next N months
+  Future<List<UpcomingPayment>> getUpcomingPayments(int months) async {
+    final plans = await isar.installmentPlans
+        .where()
+        .statusIndexEqualTo(PlanStatus.active)
+        .findAll();
+
+    final List<UpcomingPayment> payments = [];
+    final now = DateTime.now();
+    final endDate = DateTime(now.year, now.month + months, now.day);
+
+    for (final plan in plans) {
+      // Calculate upcoming payment dates for this plan
+      for (int i = 0; i < plan.remainingInstallments && i < months; i++) {
+        final paymentNumber = plan.paidInstallments + i + 1;
+        final dueDate = DateTime(
+          plan.firstPaymentDate.year,
+          plan.firstPaymentDate.month + paymentNumber - 1,
+          plan.dayOfMonth,
+        );
+
+        // Only include if within our range and not in the past
+        if (dueDate.isAfter(now.subtract(const Duration(days: 1))) &&
+            dueDate.isBefore(endDate)) {
+          payments.add(UpcomingPayment(
+            planId: plan.id,
+            itemName: plan.itemName,
+            amount: plan.monthlyAmount,
+            dueDate: dueDate,
+            installmentNumber: paymentNumber,
+            totalInstallments: plan.totalInstallments,
+          ));
+        }
+      }
+    }
+
+    // Sort by due date
+    payments.sort((a, b) => a.dueDate.compareTo(b.dueDate));
+    return payments;
+  }
+
+  /// Get projected date when all installments will be paid off
+  Future<DateTime?> getProjectedPayoffDate() async {
+    final plans = await isar.installmentPlans
+        .where()
+        .statusIndexEqualTo(PlanStatus.active)
+        .findAll();
+
+    return calculateProjectedPayoffDate(plans);
+  }
+
+  /// Get interest analysis for all plans
+  Future<({double totalInterest, double interestPercentage})>
+      getInterestAnalysis() async {
+    final plans = await isar.installmentPlans.where().findAll();
+    return calculateInterestAnalysis(plans);
   }
 }

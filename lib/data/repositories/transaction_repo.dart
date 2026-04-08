@@ -96,4 +96,44 @@ class TransactionRepo {
     }
     return total;
   }
+
+  /// Get transactions for a range of months
+  /// [monthKeys] should be in format 'YYYY-MM'
+  Future<List<Transaction>> getByMonthRange(List<String> monthKeys) async {
+    if (monthKeys.isEmpty) return [];
+
+    // Use filter to match any of the month keys
+    final List<Transaction> results = [];
+    for (final key in monthKeys) {
+      final monthTransactions = await isar.transactions
+          .where()
+          .monthKeyEqualTo(key)
+          .findAll();
+      results.addAll(monthTransactions);
+    }
+
+    // Sort by date descending
+    results.sort((a, b) => b.date.compareTo(a.date));
+    return results;
+  }
+
+  /// Get transaction count and total by source for a specific month
+  Future<Map<String, ({int count, double amount})>> getBySourceForMonth(
+      int year, int month) async {
+    final monthKey = '$year-${month.toString().padLeft(2, '0')}';
+    final transactions = await isar.transactions
+        .where()
+        .monthKeyEqualTo(monthKey)
+        .findAll();
+
+    final Map<String, ({int count, double amount})> result = {};
+    for (final t in transactions) {
+      final current = result[t.source] ?? (count: 0, amount: 0.0);
+      result[t.source] = (
+        count: current.count + 1,
+        amount: current.amount + t.amount,
+      );
+    }
+    return result;
+  }
 }
