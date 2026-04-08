@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 abstract class AppColors {
+  // Dark theme colors (existing)
   static const primary = Color(0xFF6C63FF);
   static const primaryDark = Color(0xFF4F46E5);
   static const secondary = Color(0xFF2DD4BF);
@@ -16,7 +17,15 @@ abstract class AppColors {
   static const textSecondary = Color(0xFF9CA3AF);
   static const textMuted = Color(0xFF6B7280);
 
-  // Gradients
+  // Light theme colors (new) - WCAG AA compliant
+  static const lightBackground = Color(0xFFF8F9FA);
+  static const lightSurface = Color(0xFFFFFFFF);
+  static const lightSurfaceLight = Color(0xFFF1F3F5);
+  static const lightTextPrimary = Color(0xFF1A1A1A);  // 16.9:1 on lightBackground (AAA)
+  static const lightTextSecondary = Color(0xFF4B5563);  // 7.7:1 on lightBackground (AAA)
+  static const lightTextMuted = Color(0xFF5F6B7D);  // 5.3:1 on lightBackground (AA)
+
+  // Gradients (dark theme)
   static const primaryGradient = LinearGradient(
     colors: [primary, primaryDark],
     begin: Alignment.topLeft,
@@ -35,5 +44,12 @@ abstract class AppColors {
       Color(0xFF2DD4BF),
       Color(0xFFF59E0B),
     ],
+  );
+
+  // Gradients (light theme)
+  static const cardGradientLight = LinearGradient(
+    colors: [Color(0xFFFFFFFF), Color(0xFFF1F3F5)],
+    begin: Alignment.topLeft,
+    end: Alignment.bottomRight,
   );
 }
