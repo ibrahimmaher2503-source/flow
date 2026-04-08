@@ -14,4 +14,5 @@ class AppSettings {
   String defaultWallet = 'cash';
   int streakDays = 0;
   DateTime? lastLogDate;
+  String themeMode = 'system'; // 'light', 'dark', or 'system'
 }

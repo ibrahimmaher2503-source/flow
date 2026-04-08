@@ -3,6 +3,124 @@ import 'package:flutter/services.dart';
 import 'app_colors.dart';
 
 class AppTheme {
+  static ThemeData get lightTheme {
+    return ThemeData(
+      brightness: Brightness.light,
+      fontFamily: 'Cairo',
+      scaffoldBackgroundColor: AppColors.lightBackground,
+      colorScheme: const ColorScheme.light(
+        primary: AppColors.primary,
+        secondary: AppColors.secondary,
+        surface: AppColors.lightSurface,
+        error: AppColors.danger,
+      ),
+      appBarTheme: const AppBarTheme(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        scrolledUnderElevation: 0,
+        centerTitle: true,
+        titleTextStyle: TextStyle(
+          fontFamily: 'Cairo',
+          fontSize: 20,
+          fontWeight: FontWeight.w700,
+          color: AppColors.lightTextPrimary,
+          letterSpacing: -0.3,
+        ),
+        iconTheme: IconThemeData(color: AppColors.lightTextPrimary),
+        systemOverlayStyle: SystemUiOverlayStyle(
+          statusBarColor: Colors.transparent,
+          statusBarIconBrightness: Brightness.dark,
+        ),
+      ),
+      bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+        backgroundColor: AppColors.lightSurface,
+        selectedItemColor: AppColors.primary,
+        unselectedItemColor: AppColors.lightTextMuted,
+        type: BottomNavigationBarType.fixed,
+        elevation: 0,
+        selectedLabelStyle: TextStyle(
+          fontFamily: 'Cairo',
+          fontSize: 11,
+          fontWeight: FontWeight.w600,
+        ),
+        unselectedLabelStyle: TextStyle(
+          fontFamily: 'Cairo',
+          fontSize: 11,
+        ),
+      ),
+      cardTheme: CardThemeData(
+        color: AppColors.lightSurface,
+        elevation: 0,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+      ),
+      floatingActionButtonTheme: const FloatingActionButtonThemeData(
+        backgroundColor: AppColors.primary,
+        foregroundColor: Colors.white,
+        elevation: 0,
+      ),
+      inputDecorationTheme: InputDecorationTheme(
+        filled: true,
+        fillColor: AppColors.lightSurfaceLight.withValues(alpha: 0.6),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(14),
+          borderSide: BorderSide.none,
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(14),
+          borderSide: BorderSide(
+            color: Colors.black.withValues(alpha: 0.06),
+          ),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(14),
+          borderSide: const BorderSide(
+            color: AppColors.primary,
+            width: 1.5,
+          ),
+        ),
+        hintStyle: const TextStyle(
+          fontFamily: 'Cairo',
+          color: AppColors.lightTextMuted,
+          fontSize: 14,
+        ),
+        contentPadding:
+            const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+      ),
+      dialogTheme: DialogThemeData(
+        backgroundColor: AppColors.lightSurface,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        titleTextStyle: const TextStyle(
+          fontFamily: 'Cairo',
+          fontSize: 18,
+          fontWeight: FontWeight.w700,
+          color: AppColors.lightTextPrimary,
+        ),
+      ),
+      snackBarTheme: SnackBarThemeData(
+        backgroundColor: AppColors.lightSurfaceLight,
+        contentTextStyle: const TextStyle(
+          fontFamily: 'Cairo',
+          color: AppColors.lightTextPrimary,
+        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        behavior: SnackBarBehavior.floating,
+      ),
+      textTheme: const TextTheme(
+        bodyLarge: TextStyle(fontFamily: 'Cairo', color: AppColors.lightTextPrimary),
+        bodyMedium:
+            TextStyle(fontFamily: 'Cairo', color: AppColors.lightTextSecondary),
+        bodySmall:
+            TextStyle(fontFamily: 'Cairo', color: AppColors.lightTextMuted),
+      ),
+      pageTransitionsTheme: const PageTransitionsTheme(
+        builders: {
+          TargetPlatform.android: CupertinoPageTransitionsBuilder(),
+          TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
+        },
+      ),
+    );
+  }
+
   static ThemeData get darkTheme {
     return ThemeData(
       brightness: Brightness.dark,

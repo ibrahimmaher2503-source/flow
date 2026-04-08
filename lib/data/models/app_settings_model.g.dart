@@ -56,6 +56,11 @@ const AppSettingsSchema = CollectionSchema(
       id: 7,
       name: r'streakDays',
       type: IsarType.long,
+    ),
+    r'themeMode': PropertySchema(
+      id: 8,
+      name: r'themeMode',
+      type: IsarType.string,
     )
   },
   estimateSize: _appSettingsEstimateSize,
@@ -81,6 +86,7 @@ int _appSettingsEstimateSize(
   bytesCount += 3 + object.currency.length * 3;
   bytesCount += 3 + object.defaultWallet.length * 3;
   bytesCount += 3 + object.language.length * 3;
+  bytesCount += 3 + object.themeMode.length * 3;
   return bytesCount;
 }
 
@@ -98,6 +104,7 @@ void _appSettingsSerialize(
   writer.writeBool(offsets[5], object.notificationsEnabled);
   writer.writeBool(offsets[6], object.smsParsingEnabled);
   writer.writeLong(offsets[7], object.streakDays);
+  writer.writeString(offsets[8], object.themeMode);
 }
 
 AppSettings _appSettingsDeserialize(
@@ -116,6 +123,7 @@ AppSettings _appSettingsDeserialize(
   object.notificationsEnabled = reader.readBool(offsets[5]);
   object.smsParsingEnabled = reader.readBool(offsets[6]);
   object.streakDays = reader.readLong(offsets[7]);
+  object.themeMode = reader.readString(offsets[8]);
   return object;
 }
 
@@ -142,6 +150,8 @@ P _appSettingsDeserializeProp<P>(
       return (reader.readBool(offset)) as P;
     case 7:
       return (reader.readLong(offset)) as P;
+    case 8:
+      return (reader.readString(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
   }
@@ -904,6 +914,142 @@ extension AppSettingsQueryFilter
       ));
     });
   }
+
+  QueryBuilder<AppSettings, AppSettings, QAfterFilterCondition>
+      themeModeEqualTo(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'themeMode',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<AppSettings, AppSettings, QAfterFilterCondition>
+      themeModeGreaterThan(
+    String value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'themeMode',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<AppSettings, AppSettings, QAfterFilterCondition>
+      themeModeLessThan(
+    String value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'themeMode',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<AppSettings, AppSettings, QAfterFilterCondition>
+      themeModeBetween(
+    String lower,
+    String upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'themeMode',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<AppSettings, AppSettings, QAfterFilterCondition>
+      themeModeStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.startsWith(
+        property: r'themeMode',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<AppSettings, AppSettings, QAfterFilterCondition>
+      themeModeEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.endsWith(
+        property: r'themeMode',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<AppSettings, AppSettings, QAfterFilterCondition>
+      themeModeContains(String value, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.contains(
+        property: r'themeMode',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<AppSettings, AppSettings, QAfterFilterCondition>
+      themeModeMatches(String pattern, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.matches(
+        property: r'themeMode',
+        wildcard: pattern,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<AppSettings, AppSettings, QAfterFilterCondition>
+      themeModeIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'themeMode',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<AppSettings, AppSettings, QAfterFilterCondition>
+      themeModeIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'themeMode',
+        value: '',
+      ));
+    });
+  }
 }
 
 extension AppSettingsQueryObject
@@ -1013,6 +1159,18 @@ extension AppSettingsQuerySortBy
   QueryBuilder<AppSettings, AppSettings, QAfterSortBy> sortByStreakDaysDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'streakDays', Sort.desc);
+    });
+  }
+
+  QueryBuilder<AppSettings, AppSettings, QAfterSortBy> sortByThemeMode() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'themeMode', Sort.asc);
+    });
+  }
+
+  QueryBuilder<AppSettings, AppSettings, QAfterSortBy> sortByThemeModeDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'themeMode', Sort.desc);
     });
   }
 }
@@ -1132,6 +1290,18 @@ extension AppSettingsQuerySortThenBy
       return query.addSortBy(r'streakDays', Sort.desc);
     });
   }
+
+  QueryBuilder<AppSettings, AppSettings, QAfterSortBy> thenByThemeMode() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'themeMode', Sort.asc);
+    });
+  }
+
+  QueryBuilder<AppSettings, AppSettings, QAfterSortBy> thenByThemeModeDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'themeMode', Sort.desc);
+    });
+  }
 }
 
 extension AppSettingsQueryWhereDistinct
@@ -1187,6 +1357,13 @@ extension AppSettingsQueryWhereDistinct
   QueryBuilder<AppSettings, AppSettings, QDistinct> distinctByStreakDays() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'streakDays');
+    });
+  }
+
+  QueryBuilder<AppSettings, AppSettings, QDistinct> distinctByThemeMode(
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'themeMode', caseSensitive: caseSensitive);
     });
   }
 }
@@ -1246,6 +1423,12 @@ extension AppSettingsQueryProperty
   QueryBuilder<AppSettings, int, QQueryOperations> streakDaysProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'streakDays');
+    });
+  }
+
+  QueryBuilder<AppSettings, String, QQueryOperations> themeModeProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'themeMode');
     });
   }
 }

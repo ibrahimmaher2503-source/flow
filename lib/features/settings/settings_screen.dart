@@ -108,22 +108,32 @@ class SettingsScreen extends ConsumerWidget {
       children: [
         Padding(
           padding: const EdgeInsets.only(bottom: 8, right: 4),
-          child: Text(
-            title,
-            style: const TextStyle(
-              fontFamily: 'Cairo',
-              fontSize: 18,
-              fontWeight: FontWeight.w600,
-              color: Colors.white,
-            ),
+          child: Builder(
+            builder: (context) {
+              final isDark = Theme.of(context).brightness == Brightness.dark;
+              return Text(
+                title,
+                style: TextStyle(
+                  fontFamily: 'Cairo',
+                  fontSize: 18,
+                  fontWeight: FontWeight.w600,
+                  color: isDark ? Colors.white : AppColors.lightTextPrimary,
+                ),
+              );
+            },
           ),
         ),
-        Container(
-          decoration: BoxDecoration(
-            color: AppColors.surface,
-            borderRadius: BorderRadius.circular(16),
-          ),
-          child: Column(children: children),
+        Builder(
+          builder: (context) {
+            final isDark = Theme.of(context).brightness == Brightness.dark;
+            return Container(
+              decoration: BoxDecoration(
+                color: isDark ? AppColors.surface : AppColors.lightSurface,
+                borderRadius: BorderRadius.circular(16),
+              ),
+              child: Column(children: children),
+            );
+          },
         ),
       ],
     );
@@ -131,39 +141,58 @@ class SettingsScreen extends ConsumerWidget {
 
   Widget _buildNavTile(BuildContext context, IconData icon, String title,
       String subtitle, VoidCallback onTap) {
-    return ListTile(
-      leading: Container(
-        width: 40,
-        height: 40,
-        decoration: BoxDecoration(
-          color: AppColors.primary.withValues(alpha: 0.2),
-          borderRadius: BorderRadius.circular(10),
-        ),
-        child: Icon(icon, color: AppColors.primary, size: 22),
-      ),
-      title: Text(title,
-          style: const TextStyle(fontFamily: 'Cairo', color: Colors.white)),
-      subtitle: Text(subtitle,
-          style: const TextStyle(
-              fontFamily: 'Cairo',
-              fontSize: 12,
-              color: AppColors.textMuted)),
-      trailing:
-          const Icon(Icons.chevron_left, color: AppColors.textMuted, size: 20),
-      onTap: onTap,
+    return Builder(
+      builder: (context) {
+        final isDark = Theme.of(context).brightness == Brightness.dark;
+        final titleColor = isDark ? Colors.white : AppColors.lightTextPrimary;
+        final subtitleColor =
+            isDark ? AppColors.textMuted : AppColors.lightTextMuted;
+
+        return ListTile(
+          leading: Container(
+            width: 40,
+            height: 40,
+            decoration: BoxDecoration(
+              color: AppColors.primary.withValues(alpha: 0.2),
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Icon(icon, color: AppColors.primary, size: 22),
+          ),
+          title: Text(title,
+              style: TextStyle(fontFamily: 'Cairo', color: titleColor)),
+          subtitle: Text(subtitle,
+              style: TextStyle(
+                  fontFamily: 'Cairo',
+                  fontSize: 12,
+                  color: subtitleColor)),
+          trailing:
+              Icon(Icons.chevron_left, color: subtitleColor, size: 20),
+          onTap: onTap,
+        );
+      },
     );
   }
 
   Widget _buildInfoTile(IconData icon, String title, String value) {
-    return ListTile(
-      leading: Icon(icon, color: AppColors.primary, size: 22),
-      title: Text(title,
-          style: const TextStyle(fontFamily: 'Cairo', color: Colors.white)),
-      trailing: Text(value,
-          style: const TextStyle(
-              fontFamily: 'Cairo',
-              fontSize: 14,
-              color: AppColors.textSecondary)),
+    return Builder(
+      builder: (context) {
+        final isDark = Theme.of(context).brightness == Brightness.dark;
+        final titleColor = isDark ? Colors.white : AppColors.lightTextPrimary;
+        final valueColor = isDark
+            ? AppColors.textSecondary
+            : AppColors.lightTextSecondary;
+
+        return ListTile(
+          leading: Icon(icon, color: AppColors.primary, size: 22),
+          title: Text(title,
+              style: TextStyle(fontFamily: 'Cairo', color: titleColor)),
+          trailing: Text(value,
+              style: TextStyle(
+                  fontFamily: 'Cairo',
+                  fontSize: 14,
+                  color: valueColor)),
+        );
+      },
     );
   }
 }

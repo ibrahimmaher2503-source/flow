@@ -16,14 +16,20 @@ class LoadingShimmer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final baseColor =
+        isDark ? AppColors.surface : AppColors.lightSurfaceLight;
+    final highlightColor =
+        isDark ? AppColors.surfaceLight : AppColors.lightBackground;
+
     return Shimmer.fromColors(
-      baseColor: AppColors.surface,
-      highlightColor: AppColors.surfaceLight,
+      baseColor: baseColor,
+      highlightColor: highlightColor,
       child: Container(
         height: height,
         width: width,
         decoration: BoxDecoration(
-          color: AppColors.surface,
+          color: baseColor,
           borderRadius: BorderRadius.circular(borderRadius),
         ),
       ),

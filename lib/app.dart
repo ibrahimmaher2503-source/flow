@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'core/router/app_router.dart';
 import 'core/theme/app_colors.dart';
 import 'core/theme/app_theme.dart';
@@ -9,18 +10,23 @@ import 'features/installments/installments_hub_screen.dart';
 import 'features/budgets/budgets_screen.dart';
 import 'features/settings/settings_screen.dart';
 import 'features/onboarding/onboarding_screen.dart';
+import 'providers/theme_provider.dart' show themeProvider, AppThemeMode;
 
-class FlowSpendApp extends StatelessWidget {
+class FlowSpendApp extends ConsumerWidget {
   final bool showOnboarding;
 
   const FlowSpendApp({super.key, this.showOnboarding = false});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final appThemeMode = ref.watch(themeProvider);
+
     return MaterialApp(
       title: 'FlowSpend',
       debugShowCheckedModeBanner: false,
-      theme: AppTheme.darkTheme,
+      theme: AppTheme.lightTheme,
+      darkTheme: AppTheme.darkTheme,
+      themeMode: _getFlutterThemeMode(appThemeMode),
       locale: const Locale('ar'),
       onGenerateRoute: AppRouter.generateRoute,
       home: showOnboarding ? _OnboardingWrapper() : const AppShell(),
@@ -31,6 +37,18 @@ class FlowSpendApp extends StatelessWidget {
         );
       },
     );
+  }
+
+  /// Convert our AppThemeMode to Flutter's ThemeMode
+  ThemeMode _getFlutterThemeMode(AppThemeMode mode) {
+    switch (mode) {
+      case AppThemeMode.light:
+        return ThemeMode.light;
+      case AppThemeMode.dark:
+        return ThemeMode.dark;
+      case AppThemeMode.system:
+        return ThemeMode.system;
+    }
   }
 }
 
@@ -64,10 +82,12 @@ class _AppShellState extends State<AppShell> {
       ),
       bottomNavigationBar: Container(
         decoration: BoxDecoration(
-          color: AppColors.background,
+          color: Theme.of(context).scaffoldBackgroundColor,
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withValues(alpha: 0.3),
+              color: Theme.of(context).brightness == Brightness.light
+                  ? Colors.black.withValues(alpha: 0.1)
+                  : Colors.black.withValues(alpha: 0.3),
               blurRadius: 20,
               offset: const Offset(0, -4),
             ),

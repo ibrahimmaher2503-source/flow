@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:isar/isar.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:intl/date_symbol_data_local.dart';
 
 import 'app.dart';
 import 'data/services/notification_service.dart';
@@ -17,10 +18,12 @@ import 'data/models/app_settings_model.dart';
 import 'data/services/isar_service.dart';
 import 'data/seeds/default_categories.dart';
 import 'data/seeds/default_installment_providers.dart';
+import 'data/seeds/dummy_data.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await NotificationService.init();
+  await initializeDateFormatting('ar', null);
 
   final dir = await getApplicationDocumentsDirectory();
   final isar = await Isar.open(
@@ -95,6 +98,23 @@ Future<void> _seedDefaults(Isar isar) async {
           ..color = provider['color'] as String
           ..createdAt = DateTime.now(),
       );
+    }
+
+    // Seed dummy data for testing and demo
+    for (final wallet in DummyData.dummyWallets) {
+      await isar.wallets.put(wallet);
+    }
+    for (final transaction in DummyData.dummyTransactions) {
+      await isar.transactions.put(transaction);
+    }
+    for (final budget in DummyData.dummyBudgets) {
+      await isar.budgets.put(budget);
+    }
+    for (final goal in DummyData.dummyGoals) {
+      await isar.savingsGoals.put(goal);
+    }
+    for (final recurring in DummyData.dummyRecurring) {
+      await isar.recurringTransactions.put(recurring);
     }
   });
 }

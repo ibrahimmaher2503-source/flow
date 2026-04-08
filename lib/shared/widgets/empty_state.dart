@@ -17,18 +17,24 @@ class EmptyState extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final iconColor = isDark ? AppColors.textMuted : AppColors.lightTextMuted;
+    final textColor = isDark
+        ? AppColors.textSecondary
+        : AppColors.lightTextSecondary;
+
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(icon, size: 64, color: AppColors.textMuted),
+          Icon(icon, size: 64, color: iconColor),
           const SizedBox(height: 16),
           Text(
             message,
-            style: const TextStyle(
+            style: TextStyle(
               fontFamily: 'Cairo',
               fontSize: 16,
-              color: AppColors.textSecondary,
+              color: textColor,
             ),
             textAlign: TextAlign.center,
           ),

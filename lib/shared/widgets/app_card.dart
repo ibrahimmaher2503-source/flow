@@ -20,19 +20,29 @@ class AppCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final shadowColor = isDark
+        ? Colors.black.withValues(alpha: 0.3)
+        : Colors.black.withValues(alpha: 0.1);
+    final borderAlpha = isDark ? 0.06 : 0.05;
+    final defaultGradient =
+        isDark ? AppColors.cardGradient : AppColors.cardGradientLight;
+
     return GestureDetector(
       onTap: onTap,
       child: Container(
         padding: padding ?? const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          gradient: gradient ?? AppColors.cardGradient,
+          gradient: gradient ?? defaultGradient,
           borderRadius: BorderRadius.circular(20),
           border: Border.all(
-            color: borderColor ?? Colors.white.withValues(alpha: 0.06),
+            color: borderColor ??
+                (isDark ? Colors.white : Colors.black)
+                    .withValues(alpha: borderAlpha),
           ),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withValues(alpha: 0.3),
+              color: shadowColor,
               blurRadius: 24,
               offset: const Offset(0, 8),
             ),
@@ -61,18 +71,28 @@ class GlassCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
+    // Adjust blur, tint, and border based on brightness
+    final effectiveBlur = isDark ? blur : (blur * 0.67); // Reduce blur in light mode
+    final effectiveTint = isDark
+        ? (tint ?? AppColors.surface)
+        : (tint ?? AppColors.lightSurfaceLight);
+    final effectiveTintAlpha = isDark ? 0.5 : 0.3;
+    final borderColor = isDark
+        ? Colors.white.withValues(alpha: 0.08)
+        : Colors.black.withValues(alpha: 0.1);
+
     return ClipRRect(
       borderRadius: BorderRadius.circular(20),
       child: BackdropFilter(
-        filter: ImageFilter.blur(sigmaX: blur, sigmaY: blur),
+        filter: ImageFilter.blur(sigmaX: effectiveBlur, sigmaY: effectiveBlur),
         child: Container(
           padding: padding ?? const EdgeInsets.all(16),
           decoration: BoxDecoration(
-            color: (tint ?? AppColors.surface).withValues(alpha: 0.5),
+            color: effectiveTint.withValues(alpha: effectiveTintAlpha),
             borderRadius: BorderRadius.circular(20),
-            border: Border.all(
-              color: Colors.white.withValues(alpha: 0.08),
-            ),
+            border: Border.all(color: borderColor),
           ),
           child: child,
         ),

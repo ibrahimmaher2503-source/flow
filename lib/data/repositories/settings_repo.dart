@@ -41,4 +41,22 @@ class SettingsRepo {
       await isar.appSettings.put(settings);
     });
   }
+
+  /// Get the user's current theme preference
+  Future<String> getThemeMode() async {
+    final settings = await isar.appSettings.get(0);
+    return settings?.themeMode ?? 'system';
+  }
+
+  /// Update the user's theme preference
+  /// [mode] must be one of: 'light', 'dark', 'system'
+  Future<void> updateThemeMode(String mode) async {
+    await isar.writeTxn(() async {
+      final settings = await isar.appSettings.get(0);
+      if (settings != null) {
+        settings.themeMode = mode;
+        await isar.appSettings.put(settings);
+      }
+    });
+  }
 }
