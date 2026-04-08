@@ -118,7 +118,7 @@ class _GeneralReportTab extends ConsumerWidget {
                       fontFamily: 'Cairo',
                       fontSize: 18,
                       fontWeight: FontWeight.w600,
-                      color: Colors.white)),
+                      color: AppColors.textPrimary)),
               const SizedBox(height: 12),
               CategoryPieChart(
                 data: categoryTotals,

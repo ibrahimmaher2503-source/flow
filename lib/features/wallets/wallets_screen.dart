@@ -117,7 +117,7 @@ class WalletsScreen extends ConsumerWidget {
         builder: (ctx, setDialogState) => AlertDialog(
           backgroundColor: AppColors.surface,
           title: const Text('إضافة محفظة',
-              style: TextStyle(fontFamily: 'Cairo', color: Colors.white)),
+              style: TextStyle(fontFamily: 'Cairo', color: AppColors.textPrimary)),
           content: SingleChildScrollView(
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -125,7 +125,7 @@ class WalletsScreen extends ConsumerWidget {
                 TextField(
                   controller: nameController,
                   style: const TextStyle(
-                      fontFamily: 'Cairo', color: Colors.white),
+                      fontFamily: 'Cairo', color: AppColors.textPrimary),
                   decoration: const InputDecoration(
                     hintText: 'اسم المحفظة',
                   ),
@@ -135,7 +135,7 @@ class WalletsScreen extends ConsumerWidget {
                   controller: balanceController,
                   keyboardType: TextInputType.number,
                   style: const TextStyle(
-                      fontFamily: 'Cairo', color: Colors.white),
+                      fontFamily: 'Cairo', color: AppColors.textPrimary),
                   decoration: const InputDecoration(
                     hintText: 'الرصيد الابتدائي',
                   ),
@@ -225,10 +225,10 @@ class WalletsScreen extends ConsumerWidget {
       builder: (ctx) => AlertDialog(
         backgroundColor: AppColors.surface,
         title: const Text('تعديل المحفظة',
-            style: TextStyle(fontFamily: 'Cairo', color: Colors.white)),
+            style: TextStyle(fontFamily: 'Cairo', color: AppColors.textPrimary)),
         content: TextField(
           controller: nameController,
-          style: const TextStyle(fontFamily: 'Cairo', color: Colors.white),
+          style: const TextStyle(fontFamily: 'Cairo', color: AppColors.textPrimary),
           decoration: const InputDecoration(hintText: 'اسم المحفظة'),
         ),
         actions: [
@@ -240,7 +240,7 @@ class WalletsScreen extends ConsumerWidget {
                   backgroundColor: AppColors.surface,
                   title: const Text('حذف المحفظة؟',
                       style: TextStyle(
-                          fontFamily: 'Cairo', color: Colors.white)),
+                          fontFamily: 'Cairo', color: AppColors.textPrimary)),
                   actions: [
                     TextButton(
                       onPressed: () => Navigator.pop(ctx2, false),

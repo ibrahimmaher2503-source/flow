@@ -57,11 +57,11 @@ class GoalsScreen extends ConsumerWidget {
       builder: (ctx) => AlertDialog(
         backgroundColor: AppColors.surface,
         title: Text('إضافة مبلغ لـ ${goal.name}',
-            style: const TextStyle(fontFamily: 'Cairo', color: Colors.white)),
+            style: const TextStyle(fontFamily: 'Cairo', color: AppColors.textPrimary)),
         content: TextField(
           controller: controller,
           keyboardType: TextInputType.number,
-          style: const TextStyle(fontFamily: 'Cairo', color: Colors.white),
+          style: const TextStyle(fontFamily: 'Cairo', color: AppColors.textPrimary),
           decoration: const InputDecoration(hintText: 'المبلغ'),
         ),
         actions: [
@@ -98,14 +98,14 @@ class GoalsScreen extends ConsumerWidget {
       builder: (ctx) => AlertDialog(
         backgroundColor: AppColors.surface,
         title: const Text('هدف توفير جديد',
-            style: TextStyle(fontFamily: 'Cairo', color: Colors.white)),
+            style: TextStyle(fontFamily: 'Cairo', color: AppColors.textPrimary)),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             TextField(
               controller: nameController,
               style:
-                  const TextStyle(fontFamily: 'Cairo', color: Colors.white),
+                  const TextStyle(fontFamily: 'Cairo', color: AppColors.textPrimary),
               decoration: const InputDecoration(hintText: 'اسم الهدف'),
             ),
             const SizedBox(height: 8),
@@ -113,7 +113,7 @@ class GoalsScreen extends ConsumerWidget {
               controller: targetController,
               keyboardType: TextInputType.number,
               style:
-                  const TextStyle(fontFamily: 'Cairo', color: Colors.white),
+                  const TextStyle(fontFamily: 'Cairo', color: AppColors.textPrimary),
               decoration:
                   const InputDecoration(hintText: 'المبلغ المطلوب'),
             ),

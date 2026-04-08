@@ -39,7 +39,7 @@ class BudgetsScreen extends ConsumerWidget {
                         backgroundColor: AppColors.surface,
                         title: const Text('حذف الميزانية؟',
                             style: TextStyle(
-                                fontFamily: 'Cairo', color: Colors.white)),
+                                fontFamily: 'Cairo', color: AppColors.textPrimary)),
                         actions: [
                           TextButton(
                             onPressed: () => Navigator.pop(ctx, false),
@@ -91,7 +91,7 @@ class BudgetsScreen extends ConsumerWidget {
           return AlertDialog(
             backgroundColor: AppColors.surface,
             title: const Text('إضافة ميزانية',
-                style: TextStyle(fontFamily: 'Cairo', color: Colors.white)),
+                style: TextStyle(fontFamily: 'Cairo', color: AppColors.textPrimary)),
             content: SingleChildScrollView(
               child: Column(
                 mainAxisSize: MainAxisSize.min,
@@ -138,7 +138,7 @@ class BudgetsScreen extends ConsumerWidget {
                     controller: limitController,
                     keyboardType: TextInputType.number,
                     style: const TextStyle(
-                        fontFamily: 'Cairo', color: Colors.white),
+                        fontFamily: 'Cairo', color: AppColors.textPrimary),
                     decoration: const InputDecoration(
                       hintText: 'الحد الأقصى (جنيه)',
                     ),

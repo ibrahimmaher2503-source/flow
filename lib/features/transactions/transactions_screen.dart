@@ -53,7 +53,7 @@ class _TransactionsScreenState extends ConsumerState<TransactionsScreen> {
       builder: (ctx) => AlertDialog(
         backgroundColor: AppColors.surface,
         title: const Text('حذف المعاملة؟',
-            style: TextStyle(fontFamily: 'Cairo', color: Colors.white)),
+            style: TextStyle(fontFamily: 'Cairo', color: AppColors.textPrimary)),
         content: const Text('هل أنت متأكد من حذف هذه المعاملة؟',
             style: TextStyle(fontFamily: 'Cairo', color: AppColors.textSecondary)),
         actions: [

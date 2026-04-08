@@ -54,7 +54,7 @@ class RecurringScreen extends ConsumerWidget {
       builder: (ctx) => AlertDialog(
         backgroundColor: AppColors.surface,
         title: Text(recurring.name,
-            style: const TextStyle(fontFamily: 'Cairo', color: Colors.white)),
+            style: const TextStyle(fontFamily: 'Cairo', color: AppColors.textPrimary)),
         content: Text(
           'تلقائي: ${recurring.autoAdd ? "نعم" : "لا"}\nنشط: ${recurring.isActive ? "نعم" : "لا"}',
           style:
@@ -109,7 +109,7 @@ class RecurringScreen extends ConsumerWidget {
         builder: (ctx, setDialogState) => AlertDialog(
           backgroundColor: AppColors.surface,
           title: const Text('إضافة معاملة متكررة',
-              style: TextStyle(fontFamily: 'Cairo', color: Colors.white)),
+              style: TextStyle(fontFamily: 'Cairo', color: AppColors.textPrimary)),
           content: SingleChildScrollView(
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -117,7 +117,7 @@ class RecurringScreen extends ConsumerWidget {
                 TextField(
                   controller: nameController,
                   style: const TextStyle(
-                      fontFamily: 'Cairo', color: Colors.white),
+                      fontFamily: 'Cairo', color: AppColors.textPrimary),
                   decoration: const InputDecoration(hintText: 'الاسم'),
                 ),
                 const SizedBox(height: 8),
@@ -125,7 +125,7 @@ class RecurringScreen extends ConsumerWidget {
                   controller: amountController,
                   keyboardType: TextInputType.number,
                   style: const TextStyle(
-                      fontFamily: 'Cairo', color: Colors.white),
+                      fontFamily: 'Cairo', color: AppColors.textPrimary),
                   decoration: const InputDecoration(hintText: 'المبلغ'),
                 ),
                 const SizedBox(height: 12),
@@ -163,7 +163,7 @@ class RecurringScreen extends ConsumerWidget {
                   children: [
                     const Text('تسجيل تلقائي',
                         style: TextStyle(
-                            fontFamily: 'Cairo', color: Colors.white)),
+                            fontFamily: 'Cairo', color: AppColors.textPrimary)),
                     Switch(
                       value: autoAdd,
                       onChanged: (v) => setDialogState(() => autoAdd = v),
