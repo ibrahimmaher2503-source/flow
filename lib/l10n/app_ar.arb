@@ -331,5 +331,80 @@
   "planNotFound": "الخطة غير موجودة",
   "totalWithInterest": "الإجمالي بالفوائد",
   "installments": "الأقساط",
-  "remainingObligations": "الالتزامات المتبقية"
+  "remainingObligations": "الالتزامات المتبقية",
+
+  "smsConfirmationTitle": "تأكيد المعاملة",
+  "smsNotFound": "المعاملة غير موجودة",
+  "smsAlreadyConfirmed": "تم تأكيد المعاملة مسبقاً",
+  "smsAlreadyDismissed": "تم رفض المعاملة مسبقاً",
+  "smsDismissButton": "تجاهل",
+  "smsConfirmButton": "تأكيد",
+  "smsTransactionAddedSuccess": "تم إضافة المعاملة بنجاح",
+  "smsStatusConfirmed": "مؤكدة",
+  "smsStatusDismissed": "مرفوضة",
+  "smsStatusPending": "في الانتظار",
+  "smsTimeNow": "الآن",
+  "smsTimeMinutesAgo": "منذ {minutes} دقيقة",
+  "@smsTimeMinutesAgo": {
+    "placeholders": {
+      "minutes": {"type": "int"}
+    }
+  },
+  "smsTimeHoursAgo": "منذ {hours} ساعة",
+  "@smsTimeHoursAgo": {
+    "placeholders": {
+      "hours": {"type": "int"}
+    }
+  },
+  "smsTimeYesterday": "أمس {time}",
+  "@smsTimeYesterday": {
+    "placeholders": {
+      "time": {"type": "String"}
+    }
+  },
+  "smsTimeDaysAgo": "منذ {days} أيام",
+  "@smsTimeDaysAgo": {
+    "placeholders": {
+      "days": {"type": "int"}
+    }
+  },
+  "smsPermissionTitle": "السماح بقراءة الرسائل",
+  "smsPermissionDescription": "FlowSpend يحتاج صلاحية قراءة الرسائل لاكتشاف معاملاتك البنكية تلقائياً",
+  "smsPermissionPrivacyAssurance": "بياناتك آمنة - كل شيء يتم محلياً على جهازك ولا يتم إرسال أي بيانات للإنترنت",
+  "smsPermissionNotNow": "ليس الآن",
+  "smsPermissionAllow": "السماح",
+
+  "tabActive": "نشطة",
+  "tabCompleted": "مكتملة",
+  "totalCommitments": "إجمالي الالتزامات",
+  "monthlyInstallments": "أقساط الشهر",
+  "paidInterest": "فوائد مدفوعة",
+  "emptyActiveInstallments": "مفيش أقساط نشطة",
+  "emptyCompletedInstallments": "مفيش أقساط مكتملة",
+  "confirmTransaction": "تأكيد المعاملة",
+  "transactionNotFound": "المعاملة غير موجودة",
+  "transactionAlreadyConfirmed": "تم تأكيد المعاملة مسبقاً",
+  "transactionAlreadyRejected": "تم رفض المعاملة مسبقاً",
+  "selectCategory": "اختر التصنيف",
+  "dismiss": "تجاهل",
+  "confirm": "تأكيد",
+  "transactionAddedSuccessfully": "تم إضافة المعاملة بنجاح",
+  "errorOccurred": "حدث خطأ: {error}",
+  "@errorOccurred": {
+    "placeholders": {
+      "error": {"type": "String"}
+    }
+  },
+  "categoryDistribution": "التوزيع بالفئات",
+  "expenses": "المصاريف",
+  "noExpensesThisMonth": "لا توجد مصاريف هذا الشهر",
+  "remainingCommitments": "الالتزامات المتبقية",
+  "distributionByProvider": "التوزيع حسب المقدم",
+  "badgeFirstTransaction": "أول معاملة",
+  "badge7DayStreak": "7 أيام متتالية",
+  "badge30DayStreak": "30 يوم متتالي",
+  "badgeFirstGoalCompleted": "أول هدف اكتمل",
+  "badgeBudgetCommitted": "ملتزم بالميزانية",
+  "badgeFirstPlanCompleted": "خلصت أول خطة أقساط",
+  "badgeNoNewInstallments": "3 شهور بدون أقساط جديدة"
 }

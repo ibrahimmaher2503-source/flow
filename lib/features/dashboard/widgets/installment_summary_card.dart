@@ -20,7 +20,10 @@ class InstallmentSummaryCard extends ConsumerWidget {
     // Use M3 surface containers for light theme
     final installmentColor = isDark ? AppColors.installment : AppColors.lightInstallment;
 
-    return Container(
+    // T080: Navigation to installments hub
+    return GestureDetector(
+      onTap: () => Navigator.pushNamed(context, '/installments'),
+      child: Container(
       padding: const EdgeInsets.all(AppSpacing.lg + 2),
       decoration: BoxDecoration(
         color: isDark ? null : AppColors.lightSurfaceContainerLow,
@@ -197,6 +200,7 @@ class InstallmentSummaryCard extends ConsumerWidget {
             error: (_, __) => const SizedBox(),
           ),
         ],
+      ),
       ),
     );
   }

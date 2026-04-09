@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:uuid/uuid.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../../core/constants/app_constants.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/utils/currency_formatter.dart';
@@ -30,13 +31,14 @@ class _SmsConfirmationScreenState extends ConsumerState<SmsConfirmationScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final smsAsync = ref.watch(detectedSmsByIdProvider(widget.smsId));
     final walletsAsync = ref.watch(walletsProvider);
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('تأكيد المعاملة'),
+        title: Text(l10n.smsConfirmationTitle),
         leading: IconButton(
           icon: const Icon(Icons.close),
           onPressed: () => Navigator.pop(context),
@@ -56,7 +58,7 @@ class _SmsConfirmationScreenState extends ConsumerState<SmsConfirmationScreen> {
                   ),
                   const SizedBox(height: 16),
                   Text(
-                    'المعاملة غير موجودة',
+                    l10n.smsNotFound,
                     style: TextStyle(
                       fontFamily: 'Cairo',
                       fontSize: 16,
@@ -89,8 +91,8 @@ class _SmsConfirmationScreenState extends ConsumerState<SmsConfirmationScreen> {
                   const SizedBox(height: 16),
                   Text(
                     sms.status == 'confirmed'
-                        ? 'تم تأكيد المعاملة مسبقاً'
-                        : 'تم رفض المعاملة مسبقاً',
+                        ? l10n.smsAlreadyConfirmed
+                        : l10n.smsAlreadyDismissed,
                     style: TextStyle(
                       fontFamily: 'Cairo',
                       fontSize: 16,
@@ -102,7 +104,7 @@ class _SmsConfirmationScreenState extends ConsumerState<SmsConfirmationScreen> {
                   const SizedBox(height: 24),
                   TextButton(
                     onPressed: () => Navigator.pop(context),
-                    child: const Text('العودة'),
+                    child: Text(l10n.back),
                   ),
                 ],
               ),
@@ -200,7 +202,7 @@ class _SmsConfirmationScreenState extends ConsumerState<SmsConfirmationScreen> {
 
                 // Category selection
                 Text(
-                  'اختر التصنيف',
+                  l10n.selectCategory,
                   style: TextStyle(
                     fontFamily: 'Cairo',
                     fontSize: 16,
@@ -222,7 +224,7 @@ class _SmsConfirmationScreenState extends ConsumerState<SmsConfirmationScreen> {
 
                 // Wallet selection
                 Text(
-                  'اختر المحفظة',
+                  l10n.selectWallet,
                   style: TextStyle(
                     fontFamily: 'Cairo',
                     fontSize: 16,
@@ -286,7 +288,7 @@ class _SmsConfirmationScreenState extends ConsumerState<SmsConfirmationScreen> {
                     }).toList(),
                   ),
                   loading: () => const Center(child: CircularProgressIndicator()),
-                  error: (e, _) => Text('خطأ: $e'),
+                  error: (e, _) => Text('${l10n.errorWithMessage}: $e'),
                 ),
 
                 const SizedBox(height: 32),
@@ -309,7 +311,7 @@ class _SmsConfirmationScreenState extends ConsumerState<SmsConfirmationScreen> {
                           ),
                         ),
                         child: Text(
-                          'تجاهل',
+                          l10n.smsDismissButton,
                           style: TextStyle(
                             fontFamily: 'Cairo',
                             fontSize: 16,
@@ -324,7 +326,7 @@ class _SmsConfirmationScreenState extends ConsumerState<SmsConfirmationScreen> {
                     Expanded(
                       flex: 2,
                       child: AppButton(
-                        label: 'تأكيد',
+                        label: l10n.smsConfirmButton,
                         onPressed:
                             (_selectedCategory != null && _selectedWallet != null)
                                 ? () => _confirmTransaction(sms)
@@ -341,7 +343,7 @@ class _SmsConfirmationScreenState extends ConsumerState<SmsConfirmationScreen> {
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (error, stack) => Center(
           child: Text(
-            'حدث خطأ: $error',
+            '${l10n.errorWithMessage}: $error',
             style: const TextStyle(fontFamily: 'Cairo'),
           ),
         ),
@@ -388,8 +390,8 @@ class _SmsConfirmationScreenState extends ConsumerState<SmsConfirmationScreen> {
       if (mounted) {
         Navigator.pop(context);
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('تم إضافة المعاملة بنجاح'),
+          SnackBar(
+            content: Text(AppLocalizations.of(context)!.smsTransactionAddedSuccess),
             backgroundColor: AppColors.success,
           ),
         );
@@ -398,7 +400,7 @@ class _SmsConfirmationScreenState extends ConsumerState<SmsConfirmationScreen> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('حدث خطأ: $e'),
+            content: Text(AppLocalizations.of(context)!.errorWithMessage('$e')),
             backgroundColor: AppColors.danger,
           ),
         );
@@ -426,7 +428,7 @@ class _SmsConfirmationScreenState extends ConsumerState<SmsConfirmationScreen> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('حدث خطأ: $e'),
+            content: Text(AppLocalizations.of(context)!.errorWithMessage('$e')),
             backgroundColor: AppColors.danger,
           ),
         );

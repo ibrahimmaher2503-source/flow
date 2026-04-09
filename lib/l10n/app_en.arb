@@ -331,5 +331,80 @@
   "planNotFound": "Plan not found",
   "totalWithInterest": "Total with Interest",
   "installments": "Installments",
-  "remainingObligations": "Remaining Obligations"
+  "remainingObligations": "Remaining Obligations",
+
+  "smsConfirmationTitle": "Confirm Transaction",
+  "smsNotFound": "Transaction not found",
+  "smsAlreadyConfirmed": "Transaction already confirmed",
+  "smsAlreadyDismissed": "Transaction already dismissed",
+  "smsDismissButton": "Dismiss",
+  "smsConfirmButton": "Confirm",
+  "smsTransactionAddedSuccess": "Transaction added successfully",
+  "smsStatusConfirmed": "Confirmed",
+  "smsStatusDismissed": "Dismissed",
+  "smsStatusPending": "Pending",
+  "smsTimeNow": "Just now",
+  "smsTimeMinutesAgo": "{minutes} minutes ago",
+  "@smsTimeMinutesAgo": {
+    "placeholders": {
+      "minutes": {"type": "int"}
+    }
+  },
+  "smsTimeHoursAgo": "{hours} hours ago",
+  "@smsTimeHoursAgo": {
+    "placeholders": {
+      "hours": {"type": "int"}
+    }
+  },
+  "smsTimeYesterday": "Yesterday {time}",
+  "@smsTimeYesterday": {
+    "placeholders": {
+      "time": {"type": "String"}
+    }
+  },
+  "smsTimeDaysAgo": "{days} days ago",
+  "@smsTimeDaysAgo": {
+    "placeholders": {
+      "days": {"type": "int"}
+    }
+  },
+  "smsPermissionTitle": "Allow SMS Access",
+  "smsPermissionDescription": "FlowSpend needs SMS permission to automatically detect your bank transactions.",
+  "smsPermissionPrivacyAssurance": "Your data is safe - everything stays on your device locally and no data is sent to the internet.",
+  "smsPermissionNotNow": "Not Now",
+  "smsPermissionAllow": "Allow",
+
+  "tabActive": "Active",
+  "tabCompleted": "Completed",
+  "totalCommitments": "Total Commitments",
+  "monthlyInstallments": "Monthly Installments",
+  "paidInterest": "Interest Paid",
+  "emptyActiveInstallments": "No active installments",
+  "emptyCompletedInstallments": "No completed installments",
+  "confirmTransaction": "Confirm Transaction",
+  "transactionNotFound": "Transaction not found",
+  "transactionAlreadyConfirmed": "Transaction already confirmed",
+  "transactionAlreadyRejected": "Transaction already rejected",
+  "selectCategory": "Select Category",
+  "dismiss": "Dismiss",
+  "confirm": "Confirm",
+  "transactionAddedSuccessfully": "Transaction added successfully",
+  "errorOccurred": "Error occurred: {error}",
+  "@errorOccurred": {
+    "placeholders": {
+      "error": {"type": "String"}
+    }
+  },
+  "categoryDistribution": "Category Distribution",
+  "expenses": "Expenses",
+  "noExpensesThisMonth": "No expenses this month",
+  "remainingCommitments": "Remaining Commitments",
+  "distributionByProvider": "Distribution by Provider",
+  "badgeFirstTransaction": "First Transaction",
+  "badge7DayStreak": "7 Day Streak",
+  "badge30DayStreak": "30 Day Streak",
+  "badgeFirstGoalCompleted": "First Goal Completed",
+  "badgeBudgetCommitted": "Budget Champion",
+  "badgeFirstPlanCompleted": "Debt Free",
+  "badgeNoNewInstallments": "3 Months No New Debt"
 }

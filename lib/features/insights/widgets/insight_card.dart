@@ -3,7 +3,6 @@ import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_spacing.dart';
 import '../../../core/utils/icon_resolver.dart';
 import '../../../data/models/insight_model.dart';
-import '../../../data/models/smart_feature_models.dart';
 
 /// Card displaying a single insight with swipe-to-dismiss
 class InsightCard extends StatelessWidget {
@@ -25,8 +24,7 @@ class InsightCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final color = _parseColor(insight.colorHex) ??
-        _getPriorityColor(insight.priority, isDark);
+    final color = _parseColor(insight.colorHex, isDark);
 
     Widget card = GestureDetector(
       onTap: onTap ?? () {
@@ -184,25 +182,15 @@ class InsightCard extends StatelessWidget {
     return card;
   }
 
-  Color _parseColor(String? hex) {
-    if (hex == null || hex.isEmpty) return AppColors.primary;
+  Color _parseColor(String? hex, bool isDark) {
+    if (hex == null || hex.isEmpty) {
+      return isDark ? AppColors.primary : AppColors.lightPrimary;
+    }
     try {
       final colorHex = hex.replaceFirst('#', '');
       return Color(int.parse('FF$colorHex', radix: 16));
     } catch (_) {
-      return AppColors.primary;
-    }
-  }
-
-  Color _getPriorityColor(int priority, bool isDark) {
-    switch (priority) {
-      case 1:
-        return isDark ? AppColors.danger : AppColors.lightDanger;
-      case 2:
-        return isDark ? AppColors.warning : AppColors.lightWarning;
-      case 3:
-      default:
-        return isDark ? AppColors.success : AppColors.lightSuccess;
+      return isDark ? AppColors.primary : AppColors.lightPrimary;
     }
   }
 

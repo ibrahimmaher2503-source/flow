@@ -1,5 +1,3 @@
-import 'dart:convert';
-import 'package:crypto/crypto.dart';
 import 'package:isar/isar.dart';
 import '../models/insight_model.dart';
 import '../models/transaction_model.dart';
@@ -450,8 +448,7 @@ class InsightsService {
 
   String _generateHash(String type, String params) {
     final input = '$type:$params';
-    final bytes = utf8.encode(input);
-    final digest = md5.convert(bytes);
-    return digest.toString();
+    // Use Dart's built-in hashCode for deduplication
+    return input.hashCode.toRadixString(16);
   }
 }

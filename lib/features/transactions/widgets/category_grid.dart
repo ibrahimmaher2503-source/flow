@@ -5,6 +5,7 @@ import '../../../core/theme/app_colors.dart';
 import '../../../core/utils/extensions.dart';
 import '../../../core/utils/icon_resolver.dart';
 import '../../../data/models/category_model.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../../../providers/category_provider.dart';
 import '../../settings/categories_screen.dart';
 
@@ -22,6 +23,7 @@ class CategoryGrid extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context)!;
     final categoriesAsync = type == TransactionType.expense
         ? ref.watch(expenseCategoriesProvider)
         : ref.watch(incomeCategoriesProvider);
@@ -58,15 +60,15 @@ class CategoryGrid extends ConsumerWidget {
                     style: BorderStyle.solid,
                   ),
                 ),
-                child: const Column(
+                child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Icon(Icons.add_rounded,
+                    const Icon(Icons.add_rounded,
                         color: AppColors.primary, size: 28),
-                    SizedBox(height: 4),
+                    const SizedBox(height: 4),
                     Text(
-                      'إضافة',
-                      style: TextStyle(
+                      l10n.buttonAdd,
+                      style: const TextStyle(
                         fontFamily: 'Cairo',
                         fontSize: 11,
                         color: AppColors.primary,
@@ -129,7 +131,7 @@ class CategoryGrid extends ConsumerWidget {
         },
       ),
       loading: () => const Center(child: CircularProgressIndicator()),
-      error: (e, _) => Center(child: Text('خطأ: $e')),
+      error: (e, _) => Center(child: Text(l10n.errorWithMessage(e.toString()))),
     );
   }
 }

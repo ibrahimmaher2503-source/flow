@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import '../../core/theme/app_spacing.dart';
+import '../../providers/insights_provider.dart';
 import 'widgets/dashboard_header.dart';
 import 'widgets/balance_card.dart';
 import 'widgets/quick_stats.dart';
@@ -14,11 +15,25 @@ import 'widgets/safe_to_spend_card.dart';
 import 'widgets/forecast_mini_card.dart';
 import 'widgets/insights_carousel.dart';
 
-class DashboardScreen extends ConsumerWidget {
+class DashboardScreen extends ConsumerStatefulWidget {
   const DashboardScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<DashboardScreen> createState() => _DashboardScreenState();
+}
+
+class _DashboardScreenState extends ConsumerState<DashboardScreen> {
+  @override
+  void initState() {
+    super.initState();
+    // Generate insights on app open/dashboard load
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      triggerInsightGeneration(ref);
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
         child: AnimationLimiter(

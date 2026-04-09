@@ -1639,6 +1639,282 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Remaining Obligations'**
   String get remainingObligations;
+
+  /// No description provided for @smsConfirmationTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm Transaction'**
+  String get smsConfirmationTitle;
+
+  /// No description provided for @smsNotFound.
+  ///
+  /// In en, this message translates to:
+  /// **'Transaction not found'**
+  String get smsNotFound;
+
+  /// No description provided for @smsAlreadyConfirmed.
+  ///
+  /// In en, this message translates to:
+  /// **'Transaction already confirmed'**
+  String get smsAlreadyConfirmed;
+
+  /// No description provided for @smsAlreadyDismissed.
+  ///
+  /// In en, this message translates to:
+  /// **'Transaction already dismissed'**
+  String get smsAlreadyDismissed;
+
+  /// No description provided for @smsDismissButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Dismiss'**
+  String get smsDismissButton;
+
+  /// No description provided for @smsConfirmButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm'**
+  String get smsConfirmButton;
+
+  /// No description provided for @smsTransactionAddedSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Transaction added successfully'**
+  String get smsTransactionAddedSuccess;
+
+  /// No description provided for @smsStatusConfirmed.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirmed'**
+  String get smsStatusConfirmed;
+
+  /// No description provided for @smsStatusDismissed.
+  ///
+  /// In en, this message translates to:
+  /// **'Dismissed'**
+  String get smsStatusDismissed;
+
+  /// No description provided for @smsStatusPending.
+  ///
+  /// In en, this message translates to:
+  /// **'Pending'**
+  String get smsStatusPending;
+
+  /// No description provided for @smsTimeNow.
+  ///
+  /// In en, this message translates to:
+  /// **'Just now'**
+  String get smsTimeNow;
+
+  /// No description provided for @smsTimeMinutesAgo.
+  ///
+  /// In en, this message translates to:
+  /// **'{minutes} minutes ago'**
+  String smsTimeMinutesAgo(int minutes);
+
+  /// No description provided for @smsTimeHoursAgo.
+  ///
+  /// In en, this message translates to:
+  /// **'{hours} hours ago'**
+  String smsTimeHoursAgo(int hours);
+
+  /// No description provided for @smsTimeYesterday.
+  ///
+  /// In en, this message translates to:
+  /// **'Yesterday {time}'**
+  String smsTimeYesterday(String time);
+
+  /// No description provided for @smsTimeDaysAgo.
+  ///
+  /// In en, this message translates to:
+  /// **'{days} days ago'**
+  String smsTimeDaysAgo(int days);
+
+  /// No description provided for @smsPermissionTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Allow SMS Access'**
+  String get smsPermissionTitle;
+
+  /// No description provided for @smsPermissionDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'FlowSpend needs SMS permission to automatically detect your bank transactions.'**
+  String get smsPermissionDescription;
+
+  /// No description provided for @smsPermissionPrivacyAssurance.
+  ///
+  /// In en, this message translates to:
+  /// **'Your data is safe - everything stays on your device locally and no data is sent to the internet.'**
+  String get smsPermissionPrivacyAssurance;
+
+  /// No description provided for @smsPermissionNotNow.
+  ///
+  /// In en, this message translates to:
+  /// **'Not Now'**
+  String get smsPermissionNotNow;
+
+  /// No description provided for @smsPermissionAllow.
+  ///
+  /// In en, this message translates to:
+  /// **'Allow'**
+  String get smsPermissionAllow;
+
+  /// No description provided for @tabActive.
+  ///
+  /// In en, this message translates to:
+  /// **'Active'**
+  String get tabActive;
+
+  /// No description provided for @tabCompleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Completed'**
+  String get tabCompleted;
+
+  /// No description provided for @totalCommitments.
+  ///
+  /// In en, this message translates to:
+  /// **'Total Commitments'**
+  String get totalCommitments;
+
+  /// No description provided for @monthlyInstallments.
+  ///
+  /// In en, this message translates to:
+  /// **'Monthly Installments'**
+  String get monthlyInstallments;
+
+  /// No description provided for @paidInterest.
+  ///
+  /// In en, this message translates to:
+  /// **'Interest Paid'**
+  String get paidInterest;
+
+  /// No description provided for @emptyActiveInstallments.
+  ///
+  /// In en, this message translates to:
+  /// **'No active installments'**
+  String get emptyActiveInstallments;
+
+  /// No description provided for @emptyCompletedInstallments.
+  ///
+  /// In en, this message translates to:
+  /// **'No completed installments'**
+  String get emptyCompletedInstallments;
+
+  /// No description provided for @confirmTransaction.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm Transaction'**
+  String get confirmTransaction;
+
+  /// No description provided for @transactionNotFound.
+  ///
+  /// In en, this message translates to:
+  /// **'Transaction not found'**
+  String get transactionNotFound;
+
+  /// No description provided for @transactionAlreadyConfirmed.
+  ///
+  /// In en, this message translates to:
+  /// **'Transaction already confirmed'**
+  String get transactionAlreadyConfirmed;
+
+  /// No description provided for @transactionAlreadyRejected.
+  ///
+  /// In en, this message translates to:
+  /// **'Transaction already rejected'**
+  String get transactionAlreadyRejected;
+
+  /// No description provided for @selectCategory.
+  ///
+  /// In en, this message translates to:
+  /// **'Select Category'**
+  String get selectCategory;
+
+  /// No description provided for @dismiss.
+  ///
+  /// In en, this message translates to:
+  /// **'Dismiss'**
+  String get dismiss;
+
+  /// No description provided for @confirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm'**
+  String get confirm;
+
+  /// No description provided for @transactionAddedSuccessfully.
+  ///
+  /// In en, this message translates to:
+  /// **'Transaction added successfully'**
+  String get transactionAddedSuccessfully;
+
+  /// No description provided for @errorOccurred.
+  ///
+  /// In en, this message translates to:
+  /// **'Error occurred: {error}'**
+  String errorOccurred(String error);
+
+  /// No description provided for @categoryDistribution.
+  ///
+  /// In en, this message translates to:
+  /// **'Category Distribution'**
+  String get categoryDistribution;
+
+  /// No description provided for @expenses.
+  ///
+  /// In en, this message translates to:
+  /// **'Expenses'**
+  String get expenses;
+
+  /// No description provided for @noExpensesThisMonth.
+  ///
+  /// In en, this message translates to:
+  /// **'No expenses this month'**
+  String get noExpensesThisMonth;
+
+  /// No description provided for @remainingCommitments.
+  ///
+  /// In en, this message translates to:
+  /// **'Remaining Commitments'**
+  String get remainingCommitments;
+
+  /// No description provided for @distributionByProvider.
+  ///
+  /// In en, this message translates to:
+  /// **'Distribution by Provider'**
+  String get distributionByProvider;
+
+  /// No description provided for @badge7DayStreak.
+  ///
+  /// In en, this message translates to:
+  /// **'7 Day Streak'**
+  String get badge7DayStreak;
+
+  /// No description provided for @badge30DayStreak.
+  ///
+  /// In en, this message translates to:
+  /// **'30 Day Streak'**
+  String get badge30DayStreak;
+
+  /// No description provided for @badgeFirstGoalCompleted.
+  ///
+  /// In en, this message translates to:
+  /// **'First Goal Completed'**
+  String get badgeFirstGoalCompleted;
+
+  /// No description provided for @badgeBudgetCommitted.
+  ///
+  /// In en, this message translates to:
+  /// **'Budget Champion'**
+  String get badgeBudgetCommitted;
+
+  /// No description provided for @badgeFirstPlanCompleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Debt Free'**
+  String get badgeFirstPlanCompleted;
 }
 
 class _AppLocalizationsDelegate

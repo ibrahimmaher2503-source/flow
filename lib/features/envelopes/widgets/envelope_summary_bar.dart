@@ -43,10 +43,18 @@ class _SummaryContent extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(AppSpacing.lg),
       decoration: BoxDecoration(
-        gradient: isDark
-            ? AppColors.primaryGradient
-            : AppColors.lightPrimaryGradient,
+        // Solid color - no gradients for cleaner design
+        color: isDark ? AppColors.primary : AppColors.lightPrimary,
         borderRadius: BorderRadius.circular(AppSpacing.radiusLg),
+        boxShadow: [
+          BoxShadow(
+            color: isDark
+                ? AppColors.primary.withValues(alpha: 0.2)
+                : AppColors.lightPrimary.withValues(alpha: 0.12),
+            blurRadius: 12,
+            offset: const Offset(0, 4),
+          ),
+        ],
       ),
       child: Column(
         children: [

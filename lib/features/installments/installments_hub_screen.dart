@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/utils/currency_formatter.dart';
 import '../../data/models/installment_plan_model.dart';
@@ -37,6 +38,7 @@ class _InstallmentsHubScreenState
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final totalDebt = ref.watch(totalDebtProvider);
     final monthlyTotal = ref.watch(monthlyInstallmentTotalProvider);
     final interestPaid = ref.watch(totalInterestPaidProvider);
@@ -46,15 +48,15 @@ class _InstallmentsHubScreenState
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('الأقساط'),
+        title: Text(l10n.installmentsTitle),
         bottom: TabBar(
           controller: _tabController,
           indicatorColor: AppColors.primary,
           labelStyle: const TextStyle(fontFamily: 'Cairo', fontWeight: FontWeight.w600),
           unselectedLabelStyle: const TextStyle(fontFamily: 'Cairo'),
-          tabs: const [
-            Tab(text: 'نشطة'),
-            Tab(text: 'مكتملة'),
+          tabs: [
+            Tab(text: l10n.tabActive),
+            Tab(text: l10n.tabCompleted),
           ],
         ),
       ),
@@ -66,19 +68,19 @@ class _InstallmentsHubScreenState
             child: Row(
               children: [
                 _summaryCard(
-                  'إجمالي الالتزامات',
+                  l10n.totalCommitments,
                   totalDebt,
                   AppColors.installment,
                 ),
                 const SizedBox(width: 8),
                 _summaryCard(
-                  'أقساط الشهر',
+                  l10n.monthlyInstallments,
                   monthlyTotal,
                   AppColors.warning,
                 ),
                 const SizedBox(width: 8),
                 _summaryCard(
-                  'فوائد مدفوعة',
+                  l10n.paidInterest,
                   interestPaid,
                   AppColors.danger,
                 ),
@@ -92,9 +94,9 @@ class _InstallmentsHubScreenState
               controller: _tabController,
               children: [
                 // Active
-                _buildPlanList(activePlans, providersAsync, isEmpty: 'مفيش أقساط نشطة'),
+                _buildPlanList(activePlans, providersAsync, isEmpty: l10n.emptyActiveInstallments),
                 // Completed
-                _buildPlanList(completedPlans, providersAsync, isEmpty: 'مفيش أقساط مكتملة'),
+                _buildPlanList(completedPlans, providersAsync, isEmpty: l10n.emptyCompletedInstallments),
               ],
             ),
           ),
@@ -207,7 +209,7 @@ class _InstallmentsHubScreenState
         );
       },
       loading: () => const Center(child: CircularProgressIndicator()),
-      error: (e, _) => Center(child: Text('خطأ: $e')),
+      error: (e, _) => Center(child: Text(AppLocalizations.of(context)!.errorWithMessage('$e'))),
     );
   }
 }

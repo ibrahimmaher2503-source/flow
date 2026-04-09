@@ -12,6 +12,7 @@ import '../../providers/wallet_provider.dart';
 import '../../providers/settings_provider.dart';
 import '../../providers/tag_provider.dart';
 import '../../providers/envelope_provider.dart';
+import '../../providers/insights_provider.dart';
 import '../../core/utils/currency_formatter.dart';
 import 'widgets/number_pad.dart';
 import 'widgets/category_grid.dart';
@@ -163,6 +164,10 @@ class _AddTransactionScreenState extends ConsumerState<AddTransactionScreen> {
       refreshWallets(ref);
       refreshSettings(ref);
       refreshTags(ref);
+
+      // Trigger insight generation after adding/editing transaction
+      triggerInsightGeneration(ref);
+
       Navigator.of(context).pop(true);
     }
   }

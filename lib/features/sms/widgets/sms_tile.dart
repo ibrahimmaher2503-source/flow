@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/utils/currency_formatter.dart';
 import '../../../data/models/detected_sms_model.dart';
@@ -16,6 +17,7 @@ class SmsTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return GestureDetector(
@@ -71,7 +73,7 @@ class SmsTile extends StatelessWidget {
                     borderRadius: BorderRadius.circular(6),
                   ),
                   child: Text(
-                    _getStatusLabel(),
+                    _getStatusLabel(AppLocalizations.of(context)!),
                     style: TextStyle(
                       fontFamily: 'Cairo',
                       fontSize: 11,
@@ -159,14 +161,14 @@ class SmsTile extends StatelessWidget {
     }
   }
 
-  String _getStatusLabel() {
+  String _getStatusLabel(AppLocalizations l10n) {
     switch (sms.status) {
       case 'confirmed':
-        return 'مؤكدة';
+        return l10n.smsStatusConfirmed;
       case 'dismissed':
-        return 'مرفوضة';
+        return l10n.smsStatusDismissed;
       default:
-        return 'في الانتظار';
+        return l10n.smsStatusPending;
     }
   }
 

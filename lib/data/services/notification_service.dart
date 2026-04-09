@@ -146,6 +146,91 @@ class NotificationService {
     );
   }
 
+  /// T066: Show bill reminder notification with contextual message
+  static Future<void> showBillReminder({
+    required int billId,
+    required String billName,
+    required double amount,
+    required int daysUntilDue,
+    required String message,
+    required String tone, // 'encouraging' | 'neutral' | 'warning' | 'urgent'
+  }) async {
+    // Determine notification importance based on tone
+    final importance = tone == 'urgent'
+        ? Importance.max
+        : tone == 'warning'
+            ? Importance.high
+            : Importance.defaultImportance;
+
+    final priority = tone == 'urgent'
+        ? Priority.max
+        : tone == 'warning'
+            ? Priority.high
+            : Priority.defaultPriority;
+
+    final details = NotificationDetails(
+      android: AndroidNotificationDetails(
+        'flowspend_bills',
+        'Bill Reminders',
+        channelDescription: 'Upcoming bill payment reminders',
+        importance: importance,
+        priority: priority,
+        styleInformation: BigTextStyleInformation(message),
+      ),
+      iOS: const DarwinNotificationDetails(
+        presentAlert: true,
+        presentBadge: true,
+        presentSound: true,
+      ),
+    );
+
+    String title;
+    if (daysUntilDue == 0) {
+      title = '💰 $billName مستحق اليوم';
+    } else if (daysUntilDue == 1) {
+      title = '📅 $billName مستحق بكرة';
+    } else {
+      title = '📋 $billName خلال $daysUntilDue أيام';
+    }
+
+    await _plugin.show(
+      'bill_$billId'.hashCode,
+      title,
+      message,
+      details,
+      payload: 'recurring:$billId',
+    );
+  }
+
+  /// T067: Schedule bill reminder for a specific date/time
+  static Future<void> scheduleBillReminder({
+    required int billId,
+    required String billName,
+    required double amount,
+    required DateTime scheduledDate,
+    required String message,
+    required String tone,
+  }) async {
+    // Note: Actual scheduling requires timezone package and additional setup
+    // For now, we'll use immediate notifications triggered by app startup checks
+    // Full scheduling can be implemented with flutter_local_notifications zonedSchedule
+
+    // Calculate days until due from scheduled date
+    final now = DateTime.now();
+    final today = DateTime(now.year, now.month, now.day);
+    final dueDate = DateTime(scheduledDate.year, scheduledDate.month, scheduledDate.day);
+    final daysUntilDue = dueDate.difference(today).inDays;
+
+    await showBillReminder(
+      billId: billId,
+      billName: billName,
+      amount: amount,
+      daysUntilDue: daysUntilDue,
+      message: message,
+      tone: tone,
+    );
+  }
+
   /// Show envelope health summary notification
   static Future<void> showEnvelopesSummary({
     required int healthyCount,

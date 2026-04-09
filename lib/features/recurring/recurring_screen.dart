@@ -1,51 +1,157 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/theme/app_colors.dart';
+import '../../core/theme/app_spacing.dart';
 import '../../data/models/recurring_transaction_model.dart';
 import '../../l10n/generated/app_localizations.dart';
 import '../../providers/recurring_provider.dart';
 import '../../shared/widgets/empty_state.dart';
+import 'widgets/bill_calendar.dart';
 import 'widgets/recurring_tile.dart';
 
-class RecurringScreen extends ConsumerWidget {
+/// T069: Recurring screen with integrated BillCalendar
+class RecurringScreen extends ConsumerStatefulWidget {
   const RecurringScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<RecurringScreen> createState() => _RecurringScreenState();
+}
+
+class _RecurringScreenState extends ConsumerState<RecurringScreen>
+    with SingleTickerProviderStateMixin {
+  late TabController _tabController;
+
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(length: 2, vsync: this);
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final recurringAsync = ref.watch(activeRecurringProvider);
+    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
-      appBar: AppBar(title: Text(l10n.screenRecurring)),
-      body: recurringAsync.when(
-        data: (items) {
-          if (items.isEmpty) {
-            return EmptyState(
-              icon: Icons.repeat,
-              message: l10n.emptyRecurringTransactions,
-            );
-          }
-          return ListView.builder(
-            padding: const EdgeInsets.all(16),
-            itemCount: items.length,
-            itemBuilder: (context, index) {
-              return Padding(
-                padding: const EdgeInsets.only(bottom: 12),
-                child: RecurringTile(
-                  recurring: items[index],
-                  onTap: () => _showEditDialog(context, ref, items[index]),
-                ),
-              );
-            },
-          );
-        },
-        loading: () => const Center(child: CircularProgressIndicator()),
-        error: (e, _) => Center(child: Text('$e')),
+      appBar: AppBar(
+        title: Text(l10n.screenRecurring),
+        bottom: TabBar(
+          controller: _tabController,
+          labelColor: isDark ? AppColors.primary : AppColors.lightPrimary,
+          unselectedLabelColor:
+              isDark ? AppColors.textMuted : AppColors.lightTextMuted,
+          indicatorColor: isDark ? AppColors.primary : AppColors.lightPrimary,
+          tabs: const [
+            Tab(text: 'التقويم', icon: Icon(Icons.calendar_month_rounded, size: 18)),
+            Tab(text: 'القائمة', icon: Icon(Icons.list_rounded, size: 18)),
+          ],
+        ),
+      ),
+      body: TabBarView(
+        controller: _tabController,
+        children: [
+          // Calendar view
+          _buildCalendarView(isDark),
+          // List view
+          _buildListView(l10n),
+        ],
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => _showAddDialog(context, ref),
         child: const Icon(Icons.add),
       ),
+    );
+  }
+
+  Widget _buildCalendarView(bool isDark) {
+    return SingleChildScrollView(
+      padding: const EdgeInsets.all(AppSpacing.lg),
+      child: Column(
+        children: [
+          // Bill Calendar
+          const BillCalendar(),
+
+          const SizedBox(height: AppSpacing.lg),
+
+          // Legend
+          Container(
+            padding: const EdgeInsets.all(AppSpacing.md),
+            decoration: BoxDecoration(
+              color: isDark
+                  ? AppColors.surfaceLight.withValues(alpha: 0.3)
+                  : AppColors.lightSurfaceContainerLow,
+              borderRadius: BorderRadius.circular(AppSpacing.radiusMd),
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                _legendItem('متاح', isDark ? AppColors.success : AppColors.lightSuccess, isDark),
+                _legendItem('تحذير', isDark ? AppColors.warning : AppColors.lightWarning, isDark),
+                _legendItem('عاجل', isDark ? AppColors.danger : AppColors.lightDanger, isDark),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _legendItem(String label, Color color, bool isDark) {
+    return Row(
+      children: [
+        Container(
+          width: 8,
+          height: 8,
+          decoration: BoxDecoration(
+            color: color,
+            shape: BoxShape.circle,
+          ),
+        ),
+        const SizedBox(width: 4),
+        Text(
+          label,
+          style: TextStyle(
+            color: isDark ? AppColors.textSecondary : AppColors.lightTextSecondary,
+            fontSize: 11,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildListView(AppLocalizations l10n) {
+    final recurringAsync = ref.watch(activeRecurringProvider);
+
+    return recurringAsync.when(
+      data: (items) {
+        if (items.isEmpty) {
+          return EmptyState(
+            icon: Icons.repeat,
+            message: l10n.emptyRecurringTransactions,
+          );
+        }
+        return ListView.builder(
+          padding: const EdgeInsets.all(16),
+          itemCount: items.length,
+          itemBuilder: (context, index) {
+            return Padding(
+              padding: const EdgeInsets.only(bottom: 12),
+              child: RecurringTile(
+                recurring: items[index],
+                onTap: () => _showEditDialog(context, ref, items[index]),
+              ),
+            );
+          },
+        );
+      },
+      loading: () => const Center(child: CircularProgressIndicator()),
+      error: (e, st) => Center(child: Text('$e')),
     );
   }
 
@@ -174,7 +280,7 @@ class RecurringScreen extends ConsumerWidget {
                     Switch(
                       value: autoAdd,
                       onChanged: (v) => setDialogState(() => autoAdd = v),
-                      activeColor: AppColors.primary,
+                      activeTrackColor: AppColors.primary,
                     ),
                   ],
                 ),

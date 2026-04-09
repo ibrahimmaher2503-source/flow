@@ -110,7 +110,7 @@ class SettingsScreen extends ConsumerWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: const EdgeInsets.only(bottom: 8, right: 4),
+          padding: const EdgeInsets.only(bottom: 12, right: 4),
           child: Builder(
             builder: (context) {
               final isDark = Theme.of(context).brightness == Brightness.dark;
@@ -118,9 +118,10 @@ class SettingsScreen extends ConsumerWidget {
                 title,
                 style: TextStyle(
                   fontFamily: 'Cairo',
-                  fontSize: 18,
+                  fontSize: 16,
                   fontWeight: FontWeight.w600,
                   color: isDark ? Colors.white : AppColors.lightTextPrimary,
+                  letterSpacing: 0.3,
                 ),
               );
             },
@@ -131,8 +132,29 @@ class SettingsScreen extends ConsumerWidget {
             final isDark = Theme.of(context).brightness == Brightness.dark;
             return Container(
               decoration: BoxDecoration(
-                color: isDark ? AppColors.surface : AppColors.lightSurface,
+                color: isDark ? AppColors.surfaceLight : AppColors.lightSurfaceContainerLow,
                 borderRadius: BorderRadius.circular(16),
+                border: Border.all(
+                  color: isDark
+                      ? Colors.white.withValues(alpha: 0.06)
+                      : AppColors.lightBorderVariant,
+                  width: 1,
+                ),
+                boxShadow: isDark
+                    ? [
+                        BoxShadow(
+                          color: Colors.black.withValues(alpha: 0.2),
+                          blurRadius: 8,
+                          offset: const Offset(0, 2),
+                        ),
+                      ]
+                    : [
+                        BoxShadow(
+                          color: AppColors.lightShadow,
+                          blurRadius: 8,
+                          offset: const Offset(0, 1),
+                        ),
+                      ],
               ),
               child: Column(children: children),
             );
@@ -150,27 +172,47 @@ class SettingsScreen extends ConsumerWidget {
         final titleColor = isDark ? Colors.white : AppColors.lightTextPrimary;
         final subtitleColor =
             isDark ? AppColors.textMuted : AppColors.lightTextMuted;
+        final primaryColor = isDark ? AppColors.primary : AppColors.lightPrimary;
+        final iconBgColor = isDark
+            ? primaryColor.withValues(alpha: 0.15)
+            : AppColors.lightPrimaryMuted;
 
         return ListTile(
+          contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
           leading: Container(
-            width: 40,
-            height: 40,
+            width: 44,
+            height: 44,
             decoration: BoxDecoration(
-              color: AppColors.primary.withValues(alpha: 0.2),
-              borderRadius: BorderRadius.circular(10),
+              color: iconBgColor,
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(
+                color: isDark
+                    ? primaryColor.withValues(alpha: 0.2)
+                    : primaryColor.withValues(alpha: 0.15),
+                width: 1,
+              ),
             ),
-            child: Icon(icon, color: AppColors.primary, size: 22),
+            child: Icon(icon, color: primaryColor, size: 22),
           ),
           title: Text(title,
-              style: TextStyle(fontFamily: 'Cairo', color: titleColor)),
+              style: TextStyle(
+                fontFamily: 'Cairo',
+                color: titleColor,
+                fontWeight: FontWeight.w500,
+                fontSize: 15,
+              )),
           subtitle: Text(subtitle,
               style: TextStyle(
                   fontFamily: 'Cairo',
-                  fontSize: 12,
-                  color: subtitleColor)),
+                  fontSize: 13,
+                  color: subtitleColor,
+                  fontWeight: FontWeight.w400)),
           trailing:
               Icon(Icons.chevron_left, color: subtitleColor, size: 20),
           onTap: onTap,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
         );
       },
     );
@@ -184,16 +226,27 @@ class SettingsScreen extends ConsumerWidget {
         final valueColor = isDark
             ? AppColors.textSecondary
             : AppColors.lightTextSecondary;
+        final primaryColor = isDark ? AppColors.primary : AppColors.lightPrimary;
 
         return ListTile(
-          leading: Icon(icon, color: AppColors.primary, size: 22),
+          contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          leading: Icon(icon, color: primaryColor, size: 22),
           title: Text(title,
-              style: TextStyle(fontFamily: 'Cairo', color: titleColor)),
+              style: TextStyle(
+                fontFamily: 'Cairo',
+                color: titleColor,
+                fontWeight: FontWeight.w500,
+                fontSize: 15,
+              )),
           trailing: Text(value,
               style: TextStyle(
                   fontFamily: 'Cairo',
                   fontSize: 14,
-                  color: valueColor)),
+                  color: valueColor,
+                  fontWeight: FontWeight.w400)),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
         );
       },
     );

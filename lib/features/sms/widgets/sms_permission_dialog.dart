@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../../../core/theme/app_colors.dart';
 
 class SmsPermissionDialog extends StatelessWidget {
@@ -24,6 +25,7 @@ class SmsPermissionDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return AlertDialog(
@@ -53,7 +55,7 @@ class SmsPermissionDialog extends StatelessWidget {
 
           // Title
           Text(
-            'السماح بقراءة الرسائل',
+            l10n.smsPermissionTitle,
             style: TextStyle(
               fontFamily: 'Cairo',
               fontSize: 20,
@@ -66,7 +68,7 @@ class SmsPermissionDialog extends StatelessWidget {
 
           // Description
           Text(
-            'FlowSpend يحتاج صلاحية قراءة الرسائل لاكتشاف معاملاتك البنكية تلقائياً.',
+            l10n.smsPermissionDescription,
             style: TextStyle(
               fontFamily: 'Cairo',
               fontSize: 14,
@@ -96,7 +98,7 @@ class SmsPermissionDialog extends StatelessWidget {
                 const SizedBox(width: 10),
                 Expanded(
                   child: Text(
-                    'بياناتك آمنة - كل شيء يتم محلياً على جهازك ولا يتم إرسال أي بيانات للإنترنت.',
+                    l10n.smsPermissionPrivacyAssurance,
                     style: TextStyle(
                       fontFamily: 'Cairo',
                       fontSize: 12,
@@ -122,7 +124,7 @@ class SmsPermissionDialog extends StatelessWidget {
                     ),
                   ),
                   child: Text(
-                    'ليس الآن',
+                    l10n.smsPermissionNotNow,
                     style: TextStyle(
                       fontFamily: 'Cairo',
                       fontSize: 14,
@@ -147,9 +149,9 @@ class SmsPermissionDialog extends StatelessWidget {
                       borderRadius: BorderRadius.circular(12),
                     ),
                   ),
-                  child: const Text(
-                    'السماح',
-                    style: TextStyle(
+                  child: Text(
+                    l10n.smsPermissionAllow,
+                    style: const TextStyle(
                       fontFamily: 'Cairo',
                       fontSize: 14,
                       fontWeight: FontWeight.w600,

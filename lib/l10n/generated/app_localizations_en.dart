@@ -797,4 +797,154 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get remainingObligations => 'Remaining Obligations';
+
+  @override
+  String get smsConfirmationTitle => 'Confirm Transaction';
+
+  @override
+  String get smsNotFound => 'Transaction not found';
+
+  @override
+  String get smsAlreadyConfirmed => 'Transaction already confirmed';
+
+  @override
+  String get smsAlreadyDismissed => 'Transaction already dismissed';
+
+  @override
+  String get smsDismissButton => 'Dismiss';
+
+  @override
+  String get smsConfirmButton => 'Confirm';
+
+  @override
+  String get smsTransactionAddedSuccess => 'Transaction added successfully';
+
+  @override
+  String get smsStatusConfirmed => 'Confirmed';
+
+  @override
+  String get smsStatusDismissed => 'Dismissed';
+
+  @override
+  String get smsStatusPending => 'Pending';
+
+  @override
+  String get smsTimeNow => 'Just now';
+
+  @override
+  String smsTimeMinutesAgo(int minutes) {
+    return '$minutes minutes ago';
+  }
+
+  @override
+  String smsTimeHoursAgo(int hours) {
+    return '$hours hours ago';
+  }
+
+  @override
+  String smsTimeYesterday(String time) {
+    return 'Yesterday $time';
+  }
+
+  @override
+  String smsTimeDaysAgo(int days) {
+    return '$days days ago';
+  }
+
+  @override
+  String get smsPermissionTitle => 'Allow SMS Access';
+
+  @override
+  String get smsPermissionDescription =>
+      'FlowSpend needs SMS permission to automatically detect your bank transactions.';
+
+  @override
+  String get smsPermissionPrivacyAssurance =>
+      'Your data is safe - everything stays on your device locally and no data is sent to the internet.';
+
+  @override
+  String get smsPermissionNotNow => 'Not Now';
+
+  @override
+  String get smsPermissionAllow => 'Allow';
+
+  @override
+  String get tabActive => 'Active';
+
+  @override
+  String get tabCompleted => 'Completed';
+
+  @override
+  String get totalCommitments => 'Total Commitments';
+
+  @override
+  String get monthlyInstallments => 'Monthly Installments';
+
+  @override
+  String get paidInterest => 'Interest Paid';
+
+  @override
+  String get emptyActiveInstallments => 'No active installments';
+
+  @override
+  String get emptyCompletedInstallments => 'No completed installments';
+
+  @override
+  String get confirmTransaction => 'Confirm Transaction';
+
+  @override
+  String get transactionNotFound => 'Transaction not found';
+
+  @override
+  String get transactionAlreadyConfirmed => 'Transaction already confirmed';
+
+  @override
+  String get transactionAlreadyRejected => 'Transaction already rejected';
+
+  @override
+  String get selectCategory => 'Select Category';
+
+  @override
+  String get dismiss => 'Dismiss';
+
+  @override
+  String get confirm => 'Confirm';
+
+  @override
+  String get transactionAddedSuccessfully => 'Transaction added successfully';
+
+  @override
+  String errorOccurred(String error) {
+    return 'Error occurred: $error';
+  }
+
+  @override
+  String get categoryDistribution => 'Category Distribution';
+
+  @override
+  String get expenses => 'Expenses';
+
+  @override
+  String get noExpensesThisMonth => 'No expenses this month';
+
+  @override
+  String get remainingCommitments => 'Remaining Commitments';
+
+  @override
+  String get distributionByProvider => 'Distribution by Provider';
+
+  @override
+  String get badge7DayStreak => '7 Day Streak';
+
+  @override
+  String get badge30DayStreak => '30 Day Streak';
+
+  @override
+  String get badgeFirstGoalCompleted => 'First Goal Completed';
+
+  @override
+  String get badgeBudgetCommitted => 'Budget Champion';
+
+  @override
+  String get badgeFirstPlanCompleted => 'Debt Free';
 }

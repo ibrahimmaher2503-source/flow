@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/utils/currency_formatter.dart';
 import '../../core/utils/extensions.dart';
@@ -30,19 +31,20 @@ class ReportsScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context)!;
     return DefaultTabController(
       length: 2,
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('التقارير'),
-          bottom: const TabBar(
+          title: Text(l10n.screenReports),
+          bottom: TabBar(
             indicatorColor: AppColors.primary,
             labelStyle:
-                TextStyle(fontFamily: 'Cairo', fontWeight: FontWeight.w600),
-            unselectedLabelStyle: TextStyle(fontFamily: 'Cairo'),
+                const TextStyle(fontFamily: 'Cairo', fontWeight: FontWeight.w600),
+            unselectedLabelStyle: const TextStyle(fontFamily: 'Cairo'),
             tabs: [
-              Tab(text: 'المصاريف'),
-              Tab(text: 'الأقساط'),
+              Tab(text: l10n.reportsTabExpenses),
+              Tab(text: l10n.reportsTabInstallments),
             ],
           ),
         ),

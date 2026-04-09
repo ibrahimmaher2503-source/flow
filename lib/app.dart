@@ -89,6 +89,54 @@ class _AppShellState extends State<AppShell> {
   // FAB only on Dashboard (0) and Transactions (1) tabs
   bool get _showFab => _currentIndex == 0 || _currentIndex == 1;
 
+  /// Enhanced FAB with premium solid color design (no gradients)
+  Widget _buildEnhancedFAB(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final primaryColor = isDark ? AppColors.primary : AppColors.lightPrimary;
+    final onPrimaryColor = isDark ? Colors.white : AppColors.lightOnPrimary;
+
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 16, right: 16),
+      child: Container(
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          color: primaryColor,
+          boxShadow: [
+            // Primary color glow shadow
+            BoxShadow(
+              color: primaryColor.withValues(alpha: isDark ? 0.4 : 0.25),
+              blurRadius: 24,
+              offset: const Offset(0, 8),
+              spreadRadius: 2,
+            ),
+            // Subtle ambient shadow for depth
+            BoxShadow(
+              color: isDark
+                  ? Colors.black.withValues(alpha: 0.3)
+                  : AppColors.lightShadow,
+              blurRadius: 16,
+              offset: const Offset(0, 4),
+            ),
+          ],
+        ),
+        child: FloatingActionButton(
+          onPressed: () {
+            Navigator.push<bool>(
+              context,
+              MaterialPageRoute(
+                builder: (_) => const AddTransactionScreen(),
+              ),
+            );
+          },
+          backgroundColor: primaryColor,
+          elevation: 0,
+          shape: const CircleBorder(),
+          child: Icon(Icons.add_rounded, size: 28, color: onPrimaryColor),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -144,32 +192,7 @@ class _AppShellState extends State<AppShell> {
         },
       ),
       floatingActionButton: _showFab
-          ? Container(
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                gradient: AppColors.primaryGradient,
-                boxShadow: [
-                  BoxShadow(
-                    color: AppColors.primary.withValues(alpha: 0.5),
-                    blurRadius: 20,
-                    offset: const Offset(0, 6),
-                  ),
-                ],
-              ),
-              child: FloatingActionButton(
-                onPressed: () {
-                  Navigator.push<bool>(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) => const AddTransactionScreen(),
-                    ),
-                  );
-                },
-                backgroundColor: Colors.transparent,
-                elevation: 0,
-                child: const Icon(Icons.add_rounded, size: 28),
-              ),
-            )
+          ? _buildEnhancedFAB(context)
           : null,
     );
   }

@@ -213,7 +213,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get badgeFirstPlanDone => 'خلصت أول خطة أقساط';
 
   @override
-  String get badgeNoNewInstallments => 'مفيش أقساط جديدة 3 شهور';
+  String get badgeNoNewInstallments => '3 شهور بدون أقساط جديدة';
 
   @override
   String get categoryFood => 'اكل وشرب';
@@ -796,4 +796,154 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get remainingObligations => 'الالتزامات المتبقية';
+
+  @override
+  String get smsConfirmationTitle => 'تأكيد المعاملة';
+
+  @override
+  String get smsNotFound => 'المعاملة غير موجودة';
+
+  @override
+  String get smsAlreadyConfirmed => 'تم تأكيد المعاملة مسبقاً';
+
+  @override
+  String get smsAlreadyDismissed => 'تم رفض المعاملة مسبقاً';
+
+  @override
+  String get smsDismissButton => 'تجاهل';
+
+  @override
+  String get smsConfirmButton => 'تأكيد';
+
+  @override
+  String get smsTransactionAddedSuccess => 'تم إضافة المعاملة بنجاح';
+
+  @override
+  String get smsStatusConfirmed => 'مؤكدة';
+
+  @override
+  String get smsStatusDismissed => 'مرفوضة';
+
+  @override
+  String get smsStatusPending => 'في الانتظار';
+
+  @override
+  String get smsTimeNow => 'الآن';
+
+  @override
+  String smsTimeMinutesAgo(int minutes) {
+    return 'منذ $minutes دقيقة';
+  }
+
+  @override
+  String smsTimeHoursAgo(int hours) {
+    return 'منذ $hours ساعة';
+  }
+
+  @override
+  String smsTimeYesterday(String time) {
+    return 'أمس $time';
+  }
+
+  @override
+  String smsTimeDaysAgo(int days) {
+    return 'منذ $days أيام';
+  }
+
+  @override
+  String get smsPermissionTitle => 'السماح بقراءة الرسائل';
+
+  @override
+  String get smsPermissionDescription =>
+      'FlowSpend يحتاج صلاحية قراءة الرسائل لاكتشاف معاملاتك البنكية تلقائياً';
+
+  @override
+  String get smsPermissionPrivacyAssurance =>
+      'بياناتك آمنة - كل شيء يتم محلياً على جهازك ولا يتم إرسال أي بيانات للإنترنت';
+
+  @override
+  String get smsPermissionNotNow => 'ليس الآن';
+
+  @override
+  String get smsPermissionAllow => 'السماح';
+
+  @override
+  String get tabActive => 'نشطة';
+
+  @override
+  String get tabCompleted => 'مكتملة';
+
+  @override
+  String get totalCommitments => 'إجمالي الالتزامات';
+
+  @override
+  String get monthlyInstallments => 'أقساط الشهر';
+
+  @override
+  String get paidInterest => 'فوائد مدفوعة';
+
+  @override
+  String get emptyActiveInstallments => 'مفيش أقساط نشطة';
+
+  @override
+  String get emptyCompletedInstallments => 'مفيش أقساط مكتملة';
+
+  @override
+  String get confirmTransaction => 'تأكيد المعاملة';
+
+  @override
+  String get transactionNotFound => 'المعاملة غير موجودة';
+
+  @override
+  String get transactionAlreadyConfirmed => 'تم تأكيد المعاملة مسبقاً';
+
+  @override
+  String get transactionAlreadyRejected => 'تم رفض المعاملة مسبقاً';
+
+  @override
+  String get selectCategory => 'اختر التصنيف';
+
+  @override
+  String get dismiss => 'تجاهل';
+
+  @override
+  String get confirm => 'تأكيد';
+
+  @override
+  String get transactionAddedSuccessfully => 'تم إضافة المعاملة بنجاح';
+
+  @override
+  String errorOccurred(String error) {
+    return 'حدث خطأ: $error';
+  }
+
+  @override
+  String get categoryDistribution => 'التوزيع بالفئات';
+
+  @override
+  String get expenses => 'المصاريف';
+
+  @override
+  String get noExpensesThisMonth => 'لا توجد مصاريف هذا الشهر';
+
+  @override
+  String get remainingCommitments => 'الالتزامات المتبقية';
+
+  @override
+  String get distributionByProvider => 'التوزيع حسب المقدم';
+
+  @override
+  String get badge7DayStreak => '7 أيام متتالية';
+
+  @override
+  String get badge30DayStreak => '30 يوم متتالي';
+
+  @override
+  String get badgeFirstGoalCompleted => 'أول هدف اكتمل';
+
+  @override
+  String get badgeBudgetCommitted => 'ملتزم بالميزانية';
+
+  @override
+  String get badgeFirstPlanCompleted => 'خلصت أول خطة أقساط';
 }

@@ -28,9 +28,7 @@ class InsightsCarousel extends ConsumerWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Header
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg),
-              child: Row(
+            Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   SectionHeader(
@@ -52,7 +50,6 @@ class InsightsCarousel extends ConsumerWidget {
                     ),
                 ],
               ),
-            ),
             const SizedBox(height: AppSpacing.md),
 
             // Carousel
@@ -60,10 +57,9 @@ class InsightsCarousel extends ConsumerWidget {
               height: 120,
               child: ListView.separated(
                 scrollDirection: Axis.horizontal,
-                padding:
-                    const EdgeInsets.symmetric(horizontal: AppSpacing.lg),
+                padding: EdgeInsets.zero,
                 itemCount: insights.length,
-                separatorBuilder: (_, __) =>
+                separatorBuilder: (context, index) =>
                     const SizedBox(width: AppSpacing.md),
                 itemBuilder: (context, index) {
                   final insight = insights[index];
@@ -97,19 +93,16 @@ class InsightsCarousel extends ConsumerWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg),
-          child: LoadingShimmer(height: 20, width: 120),
-        ),
+        LoadingShimmer(height: 20, width: 120),
         const SizedBox(height: AppSpacing.md),
         SizedBox(
           height: 100,
           child: ListView.separated(
             scrollDirection: Axis.horizontal,
-            padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg),
+            padding: EdgeInsets.zero,
             itemCount: 3,
-            separatorBuilder: (_, __) => const SizedBox(width: AppSpacing.md),
-            itemBuilder: (_, __) => const SizedBox(
+            separatorBuilder: (context, index) => const SizedBox(width: AppSpacing.md),
+            itemBuilder: (context, index) => const SizedBox(
               width: 280,
               child: LoadingShimmer(height: 100),
             ),
