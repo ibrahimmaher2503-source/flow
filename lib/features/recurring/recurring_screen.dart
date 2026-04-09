@@ -49,16 +49,17 @@ class RecurringScreen extends ConsumerWidget {
 
   void _showEditDialog(
       BuildContext context, WidgetRef ref, RecurringTransaction recurring) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
-        backgroundColor: AppColors.surface,
+        backgroundColor: isDark ? AppColors.surface : AppColors.lightSurface,
         title: Text(recurring.name,
-            style: const TextStyle(fontFamily: 'Cairo', color: AppColors.textPrimary)),
+            style: TextStyle(fontFamily: 'Cairo', color: isDark ? AppColors.textPrimary : AppColors.lightTextPrimary)),
         content: Text(
           'تلقائي: ${recurring.autoAdd ? "نعم" : "لا"}\nنشط: ${recurring.isActive ? "نعم" : "لا"}',
           style:
-              const TextStyle(fontFamily: 'Cairo', color: AppColors.textSecondary),
+              TextStyle(fontFamily: 'Cairo', color: isDark ? AppColors.textSecondary : AppColors.lightTextSecondary),
         ),
         actions: [
           TextButton(
@@ -102,30 +103,31 @@ class RecurringScreen extends ConsumerWidget {
     String frequency = 'monthly';
     String category = 'فواتير';
     bool autoAdd = false;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     showDialog<void>(
       context: context,
       builder: (ctx) => StatefulBuilder(
         builder: (ctx, setDialogState) => AlertDialog(
-          backgroundColor: AppColors.surface,
-          title: const Text('إضافة معاملة متكررة',
-              style: TextStyle(fontFamily: 'Cairo', color: AppColors.textPrimary)),
+          backgroundColor: isDark ? AppColors.surface : AppColors.lightSurface,
+          title: Text('إضافة معاملة متكررة',
+              style: TextStyle(fontFamily: 'Cairo', color: isDark ? AppColors.textPrimary : AppColors.lightTextPrimary)),
           content: SingleChildScrollView(
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
                 TextField(
                   controller: nameController,
-                  style: const TextStyle(
-                      fontFamily: 'Cairo', color: AppColors.textPrimary),
+                  style: TextStyle(
+                      fontFamily: 'Cairo', color: isDark ? AppColors.textPrimary : AppColors.lightTextPrimary),
                   decoration: const InputDecoration(hintText: 'الاسم'),
                 ),
                 const SizedBox(height: 8),
                 TextField(
                   controller: amountController,
                   keyboardType: TextInputType.number,
-                  style: const TextStyle(
-                      fontFamily: 'Cairo', color: AppColors.textPrimary),
+                  style: TextStyle(
+                      fontFamily: 'Cairo', color: isDark ? AppColors.textPrimary : AppColors.lightTextPrimary),
                   decoration: const InputDecoration(hintText: 'المبلغ'),
                 ),
                 const SizedBox(height: 12),
@@ -134,10 +136,10 @@ class RecurringScreen extends ConsumerWidget {
                 Row(
                   children: [
                     _chip('مصروف', type == 'expense',
-                        () => setDialogState(() => type = 'expense')),
+                        () => setDialogState(() => type = 'expense'), isDark),
                     const SizedBox(width: 8),
                     _chip('دخل', type == 'income',
-                        () => setDialogState(() => type = 'income')),
+                        () => setDialogState(() => type = 'income'), isDark),
                   ],
                 ),
                 const SizedBox(height: 8),
@@ -151,6 +153,7 @@ class RecurringScreen extends ConsumerWidget {
                         _freqLabel(f),
                         frequency == f,
                         () => setDialogState(() => frequency = f),
+                        isDark,
                       ),
                     );
                   }).toList(),
@@ -161,9 +164,9 @@ class RecurringScreen extends ConsumerWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Text('تسجيل تلقائي',
+                    Text('تسجيل تلقائي',
                         style: TextStyle(
-                            fontFamily: 'Cairo', color: AppColors.textPrimary)),
+                            fontFamily: 'Cairo', color: isDark ? AppColors.textPrimary : AppColors.lightTextPrimary)),
                     Switch(
                       value: autoAdd,
                       onChanged: (v) => setDialogState(() => autoAdd = v),
@@ -177,9 +180,9 @@ class RecurringScreen extends ConsumerWidget {
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(ctx),
-              child: const Text('إلغاء',
+              child: Text('إلغاء',
                   style: TextStyle(
-                      fontFamily: 'Cairo', color: AppColors.textMuted)),
+                      fontFamily: 'Cairo', color: isDark ? AppColors.textMuted : AppColors.lightTextMuted)),
             ),
             TextButton(
               onPressed: () async {
@@ -213,7 +216,7 @@ class RecurringScreen extends ConsumerWidget {
     });
   }
 
-  Widget _chip(String label, bool selected, VoidCallback onTap) {
+  Widget _chip(String label, bool selected, VoidCallback onTap, bool isDark) {
     return GestureDetector(
       onTap: onTap,
       child: Container(
@@ -222,14 +225,14 @@ class RecurringScreen extends ConsumerWidget {
           color: selected ? AppColors.primary : Colors.transparent,
           borderRadius: BorderRadius.circular(8),
           border:
-              selected ? null : Border.all(color: AppColors.textMuted),
+              selected ? null : Border.all(color: isDark ? AppColors.textMuted : AppColors.lightTextMuted),
         ),
         child: Text(
           label,
           style: TextStyle(
             fontFamily: 'Cairo',
             fontSize: 13,
-            color: selected ? Colors.white : AppColors.textSecondary,
+            color: selected ? Colors.white : (isDark ? AppColors.textSecondary : AppColors.lightTextSecondary),
           ),
         ),
       ),

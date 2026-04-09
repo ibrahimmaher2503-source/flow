@@ -110,22 +110,23 @@ class WalletsScreen extends ConsumerWidget {
     final balanceController = TextEditingController(text: '0');
     String selectedType = 'cash';
     String selectedColor = _walletColors[0];
+    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     showDialog<void>(
       context: context,
       builder: (ctx) => StatefulBuilder(
         builder: (ctx, setDialogState) => AlertDialog(
-          backgroundColor: AppColors.surface,
-          title: const Text('إضافة محفظة',
-              style: TextStyle(fontFamily: 'Cairo', color: AppColors.textPrimary)),
+          backgroundColor: isDark ? AppColors.surface : AppColors.lightSurface,
+          title: Text('إضافة محفظة',
+              style: TextStyle(fontFamily: 'Cairo', color: isDark ? AppColors.textPrimary : AppColors.lightTextPrimary)),
           content: SingleChildScrollView(
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
                 TextField(
                   controller: nameController,
-                  style: const TextStyle(
-                      fontFamily: 'Cairo', color: AppColors.textPrimary),
+                  style: TextStyle(
+                      fontFamily: 'Cairo', color: isDark ? AppColors.textPrimary : AppColors.lightTextPrimary),
                   decoration: const InputDecoration(
                     hintText: 'اسم المحفظة',
                   ),
@@ -134,8 +135,8 @@ class WalletsScreen extends ConsumerWidget {
                 TextField(
                   controller: balanceController,
                   keyboardType: TextInputType.number,
-                  style: const TextStyle(
-                      fontFamily: 'Cairo', color: AppColors.textPrimary),
+                  style: TextStyle(
+                      fontFamily: 'Cairo', color: isDark ? AppColors.textPrimary : AppColors.lightTextPrimary),
                   decoration: const InputDecoration(
                     hintText: 'الرصيد الابتدائي',
                   ),
@@ -144,13 +145,13 @@ class WalletsScreen extends ConsumerWidget {
                 Row(
                   children: [
                     _typeChip('كاش', 'cash', selectedType,
-                        (v) => setDialogState(() => selectedType = v)),
+                        (v) => setDialogState(() => selectedType = v), isDark),
                     const SizedBox(width: 8),
                     _typeChip('بنك', 'bank', selectedType,
-                        (v) => setDialogState(() => selectedType = v)),
+                        (v) => setDialogState(() => selectedType = v), isDark),
                     const SizedBox(width: 8),
                     _typeChip('إلكتروني', 'ewallet', selectedType,
-                        (v) => setDialogState(() => selectedType = v)),
+                        (v) => setDialogState(() => selectedType = v), isDark),
                   ],
                 ),
                 const SizedBox(height: 12),
@@ -182,9 +183,9 @@ class WalletsScreen extends ConsumerWidget {
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(ctx),
-              child: const Text('إلغاء',
+              child: Text('إلغاء',
                   style: TextStyle(
-                      fontFamily: 'Cairo', color: AppColors.textMuted)),
+                      fontFamily: 'Cairo', color: isDark ? AppColors.textMuted : AppColors.lightTextMuted)),
             ),
             TextButton(
               onPressed: () async {
@@ -219,16 +220,17 @@ class WalletsScreen extends ConsumerWidget {
   void _showEditWalletDialog(
       BuildContext context, WidgetRef ref, Wallet wallet) {
     final nameController = TextEditingController(text: wallet.name);
+    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     showDialog<void>(
       context: context,
       builder: (ctx) => AlertDialog(
-        backgroundColor: AppColors.surface,
-        title: const Text('تعديل المحفظة',
-            style: TextStyle(fontFamily: 'Cairo', color: AppColors.textPrimary)),
+        backgroundColor: isDark ? AppColors.surface : AppColors.lightSurface,
+        title: Text('تعديل المحفظة',
+            style: TextStyle(fontFamily: 'Cairo', color: isDark ? AppColors.textPrimary : AppColors.lightTextPrimary)),
         content: TextField(
           controller: nameController,
-          style: const TextStyle(fontFamily: 'Cairo', color: AppColors.textPrimary),
+          style: TextStyle(fontFamily: 'Cairo', color: isDark ? AppColors.textPrimary : AppColors.lightTextPrimary),
           decoration: const InputDecoration(hintText: 'اسم المحفظة'),
         ),
         actions: [
@@ -237,10 +239,10 @@ class WalletsScreen extends ConsumerWidget {
               final confirmed = await showDialog<bool>(
                 context: ctx,
                 builder: (ctx2) => AlertDialog(
-                  backgroundColor: AppColors.surface,
-                  title: const Text('حذف المحفظة؟',
+                  backgroundColor: isDark ? AppColors.surface : AppColors.lightSurface,
+                  title: Text('حذف المحفظة؟',
                       style: TextStyle(
-                          fontFamily: 'Cairo', color: AppColors.textPrimary)),
+                          fontFamily: 'Cairo', color: isDark ? AppColors.textPrimary : AppColors.lightTextPrimary)),
                   actions: [
                     TextButton(
                       onPressed: () => Navigator.pop(ctx2, false),
@@ -269,9 +271,9 @@ class WalletsScreen extends ConsumerWidget {
           ),
           TextButton(
             onPressed: () => Navigator.pop(ctx),
-            child: const Text('إلغاء',
+            child: Text('إلغاء',
                 style: TextStyle(
-                    fontFamily: 'Cairo', color: AppColors.textMuted)),
+                    fontFamily: 'Cairo', color: isDark ? AppColors.textMuted : AppColors.lightTextMuted)),
           ),
           TextButton(
             onPressed: () async {
@@ -291,7 +293,7 @@ class WalletsScreen extends ConsumerWidget {
   }
 
   Widget _typeChip(
-      String label, String value, String selected, ValueChanged<String> onTap) {
+      String label, String value, String selected, ValueChanged<String> onTap, bool isDark) {
     final isSelected = selected == value;
     return GestureDetector(
       onTap: () => onTap(value),
@@ -302,14 +304,14 @@ class WalletsScreen extends ConsumerWidget {
           borderRadius: BorderRadius.circular(20),
           border: isSelected
               ? null
-              : Border.all(color: AppColors.textMuted),
+              : Border.all(color: isDark ? AppColors.textMuted : AppColors.lightTextMuted),
         ),
         child: Text(
           label,
           style: TextStyle(
             fontFamily: 'Cairo',
             fontSize: 13,
-            color: isSelected ? Colors.white : AppColors.textSecondary,
+            color: isSelected ? Colors.white : (isDark ? AppColors.textSecondary : AppColors.lightTextSecondary),
           ),
         ),
       ),

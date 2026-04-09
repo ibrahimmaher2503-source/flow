@@ -20,6 +20,7 @@ class BudgetProgressCard extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final usageAsync = ref.watch(budgetUsageProvider(budget.categoryName));
+    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return GestureDetector(
       onTap: onTap,
@@ -27,8 +28,9 @@ class BudgetProgressCard extends ConsumerWidget {
       child: Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: AppColors.surface,
+          color: isDark ? AppColors.surface : AppColors.lightSurface,
           borderRadius: BorderRadius.circular(16),
+          border: isDark ? null : Border.all(color: AppColors.lightBorder),
         ),
         child: usageAsync.when(
           data: (spent) {
@@ -50,19 +52,19 @@ class BudgetProgressCard extends ConsumerWidget {
                   children: [
                     Text(
                       budget.categoryName,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontFamily: 'Cairo',
                         fontSize: 16,
                         fontWeight: FontWeight.w600,
-                        color: Colors.white,
+                        color: isDark ? Colors.white : AppColors.lightTextPrimary,
                       ),
                     ),
                     Text(
                       '${CurrencyFormatter.format(spent)} / ${CurrencyFormatter.format(budget.limitAmount)}',
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontFamily: 'Cairo',
                         fontSize: 13,
-                        color: AppColors.textSecondary,
+                        color: isDark ? AppColors.textSecondary : AppColors.lightTextSecondary,
                       ),
                     ),
                   ],
@@ -72,7 +74,7 @@ class BudgetProgressCard extends ConsumerWidget {
                   borderRadius: BorderRadius.circular(4),
                   child: LinearProgressIndicator(
                     value: percent,
-                    backgroundColor: AppColors.background,
+                    backgroundColor: isDark ? AppColors.background : AppColors.lightBackground,
                     valueColor: AlwaysStoppedAnimation<Color>(color),
                     minHeight: 8,
                   ),
@@ -85,7 +87,7 @@ class BudgetProgressCard extends ConsumerWidget {
                   style: TextStyle(
                     fontFamily: 'Cairo',
                     fontSize: 13,
-                    color: remaining >= 0 ? AppColors.textMuted : AppColors.danger,
+                    color: remaining >= 0 ? (isDark ? AppColors.textMuted : AppColors.lightTextMuted) : AppColors.danger,
                   ),
                 ),
               ],

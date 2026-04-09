@@ -48,19 +48,20 @@ class _TransactionsScreenState extends ConsumerState<TransactionsScreen> {
   }
 
   Future<void> _deleteTransaction(Transaction t) async {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
-        backgroundColor: AppColors.surface,
-        title: const Text('حذف المعاملة؟',
-            style: TextStyle(fontFamily: 'Cairo', color: AppColors.textPrimary)),
-        content: const Text('هل أنت متأكد من حذف هذه المعاملة؟',
-            style: TextStyle(fontFamily: 'Cairo', color: AppColors.textSecondary)),
+        backgroundColor: isDark ? AppColors.surface : AppColors.lightSurface,
+        title: Text('حذف المعاملة؟',
+            style: TextStyle(fontFamily: 'Cairo', color: isDark ? AppColors.textPrimary : AppColors.lightTextPrimary)),
+        content: Text('هل أنت متأكد من حذف هذه المعاملة؟',
+            style: TextStyle(fontFamily: 'Cairo', color: isDark ? AppColors.textSecondary : AppColors.lightTextSecondary)),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx, false),
-            child: const Text('لا',
-                style: TextStyle(fontFamily: 'Cairo', color: AppColors.textMuted)),
+            child: Text('لا',
+                style: TextStyle(fontFamily: 'Cairo', color: isDark ? AppColors.textMuted : AppColors.lightTextMuted)),
           ),
           TextButton(
             onPressed: () => Navigator.pop(ctx, true),
@@ -92,6 +93,7 @@ class _TransactionsScreenState extends ConsumerState<TransactionsScreen> {
     final expenseAsync = ref.watch(monthlyExpenseProvider);
     final selectedMonth = ref.watch(selectedMonthProvider);
     final categoriesAsync = ref.watch(allCategoriesProvider);
+    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
       appBar: AppBar(
@@ -112,15 +114,15 @@ class _TransactionsScreenState extends ConsumerState<TransactionsScreen> {
                       selectedMonth.month + 1,
                     );
                   },
-                  icon: const Icon(Icons.chevron_right, color: AppColors.textPrimary),
+                  icon: Icon(Icons.chevron_right, color: isDark ? AppColors.textPrimary : AppColors.lightTextPrimary),
                 ),
                 Text(
                   AppDateUtils.formatMonth(selectedMonth),
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontFamily: 'Cairo',
                     fontSize: 18,
                     fontWeight: FontWeight.w600,
-                    color: AppColors.textPrimary,
+                    color: isDark ? AppColors.textPrimary : AppColors.lightTextPrimary,
                   ),
                 ),
                 IconButton(
@@ -130,7 +132,7 @@ class _TransactionsScreenState extends ConsumerState<TransactionsScreen> {
                       selectedMonth.month - 1,
                     );
                   },
-                  icon: const Icon(Icons.chevron_left, color: AppColors.textPrimary),
+                  icon: Icon(Icons.chevron_left, color: isDark ? AppColors.textPrimary : AppColors.lightTextPrimary),
                 ),
               ],
             ),
@@ -150,11 +152,11 @@ class _TransactionsScreenState extends ConsumerState<TransactionsScreen> {
                     ),
                     child: Column(
                       children: [
-                        const Text('دخل',
+                        Text('دخل',
                             style: TextStyle(
                                 fontFamily: 'Cairo',
                                 fontSize: 12,
-                                color: AppColors.textMuted)),
+                                color: isDark ? AppColors.textMuted : AppColors.lightTextMuted)),
                         incomeAsync.when(
                           data: (val) => Text(
                             CurrencyFormatter.format(val),
@@ -182,11 +184,11 @@ class _TransactionsScreenState extends ConsumerState<TransactionsScreen> {
                     ),
                     child: Column(
                       children: [
-                        const Text('مصروف',
+                        Text('مصروف',
                             style: TextStyle(
                                 fontFamily: 'Cairo',
                                 fontSize: 12,
-                                color: AppColors.textMuted)),
+                                color: isDark ? AppColors.textMuted : AppColors.lightTextMuted)),
                         expenseAsync.when(
                           data: (val) => Text(
                             CurrencyFormatter.format(val),
@@ -251,11 +253,11 @@ class _TransactionsScreenState extends ConsumerState<TransactionsScreen> {
                           padding: const EdgeInsets.symmetric(vertical: 8),
                           child: Text(
                             entry.key,
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontFamily: 'Cairo',
                               fontSize: 14,
                               fontWeight: FontWeight.w600,
-                              color: AppColors.textMuted,
+                              color: isDark ? AppColors.textMuted : AppColors.lightTextMuted,
                             ),
                           ),
                         ),

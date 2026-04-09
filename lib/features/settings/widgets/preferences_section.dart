@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:permission_handler/permission_handler.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../data/services/sms_listener_service.dart';
 import '../../../providers/settings_provider.dart';
 import '../../../providers/theme_provider.dart' show themeProvider, AppThemeMode;
+import '../../sms/widgets/sms_permission_dialog.dart';
 
 class PreferencesSection extends ConsumerWidget {
   const PreferencesSection({super.key});
@@ -42,50 +45,42 @@ class PreferencesSection extends ConsumerWidget {
               child: settingsAsync.when(
                 data: (settings) => Column(
                   children: [
-                    _infoTile(Icons.attach_money, 'العملة',
+                    _infoTile(context, Icons.attach_money, 'العملة',
                         '${settings.currency} - جنيه مصري'),
-                    _infoTile(Icons.language, 'اللغة',
+                    _infoTile(context, Icons.language, 'اللغة',
                         settings.language == 'ar' ? 'العربية' : 'English'),
-                    _infoTile(Icons.calendar_today, 'بداية الشهر',
+                    _infoTile(context, Icons.calendar_today, 'بداية الشهر',
                         'يوم ${settings.monthStartDay}'),
-                    _infoTile(Icons.local_fire_department, 'الـ Streak',
+                    _infoTile(context, Icons.local_fire_department, 'الـ Streak',
                         '${settings.streakDays} يوم'),
+                    _buildSmsToggle(context, ref, settings, isDark),
                     SwitchListTile(
-                      title: const Text('قراءة SMS',
+                      title: Text('الإشعارات',
                           style: TextStyle(
-                              fontFamily: 'Cairo', color: Colors.white)),
-                      subtitle: const Text('اكتشاف رسائل البنوك تلقائياً',
+                              fontFamily: 'Cairo',
+                              color: isDark
+                                  ? Colors.white
+                                  : AppColors.lightTextPrimary)),
+                      subtitle: Text('تنبيهات الميزانية والأقساط',
                           style: TextStyle(
                               fontFamily: 'Cairo',
                               fontSize: 12,
-                              color: AppColors.textMuted)),
-                      value: settings.smsParsingEnabled,
-                      activeThumbColor: AppColors.primary,
-                      onChanged: (val) async {
-                        settings.smsParsingEnabled = val;
-                        await ref.read(settingsRepoProvider).update(settings);
-                        refreshSettings(ref);
-                      },
-                    ),
-                    SwitchListTile(
-                      title: const Text('الإشعارات',
-                          style: TextStyle(
-                              fontFamily: 'Cairo', color: Colors.white)),
-                      subtitle: const Text('تنبيهات الميزانية والأقساط',
-                          style: TextStyle(
-                              fontFamily: 'Cairo',
-                              fontSize: 12,
-                              color: AppColors.textMuted)),
+                              color: isDark
+                                  ? AppColors.textMuted
+                                  : AppColors.lightTextMuted)),
                       value: settings.notificationsEnabled,
-                      activeThumbColor: AppColors.primary,
+                      activeThumbColor:
+                          isDark ? AppColors.primary : AppColors.lightPrimary,
                       onChanged: (val) async {
                         settings.notificationsEnabled = val;
                         await ref.read(settingsRepoProvider).update(settings);
                         refreshSettings(ref);
                       },
                     ),
-                    const Divider(color: Colors.white12, height: 1),
-                    _buildThemeSelector(context, ref),
+                    Divider(
+                        color: isDark ? Colors.white12 : Colors.black12,
+                        height: 1),
+                    _buildThemeSelector(context, ref, isDark),
                   ],
                 ),
                 loading: () => const Padding(
@@ -104,20 +99,117 @@ class PreferencesSection extends ConsumerWidget {
     );
   }
 
-  Widget _infoTile(IconData icon, String title, String value) {
-    return ListTile(
-      leading: Icon(icon, color: AppColors.primary, size: 22),
-      title: Text(title,
-          style: const TextStyle(fontFamily: 'Cairo', color: Colors.white)),
-      trailing: Text(value,
-          style: const TextStyle(
-              fontFamily: 'Cairo',
-              fontSize: 14,
-              color: AppColors.textSecondary)),
+  Widget _buildSmsToggle(
+      BuildContext context, WidgetRef ref, dynamic settings, bool isDark) {
+    return FutureBuilder<PermissionStatus>(
+      future: Permission.sms.status,
+      builder: (context, snapshot) {
+        final permissionStatus = snapshot.data;
+        final isPermissionGranted = permissionStatus?.isGranted ?? false;
+        final isPermanentlyDenied =
+            permissionStatus?.isPermanentlyDenied ?? false;
+
+        String subtitle = 'اكتشاف رسائل البنوك تلقائياً';
+        if (!isPermissionGranted && settings.smsParsingEnabled) {
+          subtitle = isPermanentlyDenied
+              ? 'يرجى تفعيل الصلاحية من الإعدادات'
+              : 'يحتاج صلاحية قراءة الرسائل';
+        }
+
+        return SwitchListTile(
+          title: Text('قراءة SMS',
+              style: TextStyle(
+                  fontFamily: 'Cairo',
+                  color: isDark ? Colors.white : AppColors.lightTextPrimary)),
+          subtitle: Row(
+            children: [
+              Expanded(
+                child: Text(subtitle,
+                    style: TextStyle(
+                        fontFamily: 'Cairo',
+                        fontSize: 12,
+                        color: isDark
+                            ? AppColors.textMuted
+                            : AppColors.lightTextMuted)),
+              ),
+              if (isPermanentlyDenied && settings.smsParsingEnabled)
+                TextButton(
+                  onPressed: () => openAppSettings(),
+                  style: TextButton.styleFrom(
+                    padding: EdgeInsets.zero,
+                    minimumSize: const Size(0, 0),
+                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                  ),
+                  child: Text(
+                    'فتح الإعدادات',
+                    style: TextStyle(
+                      fontFamily: 'Cairo',
+                      fontSize: 11,
+                      color: isDark ? AppColors.primary : AppColors.lightPrimary,
+                    ),
+                  ),
+                ),
+            ],
+          ),
+          value: settings.smsParsingEnabled,
+          activeThumbColor:
+              isDark ? AppColors.primary : AppColors.lightPrimary,
+          onChanged: (val) async {
+            if (val) {
+              // Turning ON - need to request permission
+              final dialogResult = await SmsPermissionDialog.show(context);
+              if (dialogResult == true) {
+                final granted = await SmsListenerService.requestPermission();
+                if (granted) {
+                  settings.smsParsingEnabled = true;
+                  await ref.read(settingsRepoProvider).update(settings);
+                  await SmsListenerService.startListening();
+                  refreshSettings(ref);
+                } else {
+                  // Permission denied
+                  if (context.mounted) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('لم يتم منح صلاحية قراءة الرسائل'),
+                      ),
+                    );
+                  }
+                }
+              }
+            } else {
+              // Turning OFF
+              settings.smsParsingEnabled = false;
+              await ref.read(settingsRepoProvider).update(settings);
+              SmsListenerService.stopListening();
+              refreshSettings(ref);
+            }
+          },
+        );
+      },
     );
   }
 
-  Widget _buildThemeSelector(BuildContext context, WidgetRef ref) {
+  Widget _infoTile(
+      BuildContext context, IconData icon, String title, String value) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    return ListTile(
+      leading: Icon(icon,
+          color: isDark ? AppColors.primary : AppColors.lightPrimary, size: 22),
+      title: Text(title,
+          style: TextStyle(
+              fontFamily: 'Cairo',
+              color: isDark ? Colors.white : AppColors.lightTextPrimary)),
+      trailing: Text(value,
+          style: TextStyle(
+              fontFamily: 'Cairo',
+              fontSize: 14,
+              color: isDark
+                  ? AppColors.textSecondary
+                  : AppColors.lightTextSecondary)),
+    );
+  }
+
+  Widget _buildThemeSelector(BuildContext context, WidgetRef ref, bool isDark) {
     final currentTheme = ref.watch(themeProvider);
 
     return Padding(
@@ -125,13 +217,13 @@ class PreferencesSection extends ConsumerWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
+          Text(
             'المظهر',
             style: TextStyle(
               fontFamily: 'Cairo',
               fontSize: 14,
               fontWeight: FontWeight.w600,
-              color: Colors.white,
+              color: isDark ? Colors.white : AppColors.lightTextPrimary,
             ),
           ),
           const SizedBox(height: 12),
@@ -144,6 +236,7 @@ class PreferencesSection extends ConsumerWidget {
                 AppThemeMode.light,
                 currentTheme,
                 Icons.light_mode,
+                isDark,
               ),
               _themeButton(
                 ref,
@@ -151,6 +244,7 @@ class PreferencesSection extends ConsumerWidget {
                 AppThemeMode.dark,
                 currentTheme,
                 Icons.dark_mode,
+                isDark,
               ),
               _themeButton(
                 ref,
@@ -158,6 +252,7 @@ class PreferencesSection extends ConsumerWidget {
                 AppThemeMode.system,
                 currentTheme,
                 Icons.brightness_auto,
+                isDark,
               ),
             ],
           ),
@@ -172,16 +267,20 @@ class PreferencesSection extends ConsumerWidget {
     AppThemeMode mode,
     AppThemeMode currentMode,
     IconData icon,
+    bool isDark,
   ) {
     final isSelected = currentMode == mode;
+    final primaryColor = isDark ? AppColors.primary : AppColors.lightPrimary;
+    final mutedColor = isDark ? AppColors.textMuted : AppColors.lightTextMuted;
+    final secondaryColor =
+        isDark ? AppColors.textSecondary : AppColors.lightTextSecondary;
 
     return FilterChip(
       label: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
           Icon(icon,
-              size: 16,
-              color: isSelected ? Colors.white : AppColors.textSecondary),
+              size: 16, color: isSelected ? Colors.white : secondaryColor),
           const SizedBox(width: 6),
           Text(label),
         ],
@@ -194,14 +293,14 @@ class PreferencesSection extends ConsumerWidget {
         }
       },
       backgroundColor: Colors.transparent,
-      selectedColor: AppColors.primary.withValues(alpha: 0.3),
+      selectedColor: primaryColor.withValues(alpha: 0.3),
       labelStyle: TextStyle(
         fontFamily: 'Cairo',
-        color: isSelected ? AppColors.primary : AppColors.textSecondary,
+        color: isSelected ? primaryColor : secondaryColor,
         fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
       ),
       side: BorderSide(
-        color: isSelected ? AppColors.primary : AppColors.textMuted.withValues(alpha: 0.3),
+        color: isSelected ? primaryColor : mutedColor.withValues(alpha: 0.3),
         width: isSelected ? 1.5 : 1,
       ),
     );

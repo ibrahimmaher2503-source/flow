@@ -15,6 +15,7 @@ class FilterBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -30,10 +31,10 @@ class FilterBar extends StatelessWidget {
                 style: TextStyle(
                   fontFamily: 'Cairo',
                   fontSize: 13,
-                  color: isSelected ? Colors.white : AppColors.textSecondary,
+                  color: isSelected ? Colors.white : (isDark ? AppColors.textSecondary : AppColors.lightTextSecondary),
                 ),
               ),
-              backgroundColor: AppColors.surface,
+              backgroundColor: isDark ? AppColors.surface : AppColors.lightSurface,
               selectedColor: AppColors.primary,
               checkmarkColor: Colors.white,
               shape: RoundedRectangleBorder(

@@ -17,20 +17,28 @@ class LoadingShimmer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final baseColor =
-        isDark ? AppColors.surface : AppColors.lightSurfaceLight;
-    final highlightColor =
-        isDark ? AppColors.surfaceLight : AppColors.lightBackground;
+
+    // Enhanced shimmer colors for smoother visual feedback
+    final baseColor = isDark
+        ? AppColors.surface
+        : const Color(0xFFF5F6F8);  // Warmer base for light mode
+    final highlightColor = isDark
+        ? AppColors.surfaceLight
+        : AppColors.lightSurfaceEnhanced;  // Enhanced highlight
 
     return Shimmer.fromColors(
       baseColor: baseColor,
       highlightColor: highlightColor,
+      period: const Duration(milliseconds: 1400),  // Slightly slower for smoother effect
       child: Container(
         height: height,
         width: width,
         decoration: BoxDecoration(
           color: baseColor,
           borderRadius: BorderRadius.circular(borderRadius),
+          border: isDark
+              ? null
+              : Border.all(color: AppColors.lightBorderLightEnhanced),  // Enhanced border
         ),
       ),
     );

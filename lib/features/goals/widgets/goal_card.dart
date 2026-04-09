@@ -21,17 +21,18 @@ class GoalCard extends StatelessWidget {
     final percent = goal.targetAmount > 0
         ? (goal.currentAmount / goal.targetAmount).clamp(0.0, 1.0)
         : 0.0;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return GestureDetector(
       onTap: onTap,
       child: Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: AppColors.surface,
+          color: isDark ? AppColors.surface : AppColors.lightSurface,
           borderRadius: BorderRadius.circular(16),
           border: goal.isCompleted
               ? Border.all(color: AppColors.success.withValues(alpha: 0.4))
-              : null,
+              : (isDark ? null : Border.all(color: AppColors.lightBorder)),
         ),
         child: Row(
           children: [
@@ -43,16 +44,16 @@ class GoalCard extends StatelessWidget {
                   ? const Icon(Icons.check, color: AppColors.success, size: 20)
                   : Text(
                       '${(percent * 100).toInt()}%',
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontFamily: 'Cairo',
                         fontSize: 11,
                         fontWeight: FontWeight.bold,
-                        color: Colors.white,
+                        color: isDark ? Colors.white : AppColors.lightTextPrimary,
                       ),
                     ),
               progressColor:
                   goal.isCompleted ? AppColors.success : AppColors.secondary,
-              backgroundColor: AppColors.background,
+              backgroundColor: isDark ? AppColors.background : AppColors.lightBackground,
             ),
             const SizedBox(width: 14),
             Expanded(
@@ -69,11 +70,11 @@ class GoalCard extends StatelessWidget {
                       Expanded(
                         child: Text(
                           goal.name,
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontFamily: 'Cairo',
                             fontSize: 16,
                             fontWeight: FontWeight.w600,
-                            color: Colors.white,
+                            color: isDark ? Colors.white : AppColors.lightTextPrimary,
                           ),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
@@ -84,19 +85,19 @@ class GoalCard extends StatelessWidget {
                   const SizedBox(height: 2),
                   Text(
                     '${CurrencyFormatter.format(goal.currentAmount)} / ${CurrencyFormatter.format(goal.targetAmount)}',
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontFamily: 'Cairo',
                       fontSize: 13,
-                      color: AppColors.textSecondary,
+                      color: isDark ? AppColors.textSecondary : AppColors.lightTextSecondary,
                     ),
                   ),
                   if (goal.deadline != null)
                     Text(
                       'الموعد: ${goal.deadline!.day}/${goal.deadline!.month}/${goal.deadline!.year}',
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontFamily: 'Cairo',
                         fontSize: 11,
-                        color: AppColors.textMuted,
+                        color: isDark ? AppColors.textMuted : AppColors.lightTextMuted,
                       ),
                     ),
                 ],

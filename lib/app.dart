@@ -11,6 +11,7 @@ import 'features/budgets/budgets_screen.dart';
 import 'features/settings/settings_screen.dart';
 import 'features/onboarding/onboarding_screen.dart';
 import 'providers/theme_provider.dart' show themeProvider, AppThemeMode;
+import 'main.dart' show navigatorKey;
 
 class FlowSpendApp extends ConsumerWidget {
   final bool showOnboarding;
@@ -24,6 +25,7 @@ class FlowSpendApp extends ConsumerWidget {
     return MaterialApp(
       title: 'FlowSpend',
       debugShowCheckedModeBanner: false,
+      navigatorKey: navigatorKey,
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
       themeMode: _getFlutterThemeMode(appThemeMode),
@@ -31,9 +33,15 @@ class FlowSpendApp extends ConsumerWidget {
       onGenerateRoute: AppRouter.generateRoute,
       home: showOnboarding ? _OnboardingWrapper() : const AppShell(),
       builder: (context, child) {
+        // Wrap with AnimatedTheme for smooth theme transitions
         return Directionality(
           textDirection: TextDirection.rtl,
-          child: child!,
+          child: AnimatedTheme(
+            data: Theme.of(context),
+            duration: const Duration(milliseconds: 300),
+            curve: Curves.easeInOut,
+            child: child!,
+          ),
         );
       },
     );
@@ -80,45 +88,52 @@ class _AppShellState extends State<AppShell> {
         index: _currentIndex,
         children: _screens,
       ),
-      bottomNavigationBar: Container(
-        decoration: BoxDecoration(
-          color: Theme.of(context).scaffoldBackgroundColor,
-          boxShadow: [
-            BoxShadow(
-              color: Theme.of(context).brightness == Brightness.light
-                  ? Colors.black.withValues(alpha: 0.1)
-                  : Colors.black.withValues(alpha: 0.3),
-              blurRadius: 20,
-              offset: const Offset(0, -4),
+      bottomNavigationBar: Builder(
+        builder: (context) {
+          final isDark = Theme.of(context).brightness == Brightness.dark;
+          final navBarTheme = Theme.of(context).bottomNavigationBarTheme;
+
+          return Container(
+            decoration: BoxDecoration(
+              color: navBarTheme.backgroundColor ?? Theme.of(context).scaffoldBackgroundColor,
+              boxShadow: isDark
+                  ? [
+                      BoxShadow(
+                        color: AppColors.background.withValues(alpha: 0.5),
+                        blurRadius: 20,
+                        offset: const Offset(0, -4),
+                      ),
+                    ]
+                  : AppColors.lightShadowSubtle,
             ),
-          ],
-        ),
-        child: BottomNavigationBar(
-          currentIndex: _currentIndex,
-          onTap: (index) => setState(() => _currentIndex = index),
-          items: const [
-            BottomNavigationBarItem(
-              icon: Icon(Icons.home_rounded),
-              label: 'الرئيسية',
+            child: BottomNavigationBar(
+              currentIndex: _currentIndex,
+              onTap: (index) => setState(() => _currentIndex = index),
+              items: const [
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.home_rounded),
+                  label: 'الرئيسية',
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.receipt_long_rounded),
+                  label: 'المعاملات',
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.credit_card_rounded),
+                  label: 'الأقساط',
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.pie_chart_rounded),
+                  label: 'الميزانية',
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.settings_rounded),
+                  label: 'الإعدادات',
+                ),
+              ],
             ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.receipt_long_rounded),
-              label: 'المعاملات',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.credit_card_rounded),
-              label: 'الأقساط',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.pie_chart_rounded),
-              label: 'الميزانية',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.settings_rounded),
-              label: 'الإعدادات',
-          ),
-        ],
-        ),
+          );
+        },
       ),
       floatingActionButton: _showFab
           ? Container(

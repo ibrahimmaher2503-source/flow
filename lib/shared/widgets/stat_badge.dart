@@ -10,6 +10,7 @@ class StatBadge extends StatelessWidget {
   final IconData? icon;
 
   const StatBadge({
+    super.key,
     required this.label,
     required this.value,
     this.color,
@@ -19,7 +20,11 @@ class StatBadge extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final badgeColor = color ?? AppColors.primary;
+    final badgeColor = color ?? (isDark ? AppColors.primary : AppColors.lightPrimary);
+
+    // Light mode: use muted background colors based on the badge color
+    final bgAlpha = isDark ? 0.1 : 0.12;
+    final shadowAlpha = isDark ? 0.1 : 0.08;
 
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -27,15 +32,36 @@ class StatBadge extends StatelessWidget {
         Container(
           padding: const EdgeInsets.all(AppSpacing.md),
           decoration: BoxDecoration(
-            color: badgeColor.withValues(alpha: 0.1),
+            color: badgeColor.withValues(alpha: bgAlpha),
             borderRadius: BorderRadius.circular(AppSpacing.radiusLg),
-            boxShadow: [
-              BoxShadow(
-                color: badgeColor.withValues(alpha: 0.1),
-                blurRadius: 8,
-                offset: const Offset(0, 4),
-              ),
-            ],
+            border: isDark
+                ? null
+                : Border.all(
+                    color: badgeColor.withValues(alpha: 0.25),  // Enhanced border visibility
+                  ),
+            boxShadow: isDark
+                ? [
+                    BoxShadow(
+                      color: badgeColor.withValues(alpha: shadowAlpha),
+                      blurRadius: 8,
+                      offset: const Offset(0, 4),
+                    ),
+                  ]
+                : [
+                    // Enhanced multi-layer shadow for light mode
+                    BoxShadow(
+                      color: badgeColor.withValues(alpha: 0.06),
+                      blurRadius: 12,
+                      offset: const Offset(0, 4),
+                      spreadRadius: 1,
+                    ),
+                    BoxShadow(
+                      color: badgeColor.withValues(alpha: 0.08),
+                      blurRadius: 6,
+                      offset: const Offset(0, 2),
+                      spreadRadius: -1,
+                    ),
+                  ],
           ),
           child: Icon(
             icon ?? Icons.trending_up,

@@ -52,16 +52,17 @@ class GoalsScreen extends ConsumerWidget {
   void _showContributeDialog(
       BuildContext context, WidgetRef ref, SavingsGoal goal) {
     final controller = TextEditingController();
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     showDialog<void>(
       context: context,
       builder: (ctx) => AlertDialog(
-        backgroundColor: AppColors.surface,
+        backgroundColor: isDark ? AppColors.surface : AppColors.lightSurface,
         title: Text('إضافة مبلغ لـ ${goal.name}',
-            style: const TextStyle(fontFamily: 'Cairo', color: AppColors.textPrimary)),
+            style: TextStyle(fontFamily: 'Cairo', color: isDark ? AppColors.textPrimary : AppColors.lightTextPrimary)),
         content: TextField(
           controller: controller,
           keyboardType: TextInputType.number,
-          style: const TextStyle(fontFamily: 'Cairo', color: AppColors.textPrimary),
+          style: TextStyle(fontFamily: 'Cairo', color: isDark ? AppColors.textPrimary : AppColors.lightTextPrimary),
           decoration: const InputDecoration(hintText: 'المبلغ'),
         ),
         actions: [
@@ -92,20 +93,21 @@ class GoalsScreen extends ConsumerWidget {
   void _showAddGoalDialog(BuildContext context, WidgetRef ref) {
     final nameController = TextEditingController();
     final targetController = TextEditingController();
+    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     showDialog<void>(
       context: context,
       builder: (ctx) => AlertDialog(
-        backgroundColor: AppColors.surface,
-        title: const Text('هدف توفير جديد',
-            style: TextStyle(fontFamily: 'Cairo', color: AppColors.textPrimary)),
+        backgroundColor: isDark ? AppColors.surface : AppColors.lightSurface,
+        title: Text('هدف توفير جديد',
+            style: TextStyle(fontFamily: 'Cairo', color: isDark ? AppColors.textPrimary : AppColors.lightTextPrimary)),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             TextField(
               controller: nameController,
               style:
-                  const TextStyle(fontFamily: 'Cairo', color: AppColors.textPrimary),
+                  TextStyle(fontFamily: 'Cairo', color: isDark ? AppColors.textPrimary : AppColors.lightTextPrimary),
               decoration: const InputDecoration(hintText: 'اسم الهدف'),
             ),
             const SizedBox(height: 8),
@@ -113,7 +115,7 @@ class GoalsScreen extends ConsumerWidget {
               controller: targetController,
               keyboardType: TextInputType.number,
               style:
-                  const TextStyle(fontFamily: 'Cairo', color: AppColors.textPrimary),
+                  TextStyle(fontFamily: 'Cairo', color: isDark ? AppColors.textPrimary : AppColors.lightTextPrimary),
               decoration:
                   const InputDecoration(hintText: 'المبلغ المطلوب'),
             ),

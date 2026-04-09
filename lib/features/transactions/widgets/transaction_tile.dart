@@ -26,6 +26,7 @@ class TransactionTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final isIncome = transaction.type == 'income';
     final isInstallment = transaction.source == 'installment';
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     final color = categoryColor?.toColor ?? AppColors.textMuted;
 
     return Slidable(
@@ -100,21 +101,21 @@ class TransactionTile extends StatelessWidget {
                       children: [
                         Text(
                           transaction.category,
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontFamily: 'Cairo',
                             fontSize: 15,
                             fontWeight: FontWeight.w500,
-                            color: Colors.white,
+                            color: isDark ? Colors.white : AppColors.lightTextPrimary,
                           ),
                         ),
                         if (transaction.subcategory != null) ...[
                           const SizedBox(width: 4),
                           Text(
                             '· ${transaction.subcategory}',
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontFamily: 'Cairo',
                               fontSize: 12,
-                              color: AppColors.textMuted,
+                              color: isDark ? AppColors.textMuted : AppColors.lightTextMuted,
                             ),
                           ),
                         ],
@@ -124,10 +125,10 @@ class TransactionTile extends StatelessWidget {
                         transaction.note!.isNotEmpty)
                       Text(
                         transaction.note!,
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontFamily: 'Cairo',
                           fontSize: 12,
-                          color: AppColors.textMuted,
+                          color: isDark ? AppColors.textMuted : AppColors.lightTextMuted,
                         ),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,

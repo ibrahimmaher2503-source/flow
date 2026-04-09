@@ -10,6 +10,7 @@ import '../../features/reports/reports_screen.dart';
 import '../../features/goals/goals_screen.dart';
 import '../../features/recurring/recurring_screen.dart';
 import '../../features/sms/sms_inbox_screen.dart';
+import '../../features/sms/sms_confirmation_screen.dart';
 import '../../features/settings/settings_screen.dart';
 import '../../features/settings/categories_screen.dart';
 
@@ -25,6 +26,7 @@ class AppRouter {
   static const goals = '/goals';
   static const recurring = '/recurring';
   static const smsInbox = '/sms';
+  static const smsConfirmation = '/sms/confirmation';
   static const categories = '/categories';
   static const settings = '/settings';
 
@@ -56,6 +58,10 @@ class AppRouter {
       case smsInbox:
         return MaterialPageRoute(
             builder: (_) => const SmsInboxScreen());
+      case smsConfirmation:
+        final smsId = routeSettings.arguments as int;
+        return MaterialPageRoute(
+            builder: (_) => SmsConfirmationScreen(smsId: smsId));
       case categories:
         return MaterialPageRoute(
             builder: (_) => const CategoriesScreen());

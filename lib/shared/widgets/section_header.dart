@@ -21,7 +21,13 @@ class SectionHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final textColor = isDark ? Colors.white : AppColors.lightTextPrimary;
-    final actionColor = AppColors.primary;
+    final actionColor = isDark ? AppColors.primary : AppColors.lightPrimary;
+    final actionBgColor = isDark
+        ? actionColor.withValues(alpha: 0.1)
+        : AppColors.lightPrimaryMuted;
+    final actionBorderColor = isDark
+        ? Colors.transparent
+        : AppColors.lightPrimaryBorder.withValues(alpha: 0.5);
 
     return Padding(
       padding: const EdgeInsets.only(bottom: AppSpacing.md),
@@ -47,8 +53,19 @@ class SectionHeader extends StatelessWidget {
                   vertical: AppSpacing.xs,
                 ),
                 decoration: BoxDecoration(
-                  color: actionColor.withValues(alpha: 0.1),
+                  color: actionBgColor,
                   borderRadius: BorderRadius.circular(AppSpacing.radiusSm),
+                  border: Border.all(color: actionBorderColor),
+                  // Enhanced subtle shadow for light mode
+                  boxShadow: isDark
+                      ? null
+                      : [
+                          BoxShadow(
+                            color: actionColor.withValues(alpha: 0.08),
+                            blurRadius: 8,
+                            offset: const Offset(0, 2),
+                          ),
+                        ],
                 ),
                 child: Row(
                   mainAxisSize: MainAxisSize.min,

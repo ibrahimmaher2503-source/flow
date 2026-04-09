@@ -20,6 +20,7 @@ class WalletCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final color = wallet.color.toColor;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return GestureDetector(
       onTap: onTap,
@@ -71,11 +72,11 @@ class WalletCard extends StatelessWidget {
                 children: [
                   Text(
                     wallet.name,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontFamily: 'Cairo',
                       fontSize: 16,
                       fontWeight: FontWeight.w700,
-                      color: Colors.white,
+                      color: isDark ? Colors.white : AppColors.lightTextPrimary,
                     ),
                   ),
                   Text(
@@ -83,7 +84,7 @@ class WalletCard extends StatelessWidget {
                     style: TextStyle(
                       fontFamily: 'Cairo',
                       fontSize: 12,
-                      color: AppColors.textMuted.withValues(alpha: 0.8),
+                      color: (isDark ? AppColors.textMuted : AppColors.lightTextMuted).withValues(alpha: 0.8),
                     ),
                   ),
                 ],

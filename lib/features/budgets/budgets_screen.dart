@@ -13,6 +13,7 @@ class BudgetsScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final budgetsAsync = ref.watch(activeBudgetsProvider);
+    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
       appBar: AppBar(title: const Text('الميزانية')),
@@ -36,10 +37,10 @@ class BudgetsScreen extends ConsumerWidget {
                     final confirmed = await showDialog<bool>(
                       context: context,
                       builder: (ctx) => AlertDialog(
-                        backgroundColor: AppColors.surface,
-                        title: const Text('حذف الميزانية؟',
+                        backgroundColor: isDark ? AppColors.surface : AppColors.lightSurface,
+                        title: Text('حذف الميزانية؟',
                             style: TextStyle(
-                                fontFamily: 'Cairo', color: AppColors.textPrimary)),
+                                fontFamily: 'Cairo', color: isDark ? AppColors.textPrimary : AppColors.lightTextPrimary)),
                         actions: [
                           TextButton(
                             onPressed: () => Navigator.pop(ctx, false),
@@ -81,6 +82,7 @@ class BudgetsScreen extends ConsumerWidget {
   void _showAddBudgetDialog(BuildContext context, WidgetRef ref) {
     final limitController = TextEditingController();
     String? selectedCategory;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     showDialog<void>(
       context: context,
@@ -89,17 +91,17 @@ class BudgetsScreen extends ConsumerWidget {
           final categoriesAsync = ref.watch(expenseCategoriesProvider);
 
           return AlertDialog(
-            backgroundColor: AppColors.surface,
-            title: const Text('إضافة ميزانية',
-                style: TextStyle(fontFamily: 'Cairo', color: AppColors.textPrimary)),
+            backgroundColor: isDark ? AppColors.surface : AppColors.lightSurface,
+            title: Text('إضافة ميزانية',
+                style: TextStyle(fontFamily: 'Cairo', color: isDark ? AppColors.textPrimary : AppColors.lightTextPrimary)),
             content: SingleChildScrollView(
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text('الفئة',
+                  Text('الفئة',
                       style: TextStyle(
-                          fontFamily: 'Cairo', color: AppColors.textSecondary)),
+                          fontFamily: 'Cairo', color: isDark ? AppColors.textSecondary : AppColors.lightTextSecondary)),
                   const SizedBox(height: 8),
                   categoriesAsync.when(
                     data: (cats) => Wrap(
@@ -116,7 +118,7 @@ class BudgetsScreen extends ConsumerWidget {
                             decoration: BoxDecoration(
                               color: isSelected
                                   ? AppColors.primary
-                                  : AppColors.background,
+                                  : (isDark ? AppColors.background : AppColors.lightBackground),
                               borderRadius: BorderRadius.circular(8),
                             ),
                             child: Text(c.name,
@@ -125,7 +127,7 @@ class BudgetsScreen extends ConsumerWidget {
                                     fontSize: 13,
                                     color: isSelected
                                         ? Colors.white
-                                        : AppColors.textSecondary)),
+                                        : (isDark ? AppColors.textSecondary : AppColors.lightTextSecondary))),
                           ),
                         );
                       }).toList(),
@@ -137,8 +139,8 @@ class BudgetsScreen extends ConsumerWidget {
                   TextField(
                     controller: limitController,
                     keyboardType: TextInputType.number,
-                    style: const TextStyle(
-                        fontFamily: 'Cairo', color: AppColors.textPrimary),
+                    style: TextStyle(
+                        fontFamily: 'Cairo', color: isDark ? AppColors.textPrimary : AppColors.lightTextPrimary),
                     decoration: const InputDecoration(
                       hintText: 'الحد الأقصى (جنيه)',
                     ),
@@ -149,9 +151,9 @@ class BudgetsScreen extends ConsumerWidget {
             actions: [
               TextButton(
                 onPressed: () => Navigator.pop(ctx),
-                child: const Text('إلغاء',
+                child: Text('إلغاء',
                     style: TextStyle(
-                        fontFamily: 'Cairo', color: AppColors.textMuted)),
+                        fontFamily: 'Cairo', color: isDark ? AppColors.textMuted : AppColors.lightTextMuted)),
               ),
               TextButton(
                 onPressed: () async {

@@ -20,17 +20,18 @@ class RecurringTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final isExpense = recurring.type == 'expense';
     final color = isExpense ? AppColors.danger : AppColors.success;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return GestureDetector(
       onTap: onTap,
       child: Container(
         padding: const EdgeInsets.all(14),
         decoration: BoxDecoration(
-          color: AppColors.surface,
+          color: isDark ? AppColors.surface : AppColors.lightSurface,
           borderRadius: BorderRadius.circular(14),
           border: !recurring.isActive
-              ? Border.all(color: AppColors.textMuted.withValues(alpha: 0.2))
-              : null,
+              ? Border.all(color: (isDark ? AppColors.textMuted : AppColors.lightTextMuted).withValues(alpha: 0.2))
+              : (isDark ? null : Border.all(color: AppColors.lightBorder)),
         ),
         child: Row(
           children: [
@@ -65,27 +66,27 @@ class RecurringTile extends StatelessWidget {
                       fontSize: 15,
                       fontWeight: FontWeight.w500,
                       color: recurring.isActive
-                          ? Colors.white
-                          : AppColors.textMuted,
+                          ? (isDark ? Colors.white : AppColors.lightTextPrimary)
+                          : (isDark ? AppColors.textMuted : AppColors.lightTextMuted),
                     ),
                   ),
                   Row(
                     children: [
                       Text(
                         _frequencyLabel(recurring.frequency),
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontFamily: 'Cairo',
                           fontSize: 12,
-                          color: AppColors.textMuted,
+                          color: isDark ? AppColors.textMuted : AppColors.lightTextMuted,
                         ),
                       ),
                       const SizedBox(width: 8),
                       Text(
                         'القادم: ${AppDateUtils.formatRelative(recurring.nextDueDate)}',
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontFamily: 'Cairo',
                           fontSize: 12,
-                          color: AppColors.textMuted,
+                          color: isDark ? AppColors.textMuted : AppColors.lightTextMuted,
                         ),
                       ),
                     ],
@@ -104,7 +105,7 @@ class RecurringTile extends StatelessWidget {
                     fontFamily: 'Cairo',
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
-                    color: recurring.isActive ? color : AppColors.textMuted,
+                    color: recurring.isActive ? color : (isDark ? AppColors.textMuted : AppColors.lightTextMuted),
                   ),
                 ),
                 if (recurring.autoAdd)

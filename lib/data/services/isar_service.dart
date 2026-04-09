@@ -10,6 +10,7 @@ import '../models/savings_goal_model.dart';
 import '../models/installment_provider_model.dart';
 import '../models/installment_plan_model.dart';
 import '../models/app_settings_model.dart';
+import '../models/detected_sms_model.dart';
 
 final isarProvider = Provider<Isar>((ref) {
   throw UnimplementedError('Must be overridden in main.dart');
@@ -29,6 +30,7 @@ class IsarService {
         InstallmentProviderSchema,
         InstallmentPlanSchema,
         AppSettingsSchema,
+        DetectedSmsSchema,
       ],
       directory: dir.path,
       name: 'flowspend',
