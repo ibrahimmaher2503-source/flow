@@ -181,7 +181,7 @@ class _RecurringItem extends StatelessWidget {
                     ),
                     const SizedBox(width: 4),
                     Text(
-                      AppDateUtils.formatRelative(item.nextDueDate),
+                      AppDateUtils.formatRelativeArabic(item.nextDueDate),
                       style: TextStyle(
                         fontFamily: 'Cairo',
                         fontSize: 11,

@@ -284,6 +284,20 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get relativeDateToday => 'Today';
+
+  @override
+  String get relativeDateYesterday => 'Yesterday';
+
+  @override
+  String get relativeDateBeforeYesterday => 'Day before yesterday';
+
+  @override
+  String relativeDateDaysAgo(int count) {
+    return '$count days ago';
+  }
+
+  @override
   String get onboardingWelcomeTitle => 'Welcome to FlowSpend';
 
   @override
@@ -799,6 +813,27 @@ class AppLocalizationsEn extends AppLocalizations {
   String get remainingObligations => 'Remaining Obligations';
 
   @override
+  String get interestSummaryTitle => 'Interest Summary';
+
+  @override
+  String get originalPrice => 'Original Price';
+
+  @override
+  String get totalInterestAmount => 'Interest';
+
+  @override
+  String get grandTotal => 'Total';
+
+  @override
+  String get interestRate => 'Interest Rate';
+
+  @override
+  String get amountPaid => 'Paid';
+
+  @override
+  String get amountRemaining => 'Remaining';
+
+  @override
   String get smsConfirmationTitle => 'Confirm Transaction';
 
   @override
@@ -947,4 +982,16 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get badgeFirstPlanCompleted => 'Debt Free';
+
+  @override
+  String get recurringAutoRecord => 'Auto Record';
+
+  @override
+  String get recurringStatusActive => 'Active';
+
+  @override
+  String get recurringYes => 'Yes';
+
+  @override
+  String get recurringNo => 'No';
 }

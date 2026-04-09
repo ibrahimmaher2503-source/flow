@@ -42,7 +42,7 @@ class _TransactionsScreenState extends ConsumerState<TransactionsScreen> {
   Map<String, List<Transaction>> _groupByDate(List<Transaction> transactions) {
     final Map<String, List<Transaction>> grouped = {};
     for (final t in transactions) {
-      final key = AppDateUtils.formatRelative(t.date);
+      final key = AppDateUtils.formatRelativeArabic(t.date);
       grouped.putIfAbsent(key, () => []).add(t);
     }
     return grouped;

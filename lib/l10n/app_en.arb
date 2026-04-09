@@ -107,6 +107,15 @@
       "count": {"type": "int"}
     }
   },
+  "relativeDateToday": "Today",
+  "relativeDateYesterday": "Yesterday",
+  "relativeDateBeforeYesterday": "Day before yesterday",
+  "relativeDateDaysAgo": "{count} days ago",
+  "@relativeDateDaysAgo": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
 
   "onboardingWelcomeTitle": "Welcome to FlowSpend",
   "onboardingWelcomeSubtitle": "Your personal app for managing expenses and installments\nAll your data stays on your device — no internet needed",
@@ -333,6 +342,14 @@
   "installments": "Installments",
   "remainingObligations": "Remaining Obligations",
 
+  "interestSummaryTitle": "Interest Summary",
+  "originalPrice": "Original Price",
+  "totalInterestAmount": "Interest",
+  "grandTotal": "Total",
+  "interestRate": "Interest Rate",
+  "amountPaid": "Paid",
+  "amountRemaining": "Remaining",
+
   "smsConfirmationTitle": "Confirm Transaction",
   "smsNotFound": "Transaction not found",
   "smsAlreadyConfirmed": "Transaction already confirmed",
@@ -406,5 +423,10 @@
   "badgeFirstGoalCompleted": "First Goal Completed",
   "badgeBudgetCommitted": "Budget Champion",
   "badgeFirstPlanCompleted": "Debt Free",
-  "badgeNoNewInstallments": "3 Months No New Debt"
+  "badgeNoNewInstallments": "3 Months No New Debt",
+
+  "recurringAutoRecord": "Auto Record",
+  "recurringStatusActive": "Active",
+  "recurringYes": "Yes",
+  "recurringNo": "No"
 }

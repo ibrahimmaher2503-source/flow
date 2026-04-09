@@ -166,7 +166,7 @@ class _RecurringScreenState extends ConsumerState<RecurringScreen>
         title: Text(recurring.name,
             style: TextStyle(fontFamily: 'Cairo', color: isDark ? AppColors.textPrimary : AppColors.lightTextPrimary)),
         content: Text(
-          'تلقائي: ${recurring.autoAdd ? "نعم" : "لا"}\nنشط: ${recurring.isActive ? "نعم" : "لا"}',
+          '${l10n.recurringAutoRecord}: ${recurring.autoAdd ? l10n.recurringYes : l10n.recurringNo}\n${l10n.recurringStatusActive}: ${recurring.isActive ? l10n.recurringYes : l10n.recurringNo}',
           style:
               TextStyle(fontFamily: 'Cairo', color: isDark ? AppColors.textSecondary : AppColors.lightTextSecondary),
         ),

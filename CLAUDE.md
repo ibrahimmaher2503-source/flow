@@ -95,3 +95,56 @@ Simple named-route system in `lib/core/router/app_router.dart`. The app shell (`
 ### Installments
 
 `InstallmentService` handles payment recording and debt calculations. `InstallmentCalculator` (in `lib/core/utils/`) computes schedules. Avoid N+1 queries — batch-fetch providers as done in `debtByProvider()`.
+
+### Localization (i18n/l10n)
+
+FlowSpend supports both Arabic and English. The localization system uses Flutter's native localization with ARB files.
+
+**Key Files:**
+- `lib/l10n/app_en.arb` — English translations (210+ keys)
+- `lib/l10n/app_ar.arb` — Arabic translations (210+ keys)
+- `lib/l10n/generated/app_localizations.dart` — Auto-generated localization class
+- `lib/providers/locale_provider.dart` — Riverpod locale provider
+- `lib/core/extensions/context_extensions.dart` — Convenience extension for l10n access
+
+**How to Use l10n in Code:**
+
+```dart
+// In build method of any Widget
+final l10n = AppLocalizations.of(context)!;
+
+// Use l10n keys
+Text(l10n.buttonSave)
+Text(l10n.errorWithMessage('Some error'))
+Text(l10n.smsTimeMinutesAgo(5))  // With placeholders
+```
+
+**Adding New Strings:**
+
+1. Add to `lib/l10n/app_en.arb` with English translation
+2. Add matching key to `lib/l10n/app_ar.arb` with Arabic translation
+3. Run `flutter gen-l10n` to regenerate AppLocalizations class
+4. Use `l10n.keyName` in your code
+
+**Language Switching:**
+
+Users can switch languages in Settings. The app:
+- Saves selection to AppSettings database
+- Triggers immediate rebuild via `localeProvider`
+- Automatically switches RTL/LTR based on locale
+- Persists across app restarts
+
+**Key Localization Keys by Feature:**
+- Dashboard: `financeScore`, `achievements`, `dailyAverage`, `topCategory`, `interestPaid`
+- Transactions: `transactionTypeExpense`, `transactionTypeIncome`, `labelCategory`, `labelWallet`, `buttonSave`
+- SMS: `smsConfirmationTitle`, `smsStatusConfirmed`, `smsPermissionTitle`
+- Installments: `installmentsTitle`, `installmentRemaining`, `installmentMonthlyPayment`
+- Reports: `screenReports`, `reportsTabExpenses`, `reportsTabInstallments`
+- Common: `buttonAdd`, `buttonDelete`, `buttonCancel`, `back`, `errorWithMessage`
+
+**Testing l10n:**
+
+- Test English: Change language in Settings and verify all strings translate
+- Test Arabic: Reset to Arabic and verify no regressions
+- Check RTL: Ensure layout flips correctly in Arabic mode
+- Verify persistence: Restart app and confirm language selection persists

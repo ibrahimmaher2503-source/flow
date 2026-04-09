@@ -107,6 +107,15 @@
       "count": {"type": "int"}
     }
   },
+  "relativeDateToday": "النهاردة",
+  "relativeDateYesterday": "إمبارح",
+  "relativeDateBeforeYesterday": "أول إمبارح",
+  "relativeDateDaysAgo": "من {count} أيام",
+  "@relativeDateDaysAgo": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
 
   "onboardingWelcomeTitle": "مرحباً بك في FlowSpend",
   "onboardingWelcomeSubtitle": "تطبيقك الشخصي لإدارة المصاريف والأقساط\nكل بياناتك على جهازك — بدون إنترنت",
@@ -333,6 +342,14 @@
   "installments": "الأقساط",
   "remainingObligations": "الالتزامات المتبقية",
 
+  "interestSummaryTitle": "ملخص الفوائد",
+  "originalPrice": "السعر الأصلي",
+  "totalInterestAmount": "الفوائد",
+  "grandTotal": "الإجمالي",
+  "interestRate": "نسبة الفائدة",
+  "amountPaid": "المدفوع",
+  "amountRemaining": "الباقي",
+
   "smsConfirmationTitle": "تأكيد المعاملة",
   "smsNotFound": "المعاملة غير موجودة",
   "smsAlreadyConfirmed": "تم تأكيد المعاملة مسبقاً",
@@ -406,5 +423,10 @@
   "badgeFirstGoalCompleted": "أول هدف اكتمل",
   "badgeBudgetCommitted": "ملتزم بالميزانية",
   "badgeFirstPlanCompleted": "خلصت أول خطة أقساط",
-  "badgeNoNewInstallments": "3 شهور بدون أقساط جديدة"
+  "badgeNoNewInstallments": "3 شهور بدون أقساط جديدة",
+
+  "recurringAutoRecord": "تسجيل تلقائي",
+  "recurringStatusActive": "نشط",
+  "recurringYes": "نعم",
+  "recurringNo": "لا"
 }

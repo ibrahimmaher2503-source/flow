@@ -284,6 +284,20 @@ class AppLocalizationsAr extends AppLocalizations {
   }
 
   @override
+  String get relativeDateToday => 'النهاردة';
+
+  @override
+  String get relativeDateYesterday => 'إمبارح';
+
+  @override
+  String get relativeDateBeforeYesterday => 'أول إمبارح';
+
+  @override
+  String relativeDateDaysAgo(int count) {
+    return 'من $count أيام';
+  }
+
+  @override
   String get onboardingWelcomeTitle => 'مرحباً بك في FlowSpend';
 
   @override
@@ -798,6 +812,27 @@ class AppLocalizationsAr extends AppLocalizations {
   String get remainingObligations => 'الالتزامات المتبقية';
 
   @override
+  String get interestSummaryTitle => 'ملخص الفوائد';
+
+  @override
+  String get originalPrice => 'السعر الأصلي';
+
+  @override
+  String get totalInterestAmount => 'الفوائد';
+
+  @override
+  String get grandTotal => 'الإجمالي';
+
+  @override
+  String get interestRate => 'نسبة الفائدة';
+
+  @override
+  String get amountPaid => 'المدفوع';
+
+  @override
+  String get amountRemaining => 'الباقي';
+
+  @override
   String get smsConfirmationTitle => 'تأكيد المعاملة';
 
   @override
@@ -946,4 +981,16 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get badgeFirstPlanCompleted => 'خلصت أول خطة أقساط';
+
+  @override
+  String get recurringAutoRecord => 'تسجيل تلقائي';
+
+  @override
+  String get recurringStatusActive => 'نشط';
+
+  @override
+  String get recurringYes => 'نعم';
+
+  @override
+  String get recurringNo => 'لا';
 }

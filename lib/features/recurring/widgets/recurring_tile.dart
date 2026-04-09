@@ -82,7 +82,7 @@ class RecurringTile extends StatelessWidget {
                       ),
                       const SizedBox(width: 8),
                       Text(
-                        'القادم: ${AppDateUtils.formatRelative(recurring.nextDueDate)}',
+                        'القادم: ${AppDateUtils.formatRelativeArabic(recurring.nextDueDate)}',
                         style: TextStyle(
                           fontFamily: 'Cairo',
                           fontSize: 12,

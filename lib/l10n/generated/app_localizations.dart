@@ -644,6 +644,30 @@ abstract class AppLocalizations {
   /// **'{count} days ago'**
   String dateDaysAgo(int count);
 
+  /// No description provided for @relativeDateToday.
+  ///
+  /// In en, this message translates to:
+  /// **'Today'**
+  String get relativeDateToday;
+
+  /// No description provided for @relativeDateYesterday.
+  ///
+  /// In en, this message translates to:
+  /// **'Yesterday'**
+  String get relativeDateYesterday;
+
+  /// No description provided for @relativeDateBeforeYesterday.
+  ///
+  /// In en, this message translates to:
+  /// **'Day before yesterday'**
+  String get relativeDateBeforeYesterday;
+
+  /// No description provided for @relativeDateDaysAgo.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} days ago'**
+  String relativeDateDaysAgo(int count);
+
   /// No description provided for @onboardingWelcomeTitle.
   ///
   /// In en, this message translates to:
@@ -1640,6 +1664,48 @@ abstract class AppLocalizations {
   /// **'Remaining Obligations'**
   String get remainingObligations;
 
+  /// No description provided for @interestSummaryTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Interest Summary'**
+  String get interestSummaryTitle;
+
+  /// No description provided for @originalPrice.
+  ///
+  /// In en, this message translates to:
+  /// **'Original Price'**
+  String get originalPrice;
+
+  /// No description provided for @totalInterestAmount.
+  ///
+  /// In en, this message translates to:
+  /// **'Interest'**
+  String get totalInterestAmount;
+
+  /// No description provided for @grandTotal.
+  ///
+  /// In en, this message translates to:
+  /// **'Total'**
+  String get grandTotal;
+
+  /// No description provided for @interestRate.
+  ///
+  /// In en, this message translates to:
+  /// **'Interest Rate'**
+  String get interestRate;
+
+  /// No description provided for @amountPaid.
+  ///
+  /// In en, this message translates to:
+  /// **'Paid'**
+  String get amountPaid;
+
+  /// No description provided for @amountRemaining.
+  ///
+  /// In en, this message translates to:
+  /// **'Remaining'**
+  String get amountRemaining;
+
   /// No description provided for @smsConfirmationTitle.
   ///
   /// In en, this message translates to:
@@ -1915,6 +1981,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Debt Free'**
   String get badgeFirstPlanCompleted;
+
+  /// No description provided for @recurringAutoRecord.
+  ///
+  /// In en, this message translates to:
+  /// **'Auto Record'**
+  String get recurringAutoRecord;
+
+  /// No description provided for @recurringStatusActive.
+  ///
+  /// In en, this message translates to:
+  /// **'Active'**
+  String get recurringStatusActive;
+
+  /// No description provided for @recurringYes.
+  ///
+  /// In en, this message translates to:
+  /// **'Yes'**
+  String get recurringYes;
+
+  /// No description provided for @recurringNo.
+  ///
+  /// In en, this message translates to:
+  /// **'No'**
+  String get recurringNo;
 }
 
 class _AppLocalizationsDelegate
