@@ -31,32 +31,31 @@ class DashboardHeader extends StatelessWidget {
       padding: const EdgeInsets.only(bottom: AppSpacing.md),
       child: Row(
         children: [
-          // Avatar with gradient border
+          // Avatar with solid primary border (no gradient)
           Container(
-            padding: const EdgeInsets.all(3),
+            width: 54,
+            height: 54,
             decoration: BoxDecoration(
-              gradient: LinearGradient(
-                colors: [
-                  AppColors.primary,
-                  AppColors.secondary,
-                ],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-              ),
+              color: isDark ? AppColors.surface : AppColors.lightSurfaceContainerLow,
               shape: BoxShape.circle,
+              border: Border.all(
+                color: isDark ? AppColors.primary : AppColors.lightPrimary,
+                width: 2.5,
+              ),
+              boxShadow: [
+                BoxShadow(
+                  color: isDark
+                      ? AppColors.primary.withValues(alpha: 0.1)
+                      : AppColors.lightPrimary.withValues(alpha: 0.08),
+                  blurRadius: 12,
+                  offset: const Offset(0, 2),
+                ),
+              ],
             ),
-            child: Container(
-              width: 48,
-              height: 48,
-              decoration: BoxDecoration(
-                color: isDark ? AppColors.surface : AppColors.lightSurface,
-                shape: BoxShape.circle,
-              ),
-              child: Icon(
-                Icons.person_rounded,
-                color: AppColors.primary,
-                size: 26,
-              ),
+            child: Icon(
+              Icons.person_rounded,
+              color: isDark ? AppColors.primary : AppColors.lightPrimary,
+              size: 26,
             ),
           ),
           const SizedBox(width: AppSpacing.md),

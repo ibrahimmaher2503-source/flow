@@ -12,6 +12,7 @@ import 'widgets/upcoming_recurring.dart';
 import 'widgets/finance_score_card.dart';
 import 'widgets/safe_to_spend_card.dart';
 import 'widgets/forecast_mini_card.dart';
+import 'widgets/insights_carousel.dart';
 
 class DashboardScreen extends ConsumerWidget {
   const DashboardScreen({super.key});
@@ -68,6 +69,9 @@ class DashboardScreen extends ConsumerWidget {
                         // Forecast warning if any
                         ForecastWarningBanner(),
 
+                        // Urgent insights banner
+                        InsightsBanner(),
+
                         // Streak badge (conditional)
                         StreakBadge(),
                         SizedBox(height: AppSpacing.lg),
@@ -86,6 +90,10 @@ class DashboardScreen extends ConsumerWidget {
 
                         // Installments Summary
                         InstallmentSummaryCard(),
+                        SizedBox(height: AppSpacing.xxl),
+
+                        // Smart Insights Carousel
+                        InsightsCarousel(),
                         SizedBox(height: AppSpacing.xxl),
 
                         // Recent Transactions

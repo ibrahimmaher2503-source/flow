@@ -71,10 +71,7 @@ class _AppCardState extends State<AppCard> with SingleTickerProviderStateMixin {
     // Get variant-specific styling
     final (shadows, bgColor, border) = _getVariantStyling(isDark);
 
-    final defaultGradient =
-        isDark ? AppColors.cardGradient : AppColors.cardGradientLight;
-
-    // Determine effective colors
+    // Determine effective colors - no gradients for cleaner design
     final effectiveBorder = widget.borderColor ?? border;
     final effectiveBgColor = widget.backgroundColor ?? bgColor;
 
@@ -82,9 +79,8 @@ class _AppCardState extends State<AppCard> with SingleTickerProviderStateMixin {
       duration: const Duration(milliseconds: 150),
       padding: widget.padding ?? const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        gradient: widget.backgroundColor != null
-            ? null
-            : (widget.gradient ?? (isDark ? defaultGradient : null)),
+        // Solid colors only - gradients removed for cohesive design
+        gradient: null,
         color: effectiveBgColor,
         borderRadius: BorderRadius.circular(widget.borderRadius),
         border: Border.all(color: effectiveBorder, width: 0.5),

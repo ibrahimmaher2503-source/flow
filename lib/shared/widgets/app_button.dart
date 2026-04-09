@@ -55,7 +55,6 @@ class _AppButtonState extends State<AppButton>
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final primaryColor = isDark ? AppColors.primary : AppColors.lightPrimary;
     final onPrimaryColor = isDark ? Colors.white : AppColors.lightOnPrimary;
-    final defaultGradient = isDark ? AppColors.primaryGradient : AppColors.lightPrimaryGradient;
     final isDisabled = widget.onPressed == null && !widget.isLoading;
 
     // M3 disabled state colors
@@ -82,8 +81,9 @@ class _AppButtonState extends State<AppButton>
             height: 56, // M3 standard height
             width: double.infinity,
             decoration: BoxDecoration(
-              gradient: isDisabled ? null : (widget.gradient ?? defaultGradient),
-              color: isDisabled ? disabledBgColor : null,
+              // Solid color only - gradient removed for cleaner, modern look
+              gradient: null,
+              color: isDisabled ? disabledBgColor : (widget.gradient?.colors.first ?? primaryColor),
               borderRadius: BorderRadius.circular(20), // M3 full-rounded
               boxShadow: isDisabled
                   ? null

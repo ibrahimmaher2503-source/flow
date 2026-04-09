@@ -236,20 +236,25 @@ abstract class AppColors {
   static const lightBorderLightEnhanced = Color(0xFFE7E1F4);
 
   // ═══════════════════════════════════════════════════════════════════════════
-  // GRADIENTS - Dark Theme (Updated)
+  // DEPRECATED GRADIENTS - Use solid colors instead for cleaner design
   // ═══════════════════════════════════════════════════════════════════════════
+
+  // Dark theme - solid colors instead of gradients
+  @deprecated
   static const primaryGradient = LinearGradient(
-    colors: [Color(0xFF2A244C), Color(0xFF1F1A38)],
+    colors: [Color(0xFF9991C1), Color(0xFF9991C1)],
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
   );
 
+  @deprecated
   static const cardGradient = LinearGradient(
-    colors: [Color(0xFF1A1531), Color(0xFF17132E)],
+    colors: [Color(0xFF1A1531), Color(0xFF1A1531)],
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
   );
 
+  @deprecated
   static const shimmerGradient = LinearGradient(
     colors: [
       Color(0xFF9991C1),
@@ -259,37 +264,41 @@ abstract class AppColors {
   );
 
   // ═══════════════════════════════════════════════════════════════════════════
-  // GRADIENTS - Light Theme
+  // DEPRECATED LIGHT THEME GRADIENTS - Use solid colors for cohesion
   // ═══════════════════════════════════════════════════════════════════════════
 
+  @deprecated
   static const cardGradientLight = LinearGradient(
     colors: [
       Color(0xFFFFFFFF),
-      Color(0xFFFAF7FE),
+      Color(0xFFFFFFFF),
     ],
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
   );
 
+  @deprecated
   static const lightPrimaryGradient = LinearGradient(
     colors: [
-      Color(0xFF443D69),           // Muted purple
-      Color(0xFF2A244C),           // Deep purple
-      Color(0xFF1F1A38),           // Darker
+      Color(0xFF443D69),
+      Color(0xFF2A244C),
+      Color(0xFF1F1A38),
     ],
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
   );
 
+  @deprecated
   static const lightPrimaryGradientSoft = LinearGradient(
     colors: [
-      Color(0xFFF4F0FF),           // Soft surface
-      Color(0xFFE7E1F4),           // Secondary surface
+      Color(0xFFF4F0FF),
+      Color(0xFFE7E1F4),
     ],
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
   );
 
+  @deprecated
   static const lightSecondaryGradient = LinearGradient(
     colors: [
       Color(0xFF00897B),
@@ -299,6 +308,7 @@ abstract class AppColors {
     end: Alignment.bottomRight,
   );
 
+  @deprecated
   static const lightSecondaryGradientSoft = LinearGradient(
     colors: [
       Color(0xFFE0F7F5),
@@ -309,6 +319,7 @@ abstract class AppColors {
     stops: [0.0, 1.0],
   );
 
+  @deprecated
   static const lightSuccessGradient = LinearGradient(
     colors: [
       Color(0xFF00895C),
@@ -318,6 +329,7 @@ abstract class AppColors {
     end: Alignment.bottomRight,
   );
 
+  @deprecated
   static const lightDangerGradient = LinearGradient(
     colors: [
       Color(0xFFDE3730),
@@ -327,6 +339,7 @@ abstract class AppColors {
     end: Alignment.bottomRight,
   );
 
+  @deprecated
   static const lightWarningGradient = LinearGradient(
     colors: [
       Color(0xFFC66A10),
@@ -336,6 +349,7 @@ abstract class AppColors {
     end: Alignment.bottomRight,
   );
 
+  @deprecated
   static const lightShimmerGradient = LinearGradient(
     colors: [
       Color(0xFFF3EEFE),
