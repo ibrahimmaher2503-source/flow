@@ -176,9 +176,9 @@
 #### 3.11 SMS & Onboarding Migration
 
 - [x] T061 [US1] Migrate lib/features/sms/sms_inbox_screen.dart to use l10n strings
-- [ ] T062 [P] [US1] Migrate lib/features/sms/sms_confirmation_screen.dart to use l10n strings
-- [ ] T063 [P] [US1] Migrate lib/features/sms/widgets/sms_tile.dart to use l10n strings
-- [ ] T064 [P] [US1] Migrate lib/features/sms/widgets/sms_permission_dialog.dart to use l10n strings
+- [x] T062 [P] [US1] Migrate lib/features/sms/sms_confirmation_screen.dart to use l10n strings
+- [x] T063 [P] [US1] Migrate lib/features/sms/widgets/sms_tile.dart to use l10n strings
+- [x] T064 [P] [US1] Migrate lib/features/sms/widgets/sms_permission_dialog.dart to use l10n strings
 - [x] T065 [US1] Migrate lib/features/onboarding/onboarding_screen.dart to use l10n strings
 
 #### 3.12 Shared Widgets Migration
@@ -192,7 +192,7 @@
 - [ ] T069 [US1] Update lib/providers/gamification_provider.dart badge names to use l10n keys
 - [ ] T070 [US1] Create badge name getter that accepts context for l10n lookup
 
-**Checkpoint**: ⏳ User Story 1 partial - 42 of 56 tasks complete (75%). Core screens migrated (Dashboard, Transactions, Settings, Goals, Budgets, Wallets, Recurring, Onboarding). Remaining: Installments (7 tasks), Reports (7 tasks), SMS screens (3 tasks), Gamification (2 tasks), Category grid & number pad (2 tasks).
+**Checkpoint**: ⏳ User Story 1 partial - 48 of 56 tasks complete (86%). Core screens migrated (Dashboard, Transactions, Settings, Goals, Budgets, Wallets, Recurring, Onboarding, SMS, Installments hub, Reports main). Remaining: 8 tasks (Installments widgets, Reports widgets, Gamification, remaining screens).
 
 ---
 

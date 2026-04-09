@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/utils/currency_formatter.dart';
 import '../../../core/utils/extensions.dart';
@@ -24,6 +25,7 @@ class InstallmentCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final color = providerColor?.toColor ?? AppColors.installment;
     final nextPayment = InstallmentCalculator.nextPaymentDate(
       plan.firstPaymentDate,
@@ -119,7 +121,7 @@ class InstallmentCard extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      '/شهر',
+                      '/${l10n.installmentMonthly}',
                       style: TextStyle(
                         fontFamily: 'Cairo',
                         fontSize: 11,
@@ -167,7 +169,7 @@ class InstallmentCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  '${plan.paidInstallments}/${plan.totalInstallments} أقساط',
+                  '${plan.paidInstallments}/${plan.totalInstallments} ${l10n.installmentsTotalObligations}',
                   style: const TextStyle(
                     fontFamily: 'Cairo',
                     fontSize: 12,
@@ -187,8 +189,8 @@ class InstallmentCard extends StatelessWidget {
                     ),
                     child: Text(
                       daysLeft <= 0
-                          ? 'مستحق اليوم!'
-                          : 'القادم: $daysLeft يوم',
+                          ? l10n.dueDateToday
+                          : '${l10n.recurringNextDue}: $daysLeft ${l10n.dateDaysAgo(daysLeft)}',
                       style: TextStyle(
                         fontFamily: 'Cairo',
                         fontSize: 11,
@@ -200,7 +202,7 @@ class InstallmentCard extends StatelessWidget {
                     ),
                   ),
                 Text(
-                  'باقي: ${CurrencyFormatter.format(plan.remainingAmount)}',
+                  '${l10n.budgetRemaining}: ${CurrencyFormatter.format(plan.remainingAmount)}',
                   style: const TextStyle(
                     fontFamily: 'Cairo',
                     fontSize: 12,

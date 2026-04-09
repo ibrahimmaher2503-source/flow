@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../../../core/theme/app_colors.dart';
 
 class InstallmentPieChart extends StatelessWidget {
@@ -21,12 +22,13 @@ class InstallmentPieChart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final isDark = Theme.of(context).brightness == Brightness.dark;
     if (debtByProvider.isEmpty) {
       return SizedBox(
         height: 200,
         child: Center(
-          child: Text('لا يوجد أقساط نشطة',
+          child: Text(l10n.emptyInstallments,
               style: TextStyle(fontFamily: 'Cairo', color: isDark ? AppColors.textMuted : AppColors.lightTextMuted)),
         ),
       );

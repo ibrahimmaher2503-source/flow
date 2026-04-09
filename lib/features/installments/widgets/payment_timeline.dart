@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/utils/currency_formatter.dart';
 import '../../../core/utils/app_date_utils.dart';
@@ -11,6 +12,7 @@ class PaymentTimeline extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Column(
       children: List.generate(plan.totalInstallments, (index) {
         final isPaid = index < plan.paidInstallments;
@@ -85,7 +87,7 @@ class PaymentTimeline extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'قسط ${index + 1}',
+                          '${l10n.installmentMonthlyPayment} ${index + 1}',
                           style: TextStyle(
                             fontFamily: 'Cairo',
                             fontSize: 14,

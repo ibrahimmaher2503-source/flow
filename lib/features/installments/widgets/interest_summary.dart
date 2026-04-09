@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/utils/currency_formatter.dart';
 import '../../../data/models/installment_plan_model.dart';
@@ -11,13 +12,14 @@ class InterestSummary extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return AppCard(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-            'ملخص الفوائد',
-            style: TextStyle(
+          Text(
+            l10n.installmentSummaryTitle,
+            style: const TextStyle(
               fontFamily: 'Cairo',
               fontSize: 16,
               fontWeight: FontWeight.w600,
@@ -25,20 +27,20 @@ class InterestSummary extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 12),
-          _row('السعر الأصلي', CurrencyFormatter.format(plan.originalPrice),
+          _row(l10n.totalWithInterest, CurrencyFormatter.format(plan.originalPrice),
               AppColors.textSecondary),
-          _row('الفوائد', CurrencyFormatter.format(plan.totalInterest),
+          _row(l10n.installmentSummaryTitle, CurrencyFormatter.format(plan.totalInterest),
               AppColors.installment),
           _row(
-              'الإجمالي',
+              l10n.installmentsTotalObligations,
               CurrencyFormatter.format(plan.totalWithInterest),
               Colors.white),
           const Divider(color: AppColors.textMuted, height: 20),
-          _row('نسبة الفائدة', '${plan.interestRate.toStringAsFixed(1)}%',
+          _row(l10n.interestPaid, '${plan.interestRate.toStringAsFixed(1)}%',
               AppColors.warning),
-          _row('المدفوع', CurrencyFormatter.format(plan.paidAmount),
+          _row(l10n.installmentMonthly, CurrencyFormatter.format(plan.paidAmount),
               AppColors.success),
-          _row('الباقي', CurrencyFormatter.format(plan.remainingAmount),
+          _row(l10n.budgetRemaining, CurrencyFormatter.format(plan.remainingAmount),
               AppColors.danger),
         ],
       ),

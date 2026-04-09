@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../../../core/theme/app_colors.dart';
 
 class InterestBarChart extends StatelessWidget {
@@ -14,13 +15,14 @@ class InterestBarChart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final total = principal + interest;
     if (total == 0) {
-      return const SizedBox(
+      return SizedBox(
         height: 120,
         child: Center(
-          child: Text('لا يوجد بيانات',
-              style: TextStyle(fontFamily: 'Cairo', color: AppColors.textMuted)),
+          child: Text(l10n.noData,
+              style: const TextStyle(fontFamily: 'Cairo', color: AppColors.textMuted)),
         ),
       );
     }
@@ -67,14 +69,14 @@ class InterestBarChart extends StatelessWidget {
                 getTitlesWidget: (value, meta) {
                   switch (value.toInt()) {
                     case 0:
-                      return const Text('أصل المبلغ',
-                          style: TextStyle(
+                      return Text(l10n.totalWithInterest,
+                          style: const TextStyle(
                               fontFamily: 'Cairo',
                               fontSize: 11,
                               color: AppColors.textMuted));
                     case 1:
-                      return const Text('الفوائد',
-                          style: TextStyle(
+                      return Text(l10n.interestPaid,
+                          style: const TextStyle(
                               fontFamily: 'Cairo',
                               fontSize: 11,
                               color: AppColors.textMuted));

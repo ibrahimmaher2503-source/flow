@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../../../core/theme/app_colors.dart';
 
 class TrendLineChart extends StatelessWidget {
@@ -16,12 +17,13 @@ class TrendLineChart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     if (data.isEmpty) {
-      return const SizedBox(
+      return SizedBox(
         height: 180,
         child: Center(
-          child: Text('لا يوجد بيانات',
-              style: TextStyle(fontFamily: 'Cairo', color: AppColors.textMuted)),
+          child: Text(l10n.noData,
+              style: const TextStyle(fontFamily: 'Cairo', color: AppColors.textMuted)),
         ),
       );
     }
