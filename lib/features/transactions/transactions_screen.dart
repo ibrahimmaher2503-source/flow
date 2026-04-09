@@ -9,6 +9,7 @@ import '../../providers/transaction_provider.dart';
 import '../../providers/wallet_provider.dart';
 import '../../providers/category_provider.dart';
 import '../../shared/widgets/empty_state.dart';
+import '../../l10n/generated/app_localizations.dart';
 import 'add_transaction_screen.dart';
 import 'widgets/transaction_tile.dart';
 import 'widgets/filter_bar.dart';
@@ -49,24 +50,25 @@ class _TransactionsScreenState extends ConsumerState<TransactionsScreen> {
 
   Future<void> _deleteTransaction(Transaction t) async {
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    final l10n = AppLocalizations.of(context)!;
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
         backgroundColor: isDark ? AppColors.surface : AppColors.lightSurface,
-        title: Text('حذف المعاملة؟',
+        title: Text(l10n.deleteTransaction,
             style: TextStyle(fontFamily: 'Cairo', color: isDark ? AppColors.textPrimary : AppColors.lightTextPrimary)),
-        content: Text('هل أنت متأكد من حذف هذه المعاملة؟',
+        content: Text(l10n.deleteTransactionConfirm,
             style: TextStyle(fontFamily: 'Cairo', color: isDark ? AppColors.textSecondary : AppColors.lightTextSecondary)),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx, false),
-            child: Text('لا',
+            child: Text(l10n.buttonNo,
                 style: TextStyle(fontFamily: 'Cairo', color: isDark ? AppColors.textMuted : AppColors.lightTextMuted)),
           ),
           TextButton(
             onPressed: () => Navigator.pop(ctx, true),
-            child: const Text('نعم، احذف',
-                style: TextStyle(fontFamily: 'Cairo', color: AppColors.danger)),
+            child: Text(l10n.buttonYesDelete,
+                style: const TextStyle(fontFamily: 'Cairo', color: AppColors.danger)),
           ),
         ],
       ),
@@ -94,10 +96,11 @@ class _TransactionsScreenState extends ConsumerState<TransactionsScreen> {
     final selectedMonth = ref.watch(selectedMonthProvider);
     final categoriesAsync = ref.watch(allCategoriesProvider);
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('المعاملات'),
+        title: Text(l10n.navTransactions),
       ),
       body: Column(
         children: [
@@ -152,7 +155,7 @@ class _TransactionsScreenState extends ConsumerState<TransactionsScreen> {
                     ),
                     child: Column(
                       children: [
-                        Text('دخل',
+                        Text(l10n.transactionTypeIncome,
                             style: TextStyle(
                                 fontFamily: 'Cairo',
                                 fontSize: 12,
@@ -184,7 +187,7 @@ class _TransactionsScreenState extends ConsumerState<TransactionsScreen> {
                     ),
                     child: Column(
                       children: [
-                        Text('مصروف',
+                        Text(l10n.transactionTypeExpense,
                             style: TextStyle(
                                 fontFamily: 'Cairo',
                                 fontSize: 12,
@@ -226,9 +229,9 @@ class _TransactionsScreenState extends ConsumerState<TransactionsScreen> {
               data: (transactions) {
                 final filtered = _applyFilter(transactions);
                 if (filtered.isEmpty) {
-                  return const EmptyState(
+                  return EmptyState(
                     icon: Icons.receipt_long,
-                    message: 'مفيش معاملات في الفترة دي',
+                    message: l10n.emptyTransactionsPeriod,
                   );
                 }
 
@@ -290,7 +293,7 @@ class _TransactionsScreenState extends ConsumerState<TransactionsScreen> {
               },
               loading: () =>
                   const Center(child: CircularProgressIndicator()),
-              error: (e, _) => Center(child: Text('خطأ: $e')),
+              error: (e, _) => Center(child: Text(l10n.errorWithMessage(e.toString()))),
             ),
           ),
         ],

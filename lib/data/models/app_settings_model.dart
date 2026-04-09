@@ -15,4 +15,7 @@ class AppSettings {
   int streakDays = 0;
   DateTime? lastLogDate;
   String themeMode = 'system'; // 'light', 'dark', or 'system'
+
+  /// Whether envelope budgeting is enabled (replaces simple budgets)
+  bool envelopeBudgetingEnabled = false;
 }

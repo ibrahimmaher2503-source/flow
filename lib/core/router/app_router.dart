@@ -13,6 +13,11 @@ import '../../features/sms/sms_inbox_screen.dart';
 import '../../features/sms/sms_confirmation_screen.dart';
 import '../../features/settings/settings_screen.dart';
 import '../../features/settings/categories_screen.dart';
+import '../../features/envelopes/envelopes_screen.dart';
+import '../../features/envelopes/envelope_allocate_screen.dart';
+import '../../features/tags/tags_screen.dart';
+import '../../features/forecast/forecast_screen.dart';
+import '../../features/insights/insights_screen.dart';
 
 class AppRouter {
   static const dashboard = '/';
@@ -29,6 +34,11 @@ class AppRouter {
   static const smsConfirmation = '/sms/confirmation';
   static const categories = '/categories';
   static const settings = '/settings';
+  static const envelopes = '/envelopes';
+  static const envelopeAllocate = '/envelopes/allocate';
+  static const tags = '/tags';
+  static const forecast = '/forecast';
+  static const insights = '/insights';
 
   static Route<dynamic> generateRoute(RouteSettings routeSettings) {
     switch (routeSettings.name) {
@@ -67,6 +77,17 @@ class AppRouter {
             builder: (_) => const CategoriesScreen());
       case settings:
         return MaterialPageRoute(builder: (_) => const SettingsScreen());
+      case envelopes:
+        return MaterialPageRoute(builder: (_) => const EnvelopesScreen());
+      case envelopeAllocate:
+        return MaterialPageRoute(
+            builder: (_) => const EnvelopeAllocateScreen());
+      case tags:
+        return MaterialPageRoute(builder: (_) => const TagsScreen());
+      case forecast:
+        return MaterialPageRoute(builder: (_) => const ForecastScreen());
+      case insights:
+        return MaterialPageRoute(builder: (_) => const InsightsScreen());
       default:
         return MaterialPageRoute(
             builder: (_) => const DashboardScreen());

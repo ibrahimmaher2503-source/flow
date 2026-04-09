@@ -4,6 +4,7 @@ import '../../core/theme/app_colors.dart';
 import '../../core/utils/currency_formatter.dart';
 import '../../core/utils/extensions.dart';
 import '../../data/models/wallet_model.dart';
+import '../../l10n/generated/app_localizations.dart';
 import '../../providers/wallet_provider.dart';
 import '../../shared/widgets/empty_state.dart';
 import 'widgets/wallet_card.dart';
@@ -13,19 +14,20 @@ class WalletsScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context)!;
     final walletsAsync = ref.watch(walletsProvider);
     final totalAsync = ref.watch(totalBalanceProvider);
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('المحافظ'),
+        title: Text(l10n.screenWallets),
       ),
       body: walletsAsync.when(
         data: (wallets) {
           if (wallets.isEmpty) {
-            return const EmptyState(
+            return EmptyState(
               icon: Icons.account_balance_wallet,
-              message: 'مفيش محافظ\nاضغط + لإضافة محفظة',
+              message: l10n.emptyWallets,
             );
           }
           return ListView(
@@ -42,9 +44,9 @@ class WalletsScreen extends ConsumerWidget {
                 ),
                 child: Column(
                   children: [
-                    const Text(
-                      'إجمالي الرصيد',
-                      style: TextStyle(
+                    Text(
+                      l10n.labelTotalBalance,
+                      style: const TextStyle(
                         fontFamily: 'Cairo',
                         fontSize: 14,
                         color: Colors.white70,
@@ -79,7 +81,7 @@ class WalletsScreen extends ConsumerWidget {
           );
         },
         loading: () => const Center(child: CircularProgressIndicator()),
-        error: (e, _) => Center(child: Text('خطأ: $e')),
+        error: (e, _) => Center(child: Text(l10n.errorWithMessage(e.toString()))),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => _showAddWalletDialog(context, ref),
@@ -106,6 +108,7 @@ class WalletsScreen extends ConsumerWidget {
   }
 
   void _showAddWalletDialog(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context)!;
     final nameController = TextEditingController();
     final balanceController = TextEditingController(text: '0');
     String selectedType = 'cash';
@@ -117,7 +120,7 @@ class WalletsScreen extends ConsumerWidget {
       builder: (ctx) => StatefulBuilder(
         builder: (ctx, setDialogState) => AlertDialog(
           backgroundColor: isDark ? AppColors.surface : AppColors.lightSurface,
-          title: Text('إضافة محفظة',
+          title: Text(l10n.addWallet,
               style: TextStyle(fontFamily: 'Cairo', color: isDark ? AppColors.textPrimary : AppColors.lightTextPrimary)),
           content: SingleChildScrollView(
             child: Column(
@@ -127,8 +130,8 @@ class WalletsScreen extends ConsumerWidget {
                   controller: nameController,
                   style: TextStyle(
                       fontFamily: 'Cairo', color: isDark ? AppColors.textPrimary : AppColors.lightTextPrimary),
-                  decoration: const InputDecoration(
-                    hintText: 'اسم المحفظة',
+                  decoration: InputDecoration(
+                    hintText: l10n.walletName,
                   ),
                 ),
                 const SizedBox(height: 12),
@@ -137,20 +140,20 @@ class WalletsScreen extends ConsumerWidget {
                   keyboardType: TextInputType.number,
                   style: TextStyle(
                       fontFamily: 'Cairo', color: isDark ? AppColors.textPrimary : AppColors.lightTextPrimary),
-                  decoration: const InputDecoration(
-                    hintText: 'الرصيد الابتدائي',
+                  decoration: InputDecoration(
+                    hintText: l10n.initialBalance,
                   ),
                 ),
                 const SizedBox(height: 12),
                 Row(
                   children: [
-                    _typeChip('كاش', 'cash', selectedType,
+                    _typeChip(l10n.walletTypeCash, 'cash', selectedType,
                         (v) => setDialogState(() => selectedType = v), isDark),
                     const SizedBox(width: 8),
-                    _typeChip('بنك', 'bank', selectedType,
+                    _typeChip(l10n.walletTypeBank, 'bank', selectedType,
                         (v) => setDialogState(() => selectedType = v), isDark),
                     const SizedBox(width: 8),
-                    _typeChip('إلكتروني', 'ewallet', selectedType,
+                    _typeChip(l10n.walletTypeCard, 'ewallet', selectedType,
                         (v) => setDialogState(() => selectedType = v), isDark),
                   ],
                 ),
@@ -183,7 +186,7 @@ class WalletsScreen extends ConsumerWidget {
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(ctx),
-              child: Text('إلغاء',
+              child: Text(l10n.buttonCancel,
                   style: TextStyle(
                       fontFamily: 'Cairo', color: isDark ? AppColors.textMuted : AppColors.lightTextMuted)),
             ),
@@ -204,8 +207,8 @@ class WalletsScreen extends ConsumerWidget {
                 refreshWallets(ref);
                 if (ctx.mounted) Navigator.pop(ctx);
               },
-              child: const Text('إضافة',
-                  style: TextStyle(
+              child: Text(l10n.buttonAdd,
+                  style: const TextStyle(
                       fontFamily: 'Cairo', color: AppColors.primary)),
             ),
           ],
@@ -219,6 +222,7 @@ class WalletsScreen extends ConsumerWidget {
 
   void _showEditWalletDialog(
       BuildContext context, WidgetRef ref, Wallet wallet) {
+    final l10n = AppLocalizations.of(context)!;
     final nameController = TextEditingController(text: wallet.name);
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
@@ -226,12 +230,12 @@ class WalletsScreen extends ConsumerWidget {
       context: context,
       builder: (ctx) => AlertDialog(
         backgroundColor: isDark ? AppColors.surface : AppColors.lightSurface,
-        title: Text('تعديل المحفظة',
+        title: Text(l10n.editWallet,
             style: TextStyle(fontFamily: 'Cairo', color: isDark ? AppColors.textPrimary : AppColors.lightTextPrimary)),
         content: TextField(
           controller: nameController,
           style: TextStyle(fontFamily: 'Cairo', color: isDark ? AppColors.textPrimary : AppColors.lightTextPrimary),
-          decoration: const InputDecoration(hintText: 'اسم المحفظة'),
+          decoration: InputDecoration(hintText: l10n.walletName),
         ),
         actions: [
           TextButton(
@@ -240,19 +244,19 @@ class WalletsScreen extends ConsumerWidget {
                 context: ctx,
                 builder: (ctx2) => AlertDialog(
                   backgroundColor: isDark ? AppColors.surface : AppColors.lightSurface,
-                  title: Text('حذف المحفظة؟',
+                  title: Text(l10n.deleteWallet,
                       style: TextStyle(
                           fontFamily: 'Cairo', color: isDark ? AppColors.textPrimary : AppColors.lightTextPrimary)),
                   actions: [
                     TextButton(
                       onPressed: () => Navigator.pop(ctx2, false),
-                      child: const Text('لا',
-                          style: TextStyle(fontFamily: 'Cairo')),
+                      child: Text(l10n.buttonNo,
+                          style: const TextStyle(fontFamily: 'Cairo')),
                     ),
                     TextButton(
                       onPressed: () => Navigator.pop(ctx2, true),
-                      child: const Text('نعم',
-                          style: TextStyle(
+                      child: Text(l10n.buttonYes,
+                          style: const TextStyle(
                               fontFamily: 'Cairo',
                               color: AppColors.danger)),
                     ),
@@ -265,13 +269,13 @@ class WalletsScreen extends ConsumerWidget {
                 if (ctx.mounted) Navigator.pop(ctx);
               }
             },
-            child: const Text('حذف',
-                style: TextStyle(
+            child: Text(l10n.buttonDelete,
+                style: const TextStyle(
                     fontFamily: 'Cairo', color: AppColors.danger)),
           ),
           TextButton(
             onPressed: () => Navigator.pop(ctx),
-            child: Text('إلغاء',
+            child: Text(l10n.buttonCancel,
                 style: TextStyle(
                     fontFamily: 'Cairo', color: isDark ? AppColors.textMuted : AppColors.lightTextMuted)),
           ),
@@ -283,8 +287,8 @@ class WalletsScreen extends ConsumerWidget {
               refreshWallets(ref);
               if (ctx.mounted) Navigator.pop(ctx);
             },
-            child: const Text('حفظ',
-                style: TextStyle(
+            child: Text(l10n.buttonSave,
+                style: const TextStyle(
                     fontFamily: 'Cairo', color: AppColors.primary)),
           ),
         ],

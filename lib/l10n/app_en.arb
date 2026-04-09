@@ -1,0 +1,335 @@
+{
+  "@@locale": "en",
+  "appTitle": "FlowSpend",
+
+  "navHome": "Home",
+  "navTransactions": "Transactions",
+  "navInstallments": "Installments",
+  "navBudgets": "Budgets",
+  "navSettings": "Settings",
+
+  "screenSettings": "Settings",
+  "screenReports": "Reports",
+  "screenWallets": "Wallets",
+  "screenGoals": "Savings Goals",
+  "screenRecurring": "Recurring Transactions",
+  "screenSms": "Bank Messages",
+  "screenCategories": "Manage Categories",
+  "screenAddTransaction": "Add Transaction",
+  "screenEditTransaction": "Edit Transaction",
+
+  "sectionScreens": "Screens",
+  "sectionAbout": "About App",
+  "sectionPreferences": "Preferences",
+  "sectionBackup": "Backup & Restore",
+
+  "labelWallets": "Wallets",
+  "labelWalletsDesc": "Manage wallets and balances",
+  "labelReports": "Reports",
+  "labelReportsDesc": "Analyze expenses and installments",
+  "labelGoals": "Savings Goals",
+  "labelGoalsDesc": "Track your financial goals",
+  "labelRecurring": "Recurring Transactions",
+  "labelRecurringDesc": "Rent, subscriptions, bills",
+  "labelSms": "Bank Messages",
+  "labelSmsDesc": "Detect and add transactions from SMS",
+  "labelCategories": "Manage Categories",
+  "labelCategoriesDesc": "Add and edit categories",
+  "labelVersion": "Version",
+  "labelDevelopment": "Development",
+  "labelCategory": "Category",
+  "labelWallet": "Wallet",
+  "labelAmount": "Amount",
+  "labelNote": "Note (optional)",
+  "labelTotalBalance": "Total Balance",
+  "labelMonthlyIncome": "Monthly Income",
+  "labelMonthlyExpense": "Monthly Expense",
+  "labelRemainingDebt": "Remaining Debt",
+  "labelInterestPaid": "Interest Paid",
+  "labelFinanceScore": "Finance Score",
+
+  "buttonSave": "Save",
+  "buttonSaveEdit": "Save Changes",
+  "buttonCancel": "Cancel",
+  "buttonDelete": "Delete",
+  "buttonAdd": "Add",
+  "buttonSkip": "Skip",
+  "buttonNext": "Next",
+  "buttonStartNow": "Start Now",
+
+  "transactionTypeExpense": "Expense",
+  "transactionTypeIncome": "Income",
+  "transactionCurrency": "Egyptian Pound",
+
+  "errorInvalidAmount": "Enter a valid amount",
+  "errorSelectCategory": "Select a category",
+  "errorSelectWallet": "Select a wallet",
+
+  "emptyTransactions": "No transactions this month",
+  "emptyBudgets": "No budgets set",
+  "emptyGoals": "No savings goals",
+  "emptyInstallments": "No active installments",
+  "emptyExpensesMonth": "No expenses this month",
+
+  "badgeFirstTransaction": "First Transaction",
+  "badgeStreak7": "7 Day Streak",
+  "badgeStreak30": "30 Day Streak",
+  "badgeFirstGoal": "First Goal Completed",
+  "badgeBudgetMonth": "Budget Champion",
+  "badgeFirstPlanDone": "Debt Free",
+  "badgeNoNewInstallments": "3 Months No New Debt",
+
+  "categoryFood": "Food & Drinks",
+  "categoryPersonal": "Personal Expenses",
+  "categorySmoking": "Smoking",
+  "categoryEntertainment": "Entertainment",
+  "categoryOutings": "Outings",
+  "categoryRent": "Rent",
+  "categoryTransport": "Transportation",
+  "categoryBills": "Bills",
+  "categoryHealth": "Health",
+  "categoryEducation": "Education",
+  "categorySubscriptions": "Subscriptions",
+  "categoryClothing": "Clothing",
+  "categoryGifts": "Gifts",
+  "categoryOther": "Other",
+  "categorySalary": "Salary",
+  "categoryFreelance": "Freelance",
+  "categoryRefund": "Refund",
+  "categoryOtherIncome": "Other Income",
+
+  "dateToday": "Today",
+  "dateYesterday": "Yesterday",
+  "dateBeforeYesterday": "Day before yesterday",
+  "dateDaysAgo": "{count} days ago",
+  "@dateDaysAgo": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+
+  "onboardingWelcomeTitle": "Welcome to FlowSpend",
+  "onboardingWelcomeSubtitle": "Your personal app for managing expenses and installments\nAll your data stays on your device — no internet needed",
+  "onboardingInstallmentsTitle": "Track Installments & Interest",
+  "onboardingInstallmentsSubtitle": "Record installments from Sahel, Valu, and credit cards\nSee how much you've paid in interest and what's remaining",
+  "onboardingBudgetTitle": "Smart Budget & Reports",
+  "onboardingBudgetSubtitle": "Set a budget for each category\nSee exactly where your money goes",
+  "onboardingSmsTitle": "Bank Message Detection",
+  "onboardingSmsSubtitle": "The app reads bank messages automatically\nAdds transactions without you typing anything",
+
+  "reportsTabExpenses": "Expenses",
+  "reportsTabInstallments": "Installments",
+  "reportsCategoryDistribution": "Category Distribution",
+  "reportsProviderDistribution": "Distribution by Provider",
+
+  "settingsTheme": "Theme",
+  "settingsThemeLight": "Light",
+  "settingsThemeDark": "Dark",
+  "settingsThemeSystem": "System",
+  "settingsLanguage": "Language",
+  "settingsLanguageArabic": "Arabic",
+  "settingsLanguageEnglish": "English",
+  "settingsNotifications": "Notifications",
+  "settingsSmsParsing": "SMS Parsing",
+
+  "budgetRemaining": "Remaining",
+  "budgetSpent": "Spent",
+  "budgetOverBudget": "Over Budget",
+  "budgetLimit": "Budget Limit",
+
+  "goalTarget": "Target",
+  "goalCurrent": "Current",
+  "goalProgress": "Progress",
+  "goalCompleted": "Completed",
+
+  "installmentMonthlyPayment": "Monthly Payment",
+  "installmentRemainingPayments": "Remaining Payments",
+  "installmentTotalAmount": "Total Amount",
+  "installmentProvider": "Provider",
+
+  "walletBalance": "Balance",
+  "walletTypeCash": "Cash",
+  "walletTypeBank": "Bank Account",
+  "walletTypeCard": "Card",
+
+  "recurringFrequencyDaily": "Daily",
+  "recurringFrequencyWeekly": "Weekly",
+  "recurringFrequencyMonthly": "Monthly",
+  "recurringFrequencyYearly": "Yearly",
+  "recurringNextDue": "Next Due",
+
+  "greetingMorning": "Good Morning",
+  "greetingEvening": "Good Evening",
+  "motivationMorning": "New day, new opportunity to save",
+  "motivationAfternoon": "Track your financial achievements",
+  "motivationEvening": "Review today's expenses",
+
+  "labelTotalBalanceFull": "Total Balance",
+  "labelMonthIncome": "Monthly Income",
+  "labelMonthExpense": "Monthly Expense",
+
+  "streakDaysConsecutive": "consecutive days",
+  "streakMessage30": "A full month! You're a champion",
+  "streakMessage14": "Two weeks straight! Amazing",
+  "streakMessage7": "A full week! Excellent",
+  "streakMessage3": "Strong start! Keep going",
+  "streakMessageDefault": "Keep logging your expenses!",
+  "streakMilestoneMonth": "Month",
+  "streakMilestone2Weeks": "2 Weeks",
+  "streakMilestoneWeek": "Week",
+
+  "safeToSpendTitle": "Safe to Spend",
+  "safeToSpendDesc": "Available after budgets",
+  "safeToSpendOverBudget": "Over budget by",
+
+  "financeScoreTitle": "Finance Score",
+  "financeScoreLow": "Needs Improvement",
+  "financeScoreMedium": "Good Progress",
+  "financeScoreHigh": "Excellent!",
+
+  "installmentSummaryTitle": "Installments Summary",
+  "installmentRemaining": "Remaining",
+  "installmentInterest": "Interest Paid",
+  "installmentMonthly": "Monthly Payment",
+
+  "recentTransactionsTitle": "Recent Transactions",
+  "viewAll": "View All",
+
+  "upcomingRecurringTitle": "Upcoming Recurring",
+  "dueSoon": "Due Soon",
+
+  "safeToSpendNegative": "Negative",
+  "safeToSpendFrom": "From {amount}",
+  "@safeToSpendFrom": {
+    "placeholders": {
+      "amount": {"type": "String"}
+    }
+  },
+  "safeToSpendPercentAvailable": "{percent}% available",
+  "@safeToSpendPercentAvailable": {
+    "placeholders": {
+      "percent": {"type": "int"}
+    }
+  },
+  "safeToSpendShowDetails": "Show Details",
+  "safeToSpendHideDetails": "Hide Details",
+  "safeToSpendNoObligations": "No obligations this month",
+  "safeToSpendObligations": "Obligations",
+  "safeToSpendCalcError": "Error calculating available amount",
+
+  "healthStatusHealthy": "Comfortable position",
+  "healthStatusCaution": "Watch your expenses",
+  "healthStatusDanger": "Caution - tight budget",
+
+  "dueDateToday": "Today",
+  "dueDateTomorrow": "Tomorrow",
+  "dueDateInDays": "In {days} days",
+  "@dueDateInDays": {
+    "placeholders": {
+      "days": {"type": "int"}
+    }
+  },
+
+  "installmentsTitle": "Installments",
+  "installmentsTrackingDesc": "Track installments and obligations",
+  "installmentsActive": "{count} active",
+  "@installmentsActive": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "installmentsTotalObligations": "Total Obligations",
+  "installmentsMonthly": "Monthly Installments",
+  "installmentsAvgProgress": "Average Progress",
+
+  "emptyTransactionsYet": "No transactions yet",
+  "emptyTransactionsStart": "Start by adding your first transaction",
+  "errorLoadingTransactions": "Error loading transactions",
+
+  "deleteTransaction": "Delete Transaction?",
+  "deleteTransactionConfirm": "Are you sure you want to delete this transaction?",
+  "buttonNo": "No",
+  "buttonYesDelete": "Yes, Delete",
+
+  "filterAll": "All",
+  "filterIncome": "Income",
+  "filterExpense": "Expense",
+  "filterInstallment": "Installment",
+
+  "emptyTransactionsPeriod": "No transactions in this period",
+  "errorWithMessage": "Error: {message}",
+  "@errorWithMessage": {
+    "placeholders": {
+      "message": {"type": "String"}
+    }
+  },
+
+  "financeScore": "Finance Score",
+  "achievements": "Achievements",
+  "scorePoints": "points",
+  "scoreProgress": "Progress",
+  "scoreExcellent": "Excellent! You're at the top",
+  "scoreGreat": "Great! Keep it up",
+  "scoreGood": "Good, room for improvement",
+  "scorePoor": "Need some focus",
+  "scoreStart": "Start with a budget",
+
+  "dailyAverage": "Daily Average",
+  "topCategory": "Top Category",
+  "noData": "No data",
+  "interestPaid": "Interest Paid",
+
+  "upcomingTransactions": "Upcoming Transactions",
+  "manage": "Manage",
+  "frequencyDaily": "Daily",
+  "frequencyWeekly": "Weekly",
+  "frequencyMonthly": "Monthly",
+  "frequencyYearly": "Yearly",
+
+  "deleteBudget": "Delete Budget?",
+  "addBudget": "Add Budget",
+  "addContributionToGoal": "Add Amount to {goalName}",
+  "@addContributionToGoal": {
+    "placeholders": {
+      "goalName": {"type": "String"}
+    }
+  },
+  "addNewGoal": "New Savings Goal",
+  "goalName": "Goal Name",
+  "addWallet": "Add Wallet",
+  "walletName": "Wallet Name",
+  "initialBalance": "Initial Balance",
+  "editWallet": "Edit Wallet",
+  "deleteWallet": "Delete Wallet?",
+  "addRecurring": "Add Recurring Transaction",
+  "name": "Name",
+  "autoRecord": "Auto Record",
+  "pauseRecurring": "Pause",
+  "activateRecurring": "Activate",
+  "buttonClose": "Close",
+  "emptyRecurringTransactions": "No recurring transactions yet",
+  "emptyWallets": "No wallets",
+  "buttonYes": "Yes",
+
+  "selectWallet": "Select Wallet",
+  "selectProvider": "Select Provider",
+  "addCategory": "Add Category",
+  "newCategory": "New Category",
+  "enterProductName": "Enter product name",
+  "enterOriginalPrice": "Enter original price",
+  "retryButton": "Retry",
+  "manageCategories": "Manage Categories",
+  "categoryIcon": "Icon",
+  "categoryColor": "Color",
+  "tags": "Tags",
+  "reports": "Reports",
+  "finance": "Finance",
+  "back": "Back",
+  "createEnvelopes": "Create Envelopes",
+  "distribution": "Distribution",
+  "byProvider": "By Provider",
+  "planNotFound": "Plan not found",
+  "totalWithInterest": "Total with Interest",
+  "installments": "Installments",
+  "remainingObligations": "Remaining Obligations"
+}

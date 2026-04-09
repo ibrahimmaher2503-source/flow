@@ -1,0 +1,335 @@
+{
+  "@@locale": "ar",
+  "appTitle": "فلو سبند",
+
+  "navHome": "الرئيسية",
+  "navTransactions": "المعاملات",
+  "navInstallments": "الأقساط",
+  "navBudgets": "الميزانية",
+  "navSettings": "الإعدادات",
+
+  "screenSettings": "الإعدادات",
+  "screenReports": "التقارير",
+  "screenWallets": "المحافظ",
+  "screenGoals": "أهداف التوفير",
+  "screenRecurring": "المعاملات المتكررة",
+  "screenSms": "رسائل البنوك",
+  "screenCategories": "إدارة الفئات",
+  "screenAddTransaction": "إضافة معاملة",
+  "screenEditTransaction": "تعديل معاملة",
+
+  "sectionScreens": "الشاشات",
+  "sectionAbout": "عن التطبيق",
+  "sectionPreferences": "التفضيلات",
+  "sectionBackup": "النسخ الاحتياطي",
+
+  "labelWallets": "المحافظ",
+  "labelWalletsDesc": "إدارة المحافظ والأرصدة",
+  "labelReports": "التقارير",
+  "labelReportsDesc": "تحليل المصاريف والأقساط",
+  "labelGoals": "أهداف التوفير",
+  "labelGoalsDesc": "تتبع أهدافك المالية",
+  "labelRecurring": "المعاملات المتكررة",
+  "labelRecurringDesc": "إيجار، اشتراكات، فواتير",
+  "labelSms": "رسائل البنوك",
+  "labelSmsDesc": "كشف وإضافة معاملات من SMS",
+  "labelCategories": "إدارة الفئات",
+  "labelCategoriesDesc": "إضافة وتعديل الفئات",
+  "labelVersion": "الإصدار",
+  "labelDevelopment": "التطوير",
+  "labelCategory": "الفئة",
+  "labelWallet": "المحفظة",
+  "labelAmount": "المبلغ",
+  "labelNote": "ملاحظة (اختياري)",
+  "labelTotalBalance": "إجمالي الرصيد",
+  "labelMonthlyIncome": "دخل الشهر",
+  "labelMonthlyExpense": "مصروف الشهر",
+  "labelRemainingDebt": "الالتزامات المتبقية",
+  "labelInterestPaid": "فوائد مدفوعة",
+  "labelFinanceScore": "درجة المالية",
+
+  "buttonSave": "حفظ",
+  "buttonSaveEdit": "حفظ التعديل",
+  "buttonCancel": "إلغاء",
+  "buttonDelete": "حذف",
+  "buttonAdd": "إضافة",
+  "buttonSkip": "تخطي",
+  "buttonNext": "التالي",
+  "buttonStartNow": "ابدأ الآن",
+
+  "transactionTypeExpense": "مصروف",
+  "transactionTypeIncome": "دخل",
+  "transactionCurrency": "جنيه مصري",
+
+  "errorInvalidAmount": "ادخل مبلغ صحيح",
+  "errorSelectCategory": "اختار فئة",
+  "errorSelectWallet": "اختار محفظة",
+
+  "emptyTransactions": "لا توجد معاملات هذا الشهر",
+  "emptyBudgets": "لا توجد ميزانيات",
+  "emptyGoals": "لا توجد أهداف توفير",
+  "emptyInstallments": "لا توجد أقساط نشطة",
+  "emptyExpensesMonth": "لا توجد مصاريف هذا الشهر",
+
+  "badgeFirstTransaction": "أول معاملة",
+  "badgeStreak7": "7 أيام streak",
+  "badgeStreak30": "30 يوم streak",
+  "badgeFirstGoal": "أول هدف اكتمل",
+  "badgeBudgetMonth": "ملتزم بالميزانية شهر",
+  "badgeFirstPlanDone": "خلصت أول خطة أقساط",
+  "badgeNoNewInstallments": "مفيش أقساط جديدة 3 شهور",
+
+  "categoryFood": "اكل وشرب",
+  "categoryPersonal": "مصاريفي انا",
+  "categorySmoking": "سجاير",
+  "categoryEntertainment": "ترفيه",
+  "categoryOutings": "خروجات",
+  "categoryRent": "ايجار",
+  "categoryTransport": "مواصلات",
+  "categoryBills": "فواتير",
+  "categoryHealth": "صحة",
+  "categoryEducation": "تعليم",
+  "categorySubscriptions": "اشتراكات",
+  "categoryClothing": "ملابس",
+  "categoryGifts": "هدايا",
+  "categoryOther": "أخرى",
+  "categorySalary": "مرتب",
+  "categoryFreelance": "فريلانس",
+  "categoryRefund": "استرداد",
+  "categoryOtherIncome": "دخل آخر",
+
+  "dateToday": "النهاردة",
+  "dateYesterday": "إمبارح",
+  "dateBeforeYesterday": "أول إمبارح",
+  "dateDaysAgo": "من {count} أيام",
+  "@dateDaysAgo": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+
+  "onboardingWelcomeTitle": "مرحباً بك في FlowSpend",
+  "onboardingWelcomeSubtitle": "تطبيقك الشخصي لإدارة المصاريف والأقساط\nكل بياناتك على جهازك — بدون إنترنت",
+  "onboardingInstallmentsTitle": "تتبع الأقساط والفوائد",
+  "onboardingInstallmentsSubtitle": "سجل أقساط سهولة وفاليو وكريدت كارد\nاعرف كام دفعت فوائد وكام باقي عليك",
+  "onboardingBudgetTitle": "ميزانية وتقارير ذكية",
+  "onboardingBudgetSubtitle": "حدد ميزانية لكل فئة\nشوف فين فلوسك بتروح بالتفصيل",
+  "onboardingSmsTitle": "كشف رسائل البنوك",
+  "onboardingSmsSubtitle": "التطبيق بيقرأ رسائل البنوك تلقائي\nويضيف المعاملات من غير ما تكتب حاجة",
+
+  "reportsTabExpenses": "المصاريف",
+  "reportsTabInstallments": "الأقساط",
+  "reportsCategoryDistribution": "التوزيع بالفئات",
+  "reportsProviderDistribution": "التوزيع حسب المقدم",
+
+  "settingsTheme": "المظهر",
+  "settingsThemeLight": "فاتح",
+  "settingsThemeDark": "داكن",
+  "settingsThemeSystem": "النظام",
+  "settingsLanguage": "اللغة",
+  "settingsLanguageArabic": "العربية",
+  "settingsLanguageEnglish": "English",
+  "settingsNotifications": "الإشعارات",
+  "settingsSmsParsing": "قراءة الرسائل",
+
+  "budgetRemaining": "المتبقي",
+  "budgetSpent": "المصروف",
+  "budgetOverBudget": "تجاوز الميزانية",
+  "budgetLimit": "حد الميزانية",
+
+  "goalTarget": "الهدف",
+  "goalCurrent": "الحالي",
+  "goalProgress": "التقدم",
+  "goalCompleted": "مكتمل",
+
+  "installmentMonthlyPayment": "القسط الشهري",
+  "installmentRemainingPayments": "الأقساط المتبقية",
+  "installmentTotalAmount": "المبلغ الإجمالي",
+  "installmentProvider": "المقدم",
+
+  "walletBalance": "الرصيد",
+  "walletTypeCash": "نقدي",
+  "walletTypeBank": "حساب بنكي",
+  "walletTypeCard": "بطاقة",
+
+  "recurringFrequencyDaily": "يومي",
+  "recurringFrequencyWeekly": "أسبوعي",
+  "recurringFrequencyMonthly": "شهري",
+  "recurringFrequencyYearly": "سنوي",
+  "recurringNextDue": "الموعد التالي",
+
+  "greetingMorning": "صباح الخير",
+  "greetingEvening": "مساء الخير",
+  "motivationMorning": "يوم جديد، فرصة جديدة للادخار",
+  "motivationAfternoon": "تابع إنجازاتك المالية",
+  "motivationEvening": "راجع مصاريفك اليوم",
+
+  "labelTotalBalanceFull": "إجمالي الرصيد",
+  "labelMonthIncome": "دخل الشهر",
+  "labelMonthExpense": "مصروف الشهر",
+
+  "streakDaysConsecutive": "يوم متتالي",
+  "streakMessage30": "شهر كامل! أنت بطل",
+  "streakMessage14": "أسبوعين متواصلين! رائع",
+  "streakMessage7": "أسبوع كامل! ممتاز",
+  "streakMessage3": "بداية قوية! استمر",
+  "streakMessageDefault": "استمر في تسجيل مصاريفك!",
+  "streakMilestoneMonth": "شهر",
+  "streakMilestone2Weeks": "أسبوعين",
+  "streakMilestoneWeek": "أسبوع",
+
+  "safeToSpendTitle": "آمن للصرف",
+  "safeToSpendDesc": "المتاح بعد الميزانيات",
+  "safeToSpendOverBudget": "تجاوز الميزانية بـ",
+
+  "financeScoreTitle": "درجة المالية",
+  "financeScoreLow": "محتاج تحسين",
+  "financeScoreMedium": "تقدم جيد",
+  "financeScoreHigh": "ممتاز!",
+
+  "installmentSummaryTitle": "ملخص الأقساط",
+  "installmentRemaining": "المتبقي",
+  "installmentInterest": "الفوائد المدفوعة",
+  "installmentMonthly": "القسط الشهري",
+
+  "recentTransactionsTitle": "آخر المعاملات",
+  "viewAll": "عرض الكل",
+
+  "upcomingRecurringTitle": "المعاملات القادمة",
+  "dueSoon": "قريباً",
+
+  "safeToSpendNegative": "سالب",
+  "safeToSpendFrom": "من {amount}",
+  "@safeToSpendFrom": {
+    "placeholders": {
+      "amount": {"type": "String"}
+    }
+  },
+  "safeToSpendPercentAvailable": "{percent}% متاح",
+  "@safeToSpendPercentAvailable": {
+    "placeholders": {
+      "percent": {"type": "int"}
+    }
+  },
+  "safeToSpendShowDetails": "عرض التفاصيل",
+  "safeToSpendHideDetails": "إخفاء التفاصيل",
+  "safeToSpendNoObligations": "لا توجد التزامات هذا الشهر",
+  "safeToSpendObligations": "الالتزامات",
+  "safeToSpendCalcError": "خطأ في حساب المبلغ المتاح",
+
+  "healthStatusHealthy": "وضع مريح",
+  "healthStatusCaution": "انتبه للمصروفات",
+  "healthStatusDanger": "احذر - ميزانية ضيقة",
+
+  "dueDateToday": "اليوم",
+  "dueDateTomorrow": "بكره",
+  "dueDateInDays": "بعد {days} أيام",
+  "@dueDateInDays": {
+    "placeholders": {
+      "days": {"type": "int"}
+    }
+  },
+
+  "installmentsTitle": "الأقساط",
+  "installmentsTrackingDesc": "متابعة التقسيط والالتزامات",
+  "installmentsActive": "{count} نشطة",
+  "@installmentsActive": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "installmentsTotalObligations": "إجمالي الالتزامات",
+  "installmentsMonthly": "أقساط الشهر",
+  "installmentsAvgProgress": "متوسط التقدم",
+
+  "emptyTransactionsYet": "مفيش معاملات لسه",
+  "emptyTransactionsStart": "ابدأ بإضافة أول معاملة",
+  "errorLoadingTransactions": "حدث خطأ في تحميل المعاملات",
+
+  "deleteTransaction": "حذف المعاملة؟",
+  "deleteTransactionConfirm": "هل أنت متأكد من حذف هذه المعاملة؟",
+  "buttonNo": "لا",
+  "buttonYesDelete": "نعم، احذف",
+
+  "filterAll": "الكل",
+  "filterIncome": "دخل",
+  "filterExpense": "مصروف",
+  "filterInstallment": "قسط",
+
+  "emptyTransactionsPeriod": "مفيش معاملات في الفترة دي",
+  "errorWithMessage": "خطأ: {message}",
+  "@errorWithMessage": {
+    "placeholders": {
+      "message": {"type": "String"}
+    }
+  },
+
+  "financeScore": "Finance Score",
+  "achievements": "الإنجازات",
+  "scorePoints": "نقطة",
+  "scoreProgress": "التقدم",
+  "scoreExcellent": "ممتاز! أنت في القمة",
+  "scoreGreat": "رائع! استمر كده",
+  "scoreGood": "كويس، فيه مجال للتحسين",
+  "scorePoor": "محتاج شوية تركيز",
+  "scoreStart": "ابدأ بوضع ميزانية",
+
+  "dailyAverage": "متوسط يومي",
+  "topCategory": "أعلى فئة",
+  "noData": "لا يوجد",
+  "interestPaid": "فوائد مدفوعة",
+
+  "upcomingTransactions": "المعاملات القادمة",
+  "manage": "إدارة",
+  "frequencyDaily": "يومي",
+  "frequencyWeekly": "أسبوعي",
+  "frequencyMonthly": "شهري",
+  "frequencyYearly": "سنوي",
+
+  "deleteBudget": "حذف الميزانية؟",
+  "addBudget": "إضافة ميزانية",
+  "addContributionToGoal": "إضافة مبلغ لـ {goalName}",
+  "@addContributionToGoal": {
+    "placeholders": {
+      "goalName": {"type": "String"}
+    }
+  },
+  "addNewGoal": "هدف توفير جديد",
+  "goalName": "اسم الهدف",
+  "addWallet": "إضافة محفظة",
+  "walletName": "اسم المحفظة",
+  "initialBalance": "الرصيد الابتدائي",
+  "editWallet": "تعديل المحفظة",
+  "deleteWallet": "حذف المحفظة؟",
+  "addRecurring": "إضافة معاملة متكررة",
+  "name": "الاسم",
+  "autoRecord": "تسجيل تلقائي",
+  "pauseRecurring": "إيقاف",
+  "activateRecurring": "تفعيل",
+  "buttonClose": "إغلاق",
+  "emptyRecurringTransactions": "مفيش معاملات متكررة",
+  "emptyWallets": "مفيش محافظ",
+  "buttonYes": "نعم",
+
+  "selectWallet": "اختار محفظة",
+  "selectProvider": "اختار مقدم التقسيط",
+  "addCategory": "إضافة فئة",
+  "newCategory": "إضافة فئة جديدة",
+  "enterProductName": "ادخل اسم المنتج",
+  "enterOriginalPrice": "ادخل السعر الأصلي",
+  "retryButton": "إعادة المحاولة",
+  "manageCategories": "إدارة الفئات",
+  "categoryIcon": "الأيقونة",
+  "categoryColor": "اللون",
+  "tags": "التاجات",
+  "reports": "التقارير",
+  "finance": "الذكاء المالي",
+  "back": "العودة",
+  "createEnvelopes": "إنشاء أظرف",
+  "distribution": "التوزيع حسب المقدم",
+  "byProvider": "حسب المقدم",
+  "planNotFound": "الخطة غير موجودة",
+  "totalWithInterest": "الإجمالي بالفوائد",
+  "installments": "الأقساط",
+  "remainingObligations": "الالتزامات المتبقية"
+}

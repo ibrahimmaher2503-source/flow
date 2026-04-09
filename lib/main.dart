@@ -141,5 +141,8 @@ Future<void> _seedDefaults(Isar isar) async {
     for (final recurring in DummyData.dummyRecurring) {
       await isar.recurringTransactions.put(recurring);
     }
+    for (final installment in DummyData.dummyInstallments) {
+      await isar.installmentPlans.put(installment);
+    }
   });
 }

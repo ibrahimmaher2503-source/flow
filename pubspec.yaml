@@ -9,6 +9,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_localizations:
+    sdk: flutter
 
   cupertino_icons: ^1.0.8
 
@@ -36,7 +38,7 @@ dependencies:
   telephony: ^0.2.0
 
   # Utils
-  intl: ^0.19.0
+  intl: ^0.20.2
   uuid: ^4.2.0
   path_provider: ^2.1.0
   share_plus: ^9.0.0
@@ -55,3 +57,4 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  generate: true

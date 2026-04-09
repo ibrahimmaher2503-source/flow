@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/theme/app_colors.dart';
+import '../../l10n/generated/app_localizations.dart';
 import '../wallets/wallets_screen.dart';
 import '../reports/reports_screen.dart';
 import '../goals/goals_screen.dart';
@@ -16,58 +17,60 @@ class SettingsScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context)!;
+
     return Scaffold(
-      appBar: AppBar(title: const Text('الإعدادات')),
+      appBar: AppBar(title: Text(l10n.screenSettings)),
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
           // Navigation shortcuts
-          _buildSection('الشاشات', [
+          _buildSection(l10n.sectionScreens, [
             _buildNavTile(
               context,
               Icons.account_balance_wallet,
-              'المحافظ',
-              'إدارة المحافظ والأرصدة',
+              l10n.labelWallets,
+              l10n.labelWalletsDesc,
               () => Navigator.push(context,
                   MaterialPageRoute(builder: (_) => const WalletsScreen())),
             ),
             _buildNavTile(
               context,
               Icons.bar_chart,
-              'التقارير',
-              'تحليل المصاريف والأقساط',
+              l10n.labelReports,
+              l10n.labelReportsDesc,
               () => Navigator.push(context,
                   MaterialPageRoute(builder: (_) => const ReportsScreen())),
             ),
             _buildNavTile(
               context,
               Icons.savings,
-              'أهداف التوفير',
-              'تتبع أهدافك المالية',
+              l10n.labelGoals,
+              l10n.labelGoalsDesc,
               () => Navigator.push(context,
                   MaterialPageRoute(builder: (_) => const GoalsScreen())),
             ),
             _buildNavTile(
               context,
               Icons.repeat,
-              'المعاملات المتكررة',
-              'إيجار، اشتراكات، فواتير',
+              l10n.labelRecurring,
+              l10n.labelRecurringDesc,
               () => Navigator.push(context,
                   MaterialPageRoute(builder: (_) => const RecurringScreen())),
             ),
             _buildNavTile(
               context,
               Icons.sms,
-              'رسائل البنوك',
-              'كشف وإضافة معاملات من SMS',
+              l10n.labelSms,
+              l10n.labelSmsDesc,
               () => Navigator.push(context,
                   MaterialPageRoute(builder: (_) => const SmsInboxScreen())),
             ),
             _buildNavTile(
               context,
               Icons.category_rounded,
-              'إدارة الفئات',
-              'إضافة وتعديل الفئات والفئات الفرعية',
+              l10n.labelCategories,
+              l10n.labelCategoriesDesc,
               () => Navigator.push(context,
                   MaterialPageRoute(builder: (_) => const CategoriesScreen())),
             ),
@@ -91,9 +94,9 @@ class SettingsScreen extends ConsumerWidget {
           const SizedBox(height: 16),
 
           // About
-          _buildSection('عن التطبيق', [
-            _buildInfoTile(Icons.info_outline, 'الإصدار', '1.0.0'),
-            _buildInfoTile(Icons.code, 'التطوير', 'Flutter + Isar'),
+          _buildSection(l10n.sectionAbout, [
+            _buildInfoTile(Icons.info_outline, l10n.labelVersion, '1.0.0'),
+            _buildInfoTile(Icons.code, l10n.labelDevelopment, 'Flutter + Isar'),
           ]),
 
           const SizedBox(height: 32),

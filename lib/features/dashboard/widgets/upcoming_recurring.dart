@@ -6,6 +6,7 @@ import '../../../core/utils/currency_formatter.dart';
 import '../../../core/utils/app_date_utils.dart';
 import '../../../providers/recurring_provider.dart';
 import '../../../shared/widgets/section_header.dart';
+import '../../../l10n/generated/app_localizations.dart';
 
 final _upcomingRecurringProvider = FutureProvider((ref) async {
   final repo = ref.watch(recurringRepoProvider);
@@ -21,6 +22,7 @@ class UpcomingRecurring extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final recurringAsync = ref.watch(_upcomingRecurringProvider);
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    final l10n = AppLocalizations.of(context)!;
 
     return recurringAsync.when(
       data: (items) {
@@ -30,8 +32,8 @@ class UpcomingRecurring extends ConsumerWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SectionHeader(
-              title: 'المعاملات القادمة',
-              actionText: 'إدارة',
+              title: l10n.upcomingTransactions,
+              actionText: l10n.manage,
               actionIcon: Icons.settings_rounded,
               onAction: () {
                 // Navigate to recurring management
@@ -62,6 +64,7 @@ class UpcomingRecurring extends ConsumerWidget {
                     _RecurringItem(
                       item: items[i],
                       isDark: isDark,
+                      l10n: l10n,
                     ),
                     if (i < items.length - 1)
                       Divider(
@@ -88,8 +91,9 @@ class UpcomingRecurring extends ConsumerWidget {
 class _RecurringItem extends StatelessWidget {
   final dynamic item;
   final bool isDark;
+  final AppLocalizations l10n;
 
-  const _RecurringItem({required this.item, required this.isDark});
+  const _RecurringItem({required this.item, required this.isDark, required this.l10n});
 
   @override
   Widget build(BuildContext context) {
@@ -157,7 +161,7 @@ class _RecurringItem extends StatelessWidget {
                           borderRadius: BorderRadius.circular(4),
                         ),
                         child: Text(
-                          'قريباً',
+                          l10n.dueSoon,
                           style: TextStyle(
                             fontFamily: 'Cairo',
                             fontSize: 9,
@@ -206,7 +210,7 @@ class _RecurringItem extends StatelessWidget {
                 ),
               ),
               Text(
-                _getFrequencyLabel(item.frequency),
+                _getFrequencyLabel(item.frequency, l10n),
                 style: TextStyle(
                   fontFamily: 'Cairo',
                   fontSize: 10,
@@ -220,16 +224,16 @@ class _RecurringItem extends StatelessWidget {
     );
   }
 
-  String _getFrequencyLabel(String frequency) {
+  String _getFrequencyLabel(String frequency, AppLocalizations l10n) {
     switch (frequency) {
       case 'daily':
-        return 'يومي';
+        return l10n.frequencyDaily;
       case 'weekly':
-        return 'أسبوعي';
+        return l10n.frequencyWeekly;
       case 'monthly':
-        return 'شهري';
+        return l10n.frequencyMonthly;
       case 'yearly':
-        return 'سنوي';
+        return l10n.frequencyYearly;
       default:
         return frequency;
     }

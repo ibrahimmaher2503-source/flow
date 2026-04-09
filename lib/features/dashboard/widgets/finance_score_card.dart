@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_spacing.dart';
 import '../../../providers/gamification_provider.dart';
+import '../../../l10n/generated/app_localizations.dart';
 
 class FinanceScoreCard extends ConsumerWidget {
   const FinanceScoreCard({super.key});
@@ -13,34 +14,38 @@ class FinanceScoreCard extends ConsumerWidget {
     final scoreAsync = ref.watch(financeScoreProvider);
     final badgesAsync = ref.watch(earnedBadgesProvider);
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    final l10n = AppLocalizations.of(context)!;
 
     return Container(
       padding: const EdgeInsets.all(AppSpacing.lg + 4),
       decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: isDark
-              ? [
+        color: isDark ? null : AppColors.lightSurfaceContainerLow,
+        gradient: isDark
+            ? LinearGradient(
+                colors: [
                   AppColors.secondary.withValues(alpha: 0.15),
                   AppColors.surface.withValues(alpha: 0.9),
-                ]
-              : [
-                  AppColors.secondary.withValues(alpha: 0.08),
-                  AppColors.lightSurface,
                 ],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              )
+            : null,
         borderRadius: BorderRadius.circular(AppSpacing.radiusXl),
         border: Border.all(
-          color: AppColors.secondary.withValues(alpha: isDark ? 0.2 : 0.15),
+          color: isDark
+              ? AppColors.secondary.withValues(alpha: 0.2)
+              : AppColors.lightBorderVariant,
+          width: 0.5,
         ),
-        boxShadow: [
-          BoxShadow(
-            color: AppColors.secondary.withValues(alpha: isDark ? 0.15 : 0.08),
-            blurRadius: 24,
-            offset: const Offset(0, 8),
-          ),
-        ],
+        boxShadow: isDark
+            ? [
+                BoxShadow(
+                  color: AppColors.secondary.withValues(alpha: 0.15),
+                  blurRadius: 24,
+                  offset: const Offset(0, 8),
+                ),
+              ]
+            : AppColors.lightShadowSubtle,
       ),
       child: Column(
         children: [
@@ -48,7 +53,7 @@ class FinanceScoreCard extends ConsumerWidget {
             children: [
               // Animated score circle with glow
               scoreAsync.when(
-                data: (score) => _AnimatedScoreCircle(score: score, isDark: isDark),
+                data: (score) => _AnimatedScoreCircle(score: score, isDark: isDark, l10n: l10n),
                 loading: () => const _ScoreShimmer(),
                 error: (_, __) => const SizedBox(width: 80, height: 80),
               ),
@@ -65,11 +70,11 @@ class FinanceScoreCard extends ConsumerWidget {
                         Icon(
                           Icons.insights_rounded,
                           size: 18,
-                          color: AppColors.secondary,
+                          color: isDark ? AppColors.secondary : AppColors.lightSecondary,
                         ),
                         const SizedBox(width: 6),
                         Text(
-                          'Finance Score',
+                          l10n.financeScore,
                           style: TextStyle(
                             fontFamily: 'Cairo',
                             fontSize: 17,
@@ -82,7 +87,7 @@ class FinanceScoreCard extends ConsumerWidget {
                     const SizedBox(height: 4),
                     scoreAsync.when(
                       data: (score) => Text(
-                        _getScoreMessage(score),
+                        _getScoreMessage(score, l10n),
                         style: TextStyle(
                           fontFamily: 'Cairo',
                           fontSize: 12,
@@ -97,7 +102,7 @@ class FinanceScoreCard extends ConsumerWidget {
                     const SizedBox(height: 8),
                     // Progress bar
                     scoreAsync.when(
-                      data: (score) => _ScoreProgressBar(score: score, isDark: isDark),
+                      data: (score) => _ScoreProgressBar(score: score, isDark: isDark, l10n: l10n),
                       loading: () => const SizedBox(),
                       error: (_, __) => const SizedBox(),
                     ),
@@ -118,7 +123,7 @@ class FinanceScoreCard extends ConsumerWidget {
                   decoration: BoxDecoration(
                     color: isDark
                         ? Colors.white.withValues(alpha: 0.05)
-                        : Colors.black.withValues(alpha: 0.03),
+                        : AppColors.lightSurfaceContainerHigh,
                     borderRadius: BorderRadius.circular(AppSpacing.radiusMd),
                   ),
                   child: Row(
@@ -126,18 +131,19 @@ class FinanceScoreCard extends ConsumerWidget {
                       Container(
                         padding: const EdgeInsets.all(6),
                         decoration: BoxDecoration(
-                          color: AppColors.accent.withValues(alpha: 0.15),
+                          color: (isDark ? AppColors.accent : AppColors.lightAccent)
+                              .withValues(alpha: isDark ? 0.15 : 0.2),
                           borderRadius: BorderRadius.circular(8),
                         ),
-                        child: const Icon(
+                        child: Icon(
                           Icons.emoji_events_rounded,
                           size: 16,
-                          color: AppColors.accent,
+                          color: isDark ? AppColors.accent : AppColors.lightAccent,
                         ),
                       ),
                       const SizedBox(width: 10),
                       Text(
-                        'الإنجازات',
+                        l10n.achievements,
                         style: TextStyle(
                           fontFamily: 'Cairo',
                           fontSize: 12,
@@ -160,8 +166,10 @@ class FinanceScoreCard extends ConsumerWidget {
                                         child: Container(
                                           padding: const EdgeInsets.all(6),
                                           decoration: BoxDecoration(
-                                            color: AppColors.accent
-                                                .withValues(alpha: 0.1),
+                                            color: (isDark
+                                                    ? AppColors.accent
+                                                    : AppColors.lightAccent)
+                                                .withValues(alpha: isDark ? 0.1 : 0.15),
                                             borderRadius:
                                                 BorderRadius.circular(8),
                                           ),
@@ -189,20 +197,21 @@ class FinanceScoreCard extends ConsumerWidget {
     );
   }
 
-  String _getScoreMessage(int score) {
-    if (score >= 80) return 'ممتاز! أنت في القمة';
-    if (score >= 70) return 'رائع! استمر كده';
-    if (score >= 50) return 'كويس، فيه مجال للتحسين';
-    if (score >= 30) return 'محتاج شوية تركيز';
-    return 'ابدأ بوضع ميزانية';
+  String _getScoreMessage(int score, AppLocalizations l10n) {
+    if (score >= 80) return l10n.scoreExcellent;
+    if (score >= 70) return l10n.scoreGreat;
+    if (score >= 50) return l10n.scoreGood;
+    if (score >= 30) return l10n.scorePoor;
+    return l10n.scoreStart;
   }
 }
 
 class _AnimatedScoreCircle extends StatefulWidget {
   final int score;
   final bool isDark;
+  final AppLocalizations l10n;
 
-  const _AnimatedScoreCircle({required this.score, required this.isDark});
+  const _AnimatedScoreCircle({required this.score, required this.isDark, required this.l10n});
 
   @override
   State<_AnimatedScoreCircle> createState() => _AnimatedScoreCircleState();
@@ -272,9 +281,14 @@ class _AnimatedScoreCircleState extends State<_AnimatedScoreCircle>
   }
 
   Color _getScoreColor(int score) {
-    if (score >= 70) return AppColors.success;
-    if (score >= 40) return AppColors.warning;
-    return AppColors.danger;
+    // Use theme-aware semantic colors
+    if (score >= 70) {
+      return widget.isDark ? AppColors.success : AppColors.lightSuccess;
+    }
+    if (score >= 40) {
+      return widget.isDark ? AppColors.warning : AppColors.lightWarning;
+    }
+    return widget.isDark ? AppColors.danger : AppColors.lightDanger;
   }
 
   @override
@@ -318,7 +332,7 @@ class _AnimatedScoreCircleState extends State<_AnimatedScoreCircle>
                     ),
                   ),
                   Text(
-                    'نقطة',
+                    widget.l10n.scorePoints,
                     style: TextStyle(
                       fontFamily: 'Cairo',
                       fontSize: 10,
@@ -399,16 +413,18 @@ class _ScoreCirclePainter extends CustomPainter {
 class _ScoreProgressBar extends StatelessWidget {
   final int score;
   final bool isDark;
+  final AppLocalizations l10n;
 
-  const _ScoreProgressBar({required this.score, required this.isDark});
+  const _ScoreProgressBar({required this.score, required this.isDark, required this.l10n});
 
   @override
   Widget build(BuildContext context) {
+    // Use theme-aware semantic colors
     final color = score >= 70
-        ? AppColors.success
+        ? (isDark ? AppColors.success : AppColors.lightSuccess)
         : score >= 40
-            ? AppColors.warning
-            : AppColors.danger;
+            ? (isDark ? AppColors.warning : AppColors.lightWarning)
+            : (isDark ? AppColors.danger : AppColors.lightDanger);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -417,7 +433,7 @@ class _ScoreProgressBar extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              'التقدم',
+              l10n.scoreProgress,
               style: TextStyle(
                 fontFamily: 'Cairo',
                 fontSize: 10,

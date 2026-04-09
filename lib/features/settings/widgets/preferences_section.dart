@@ -47,13 +47,13 @@ class PreferencesSection extends ConsumerWidget {
                   children: [
                     _infoTile(context, Icons.attach_money, 'العملة',
                         '${settings.currency} - جنيه مصري'),
-                    _infoTile(context, Icons.language, 'اللغة',
-                        settings.language == 'ar' ? 'العربية' : 'English'),
+                    _buildLanguageSelector(context, ref, settings, isDark),
                     _infoTile(context, Icons.calendar_today, 'بداية الشهر',
                         'يوم ${settings.monthStartDay}'),
                     _infoTile(context, Icons.local_fire_department, 'الـ Streak',
                         '${settings.streakDays} يوم'),
                     _buildSmsToggle(context, ref, settings, isDark),
+                    _buildEnvelopeToggle(context, ref, settings, isDark),
                     SwitchListTile(
                       title: Text('الإشعارات',
                           style: TextStyle(
@@ -189,6 +189,65 @@ class PreferencesSection extends ConsumerWidget {
     );
   }
 
+  Widget _buildEnvelopeToggle(
+      BuildContext context, WidgetRef ref, dynamic settings, bool isDark) {
+    return Column(
+      children: [
+        SwitchListTile(
+          title: Text('نظام الأظرف',
+              style: TextStyle(
+                  fontFamily: 'Cairo',
+                  color: isDark ? Colors.white : AppColors.lightTextPrimary)),
+          subtitle: Text('توزيع الميزانية على أظرف (فئات)',
+              style: TextStyle(
+                  fontFamily: 'Cairo',
+                  fontSize: 12,
+                  color: isDark
+                      ? AppColors.textMuted
+                      : AppColors.lightTextMuted)),
+          value: settings.envelopeBudgetingEnabled,
+          activeThumbColor:
+              isDark ? AppColors.primary : AppColors.lightPrimary,
+          onChanged: (val) async {
+            settings.envelopeBudgetingEnabled = val;
+            await ref.read(settingsRepoProvider).update(settings);
+            refreshSettings(ref);
+          },
+        ),
+        if (settings.envelopeBudgetingEnabled)
+          Padding(
+            padding: const EdgeInsets.only(right: 16, bottom: 8),
+            child: Row(
+              children: [
+                Icon(
+                  Icons.mail_outline_rounded,
+                  size: 16,
+                  color: isDark ? AppColors.primary : AppColors.lightPrimary,
+                ),
+                const SizedBox(width: 8),
+                TextButton(
+                  onPressed: () => Navigator.pushNamed(context, '/envelopes'),
+                  style: TextButton.styleFrom(
+                    padding: EdgeInsets.zero,
+                    minimumSize: const Size(0, 0),
+                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                  ),
+                  child: Text(
+                    'إدارة الأظرف',
+                    style: TextStyle(
+                      fontFamily: 'Cairo',
+                      fontSize: 13,
+                      color: isDark ? AppColors.primary : AppColors.lightPrimary,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+      ],
+    );
+  }
+
   Widget _infoTile(
       BuildContext context, IconData icon, String title, String value) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
@@ -315,5 +374,97 @@ class PreferencesSection extends ConsumerWidget {
       case AppThemeMode.system:
         return 'system';
     }
+  }
+
+  Widget _buildLanguageSelector(
+      BuildContext context, WidgetRef ref, dynamic settings, bool isDark) {
+    final currentLang = settings.language ?? 'ar';
+    final primaryColor = isDark ? AppColors.primary : AppColors.lightPrimary;
+    final mutedColor = isDark ? AppColors.textMuted : AppColors.lightTextMuted;
+    final secondaryColor =
+        isDark ? AppColors.textSecondary : AppColors.lightTextSecondary;
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Icon(Icons.language,
+                  color: primaryColor, size: 22),
+              const SizedBox(width: 12),
+              Text(
+                'اللغة',
+                style: TextStyle(
+                  fontFamily: 'Cairo',
+                  fontSize: 14,
+                  fontWeight: FontWeight.w600,
+                  color: isDark ? Colors.white : AppColors.lightTextPrimary,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
+          Wrap(
+            spacing: 12,
+            children: [
+              _languageButton(
+                ref,
+                'العربية',
+                'ar',
+                currentLang,
+                primaryColor,
+                mutedColor,
+                secondaryColor,
+              ),
+              _languageButton(
+                ref,
+                'English',
+                'en',
+                currentLang,
+                primaryColor,
+                mutedColor,
+                secondaryColor,
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _languageButton(
+    WidgetRef ref,
+    String label,
+    String langCode,
+    String currentLang,
+    Color primaryColor,
+    Color mutedColor,
+    Color secondaryColor,
+  ) {
+    final isSelected = currentLang == langCode;
+
+    return FilterChip(
+      label: Text(label),
+      selected: isSelected,
+      onSelected: (selected) async {
+        if (selected && currentLang != langCode) {
+          await ref.read(settingsRepoProvider).setLanguage(langCode);
+          refreshSettings(ref);
+        }
+      },
+      backgroundColor: Colors.transparent,
+      selectedColor: primaryColor.withValues(alpha: 0.3),
+      labelStyle: TextStyle(
+        fontFamily: 'Cairo',
+        color: isSelected ? primaryColor : secondaryColor,
+        fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
+      ),
+      side: BorderSide(
+        color: isSelected ? primaryColor : mutedColor.withValues(alpha: 0.3),
+        width: isSelected ? 1.5 : 1,
+      ),
+    );
   }
 }

@@ -20,6 +20,9 @@ class Transaction {
   bool isInterest = false;
   late DateTime createdAt;
 
+  /// Custom user tags for cross-category tracking (e.g., ["رمضان", "سفر"])
+  List<String> tags = [];
+
   @Index()
   String get monthKey => '${date.year}-${date.month.toString().padLeft(2, '0')}';
 

@@ -4,6 +4,7 @@ import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_spacing.dart';
 import '../../../core/utils/currency_formatter.dart';
 import '../../../providers/installment_provider.dart';
+import '../../../l10n/generated/app_localizations.dart';
 
 class InstallmentSummaryCard extends ConsumerWidget {
   const InstallmentSummaryCard({super.key});
@@ -14,35 +15,41 @@ class InstallmentSummaryCard extends ConsumerWidget {
     final monthlyTotal = ref.watch(monthlyInstallmentTotalProvider);
     final activePlans = ref.watch(activePlansProvider);
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    final l10n = AppLocalizations.of(context)!;
+
+    // Use M3 surface containers for light theme
+    final installmentColor = isDark ? AppColors.installment : AppColors.lightInstallment;
 
     return Container(
       padding: const EdgeInsets.all(AppSpacing.lg + 2),
       decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: isDark
-              ? [
+        color: isDark ? null : AppColors.lightSurfaceContainerLow,
+        gradient: isDark
+            ? LinearGradient(
+                colors: [
                   AppColors.installment.withValues(alpha: 0.15),
                   AppColors.surface.withValues(alpha: 0.9),
-                ]
-              : [
-                  AppColors.installment.withValues(alpha: 0.08),
-                  AppColors.lightSurface,
                 ],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              )
+            : null,
         borderRadius: BorderRadius.circular(AppSpacing.radiusXl),
         border: Border.all(
-          color: AppColors.installment.withValues(alpha: isDark ? 0.2 : 0.15),
+          color: isDark
+              ? AppColors.installment.withValues(alpha: 0.2)
+              : AppColors.lightBorderVariant,
+          width: 0.5,
         ),
-        boxShadow: [
-          BoxShadow(
-            color:
-                AppColors.installment.withValues(alpha: isDark ? 0.12 : 0.06),
-            blurRadius: 20,
-            offset: const Offset(0, 8),
-          ),
-        ],
+        boxShadow: isDark
+            ? [
+                BoxShadow(
+                  color: AppColors.installment.withValues(alpha: 0.12),
+                  blurRadius: 20,
+                  offset: const Offset(0, 8),
+                ),
+              ]
+            : AppColors.lightShadowSubtle,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -50,23 +57,16 @@ class InstallmentSummaryCard extends ConsumerWidget {
           // Header row
           Row(
             children: [
-              // Icon with gradient background
+              // Icon with subtle background
               Container(
                 padding: const EdgeInsets.all(AppSpacing.md),
                 decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [
-                      AppColors.installment.withValues(alpha: 0.25),
-                      AppColors.installment.withValues(alpha: 0.1),
-                    ],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                  ),
+                  color: installmentColor.withValues(alpha: isDark ? 0.2 : 0.12),
                   borderRadius: BorderRadius.circular(AppSpacing.radiusMd),
                 ),
-                child: const Icon(
+                child: Icon(
                   Icons.credit_card_rounded,
-                  color: AppColors.installment,
+                  color: installmentColor,
                   size: 22,
                 ),
               ),
@@ -78,7 +78,7 @@ class InstallmentSummaryCard extends ConsumerWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'الأقساط',
+                      l10n.installmentsTitle,
                       style: TextStyle(
                         fontFamily: 'Cairo',
                         fontSize: 17,
@@ -88,7 +88,7 @@ class InstallmentSummaryCard extends ConsumerWidget {
                       ),
                     ),
                     Text(
-                      'متابعة التقسيط والالتزامات',
+                      l10n.installmentsTrackingDesc,
                       style: TextStyle(
                         fontFamily: 'Cairo',
                         fontSize: 11,
@@ -109,7 +109,7 @@ class InstallmentSummaryCard extends ConsumerWidget {
                     vertical: AppSpacing.xs + 2,
                   ),
                   decoration: BoxDecoration(
-                    color: AppColors.installment.withValues(alpha: 0.15),
+                    color: installmentColor.withValues(alpha: isDark ? 0.15 : 0.1),
                     borderRadius: BorderRadius.circular(AppSpacing.radiusCircle),
                   ),
                   child: Row(
@@ -120,19 +120,19 @@ class InstallmentSummaryCard extends ConsumerWidget {
                         height: 6,
                         decoration: BoxDecoration(
                           color: plans.isNotEmpty
-                              ? AppColors.installment
-                              : AppColors.textMuted,
+                              ? installmentColor
+                              : (isDark ? AppColors.textMuted : AppColors.lightTextMuted),
                           shape: BoxShape.circle,
                         ),
                       ),
                       const SizedBox(width: 6),
                       Text(
-                        '${plans.length} نشطة',
-                        style: const TextStyle(
+                        l10n.installmentsActive(plans.length),
+                        style: TextStyle(
                           fontFamily: 'Cairo',
                           fontSize: 11,
                           fontWeight: FontWeight.w600,
-                          color: AppColors.installment,
+                          color: installmentColor,
                         ),
                       ),
                     ],
@@ -158,9 +158,9 @@ class InstallmentSummaryCard extends ConsumerWidget {
               children: [
                 Expanded(
                   child: _StatColumn(
-                    label: 'إجمالي الالتزامات',
+                    label: l10n.installmentsTotalObligations,
                     value: totalDebt,
-                    color: AppColors.installment,
+                    color: installmentColor,
                     isDark: isDark,
                   ),
                 ),
@@ -170,13 +170,13 @@ class InstallmentSummaryCard extends ConsumerWidget {
                   margin: const EdgeInsets.symmetric(horizontal: AppSpacing.md),
                   color: isDark
                       ? Colors.white.withValues(alpha: 0.1)
-                      : Colors.black.withValues(alpha: 0.08),
+                      : AppColors.lightBorderVariant,
                 ),
                 Expanded(
                   child: _StatColumn(
-                    label: 'أقساط الشهر',
+                    label: l10n.installmentsMonthly,
                     value: monthlyTotal,
-                    color: AppColors.warning,
+                    color: isDark ? AppColors.warning : AppColors.lightWarning,
                     isDark: isDark,
                   ),
                 ),
@@ -190,7 +190,7 @@ class InstallmentSummaryCard extends ConsumerWidget {
               if (plans.isEmpty) return const SizedBox();
               return Padding(
                 padding: const EdgeInsets.only(top: AppSpacing.md),
-                child: _DebtProgress(plans: plans, isDark: isDark),
+                child: _DebtProgress(plans: plans, isDark: isDark, l10n: l10n),
               );
             },
             loading: () => const SizedBox(),
@@ -281,8 +281,9 @@ class _StatColumn extends StatelessWidget {
 class _DebtProgress extends StatelessWidget {
   final List<dynamic> plans;
   final bool isDark;
+  final AppLocalizations l10n;
 
-  const _DebtProgress({required this.plans, required this.isDark});
+  const _DebtProgress({required this.plans, required this.isDark, required this.l10n});
 
   @override
   Widget build(BuildContext context) {
@@ -292,7 +293,7 @@ class _DebtProgress extends StatelessWidget {
 
     for (final plan in plans) {
       if (plan.totalInstallments > 0) {
-        final progress = plan.paidCount / plan.totalInstallments;
+        final progress = plan.paidInstallments / plan.totalInstallments;
         totalProgress += progress;
         validPlans++;
       }
@@ -307,7 +308,7 @@ class _DebtProgress extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              'متوسط التقدم',
+              l10n.installmentsAvgProgress,
               style: TextStyle(
                 fontFamily: 'Cairo',
                 fontSize: 11,
@@ -320,7 +321,7 @@ class _DebtProgress extends StatelessWidget {
                 fontFamily: 'Cairo',
                 fontSize: 11,
                 fontWeight: FontWeight.w600,
-                color: AppColors.success,
+                color: isDark ? AppColors.success : AppColors.lightSuccess,
               ),
             ),
           ],
@@ -331,7 +332,7 @@ class _DebtProgress extends StatelessWidget {
           decoration: BoxDecoration(
             color: isDark
                 ? Colors.white.withValues(alpha: 0.1)
-                : Colors.black.withValues(alpha: 0.06),
+                : AppColors.lightSurfaceContainerHighest,
             borderRadius: BorderRadius.circular(3),
           ),
           child: FractionallySizedBox(
@@ -340,7 +341,9 @@ class _DebtProgress extends StatelessWidget {
             child: Container(
               decoration: BoxDecoration(
                 gradient: LinearGradient(
-                  colors: [AppColors.success, AppColors.secondary],
+                  colors: isDark
+                      ? [AppColors.success, AppColors.secondary]
+                      : [AppColors.lightSuccess, AppColors.lightSecondary],
                 ),
                 borderRadius: BorderRadius.circular(3),
               ),

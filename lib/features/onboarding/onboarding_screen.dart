@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../core/theme/app_colors.dart';
 import '../../shared/widgets/app_button.dart';
+import '../../l10n/generated/app_localizations.dart';
 
 class OnboardingScreen extends StatefulWidget {
   final VoidCallback onComplete;
@@ -15,41 +16,46 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   final _controller = PageController();
   int _currentPage = 0;
 
-  final _pages = const [
-    _OnboardingPage(
-      icon: Icons.account_balance_wallet_rounded,
-      color: AppColors.primary,
-      title: 'مرحباً بك في FlowSpend',
-      subtitle: 'تطبيقك الشخصي لإدارة المصاريف والأقساط\nكل بياناتك على جهازك — بدون إنترنت',
-    ),
-    _OnboardingPage(
-      icon: Icons.credit_card_rounded,
-      color: AppColors.installment,
-      title: 'تتبع الأقساط والفوائد',
-      subtitle: 'سجل أقساط سهولة وفاليو وكريدت كارد\nاعرف كام دفعت فوائد وكام باقي عليك',
-    ),
-    _OnboardingPage(
-      icon: Icons.pie_chart_rounded,
-      color: AppColors.secondary,
-      title: 'ميزانية وتقارير ذكية',
-      subtitle: 'حدد ميزانية لكل فئة\nشوف فين فلوسك بتروح بالتفصيل',
-    ),
-    _OnboardingPage(
-      icon: Icons.sms_rounded,
-      color: AppColors.accent,
-      title: 'كشف رسائل البنوك',
-      subtitle: 'التطبيق بيقرأ رسائل البنوك تلقائي\nويضيف المعاملات من غير ما تكتب حاجة',
-    ),
-  ];
-
   @override
   void dispose() {
     _controller.dispose();
     super.dispose();
   }
 
+  List<_OnboardingPageData> _getPages(AppLocalizations l10n) {
+    return [
+      _OnboardingPageData(
+        icon: Icons.account_balance_wallet_rounded,
+        color: AppColors.primary,
+        title: l10n.onboardingWelcomeTitle,
+        subtitle: l10n.onboardingWelcomeSubtitle,
+      ),
+      _OnboardingPageData(
+        icon: Icons.credit_card_rounded,
+        color: AppColors.installment,
+        title: l10n.onboardingInstallmentsTitle,
+        subtitle: l10n.onboardingInstallmentsSubtitle,
+      ),
+      _OnboardingPageData(
+        icon: Icons.pie_chart_rounded,
+        color: AppColors.secondary,
+        title: l10n.onboardingBudgetTitle,
+        subtitle: l10n.onboardingBudgetSubtitle,
+      ),
+      _OnboardingPageData(
+        icon: Icons.sms_rounded,
+        color: AppColors.accent,
+        title: l10n.onboardingSmsTitle,
+        subtitle: l10n.onboardingSmsSubtitle,
+      ),
+    ];
+  }
+
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final pages = _getPages(l10n);
+
     return Scaffold(
       backgroundColor: AppColors.background,
       body: SafeArea(
@@ -60,8 +66,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               alignment: AlignmentDirectional.topEnd,
               child: TextButton(
                 onPressed: widget.onComplete,
-                child: const Text('تخطي',
-                    style: TextStyle(
+                child: Text(l10n.buttonSkip,
+                    style: const TextStyle(
                         fontFamily: 'Cairo',
                         color: AppColors.textMuted)),
               ),
@@ -72,8 +78,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               child: PageView.builder(
                 controller: _controller,
                 onPageChanged: (i) => setState(() => _currentPage = i),
-                itemCount: _pages.length,
-                itemBuilder: (_, i) => _pages[i],
+                itemCount: pages.length,
+                itemBuilder: (_, i) => _OnboardingPage(data: pages[i]),
               ),
             ),
 
@@ -82,7 +88,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               padding: const EdgeInsets.symmetric(vertical: 24),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: List.generate(_pages.length, (i) {
+                children: List.generate(pages.length, (i) {
                   final isActive = _currentPage == i;
                   return AnimatedContainer(
                     duration: const Duration(milliseconds: 200),
@@ -103,14 +109,14 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             // Bottom button
             Padding(
               padding: const EdgeInsets.fromLTRB(24, 0, 24, 32),
-              child: _currentPage == _pages.length - 1
+              child: _currentPage == pages.length - 1
                   ? AppButton(
-                      label: 'ابدأ الآن',
+                      label: l10n.buttonStartNow,
                       icon: Icons.arrow_forward_rounded,
                       onPressed: widget.onComplete,
                     )
                   : AppButton(
-                      label: 'التالي',
+                      label: l10n.buttonNext,
                       onPressed: () {
                         _controller.nextPage(
                           duration: const Duration(milliseconds: 300),
@@ -126,18 +132,24 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   }
 }
 
-class _OnboardingPage extends StatelessWidget {
+class _OnboardingPageData {
   final IconData icon;
   final Color color;
   final String title;
   final String subtitle;
 
-  const _OnboardingPage({
+  const _OnboardingPageData({
     required this.icon,
     required this.color,
     required this.title,
     required this.subtitle,
   });
+}
+
+class _OnboardingPage extends StatelessWidget {
+  final _OnboardingPageData data;
+
+  const _OnboardingPage({required this.data});
 
   @override
   Widget build(BuildContext context) {
@@ -152,17 +164,17 @@ class _OnboardingPage extends StatelessWidget {
             decoration: BoxDecoration(
               gradient: LinearGradient(
                 colors: [
-                  color.withValues(alpha: 0.25),
-                  color.withValues(alpha: 0.08),
+                  data.color.withValues(alpha: 0.25),
+                  data.color.withValues(alpha: 0.08),
                 ],
               ),
               shape: BoxShape.circle,
             ),
-            child: Icon(icon, color: color, size: 56),
+            child: Icon(data.icon, color: data.color, size: 56),
           ),
           const SizedBox(height: 40),
           Text(
-            title,
+            data.title,
             style: const TextStyle(
               fontFamily: 'Cairo',
               fontSize: 26,
@@ -174,7 +186,7 @@ class _OnboardingPage extends StatelessWidget {
           ),
           const SizedBox(height: 16),
           Text(
-            subtitle,
+            data.subtitle,
             style: TextStyle(
               fontFamily: 'Cairo',
               fontSize: 15,

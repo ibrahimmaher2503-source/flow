@@ -27,38 +27,43 @@ const AppSettingsSchema = CollectionSchema(
       name: r'defaultWallet',
       type: IsarType.string,
     ),
-    r'language': PropertySchema(
+    r'envelopeBudgetingEnabled': PropertySchema(
       id: 2,
+      name: r'envelopeBudgetingEnabled',
+      type: IsarType.bool,
+    ),
+    r'language': PropertySchema(
+      id: 3,
       name: r'language',
       type: IsarType.string,
     ),
     r'lastLogDate': PropertySchema(
-      id: 3,
+      id: 4,
       name: r'lastLogDate',
       type: IsarType.dateTime,
     ),
     r'monthStartDay': PropertySchema(
-      id: 4,
+      id: 5,
       name: r'monthStartDay',
       type: IsarType.long,
     ),
     r'notificationsEnabled': PropertySchema(
-      id: 5,
+      id: 6,
       name: r'notificationsEnabled',
       type: IsarType.bool,
     ),
     r'smsParsingEnabled': PropertySchema(
-      id: 6,
+      id: 7,
       name: r'smsParsingEnabled',
       type: IsarType.bool,
     ),
     r'streakDays': PropertySchema(
-      id: 7,
+      id: 8,
       name: r'streakDays',
       type: IsarType.long,
     ),
     r'themeMode': PropertySchema(
-      id: 8,
+      id: 9,
       name: r'themeMode',
       type: IsarType.string,
     )
@@ -98,13 +103,14 @@ void _appSettingsSerialize(
 ) {
   writer.writeString(offsets[0], object.currency);
   writer.writeString(offsets[1], object.defaultWallet);
-  writer.writeString(offsets[2], object.language);
-  writer.writeDateTime(offsets[3], object.lastLogDate);
-  writer.writeLong(offsets[4], object.monthStartDay);
-  writer.writeBool(offsets[5], object.notificationsEnabled);
-  writer.writeBool(offsets[6], object.smsParsingEnabled);
-  writer.writeLong(offsets[7], object.streakDays);
-  writer.writeString(offsets[8], object.themeMode);
+  writer.writeBool(offsets[2], object.envelopeBudgetingEnabled);
+  writer.writeString(offsets[3], object.language);
+  writer.writeDateTime(offsets[4], object.lastLogDate);
+  writer.writeLong(offsets[5], object.monthStartDay);
+  writer.writeBool(offsets[6], object.notificationsEnabled);
+  writer.writeBool(offsets[7], object.smsParsingEnabled);
+  writer.writeLong(offsets[8], object.streakDays);
+  writer.writeString(offsets[9], object.themeMode);
 }
 
 AppSettings _appSettingsDeserialize(
@@ -116,14 +122,15 @@ AppSettings _appSettingsDeserialize(
   final object = AppSettings();
   object.currency = reader.readString(offsets[0]);
   object.defaultWallet = reader.readString(offsets[1]);
+  object.envelopeBudgetingEnabled = reader.readBool(offsets[2]);
   object.id = id;
-  object.language = reader.readString(offsets[2]);
-  object.lastLogDate = reader.readDateTimeOrNull(offsets[3]);
-  object.monthStartDay = reader.readLong(offsets[4]);
-  object.notificationsEnabled = reader.readBool(offsets[5]);
-  object.smsParsingEnabled = reader.readBool(offsets[6]);
-  object.streakDays = reader.readLong(offsets[7]);
-  object.themeMode = reader.readString(offsets[8]);
+  object.language = reader.readString(offsets[3]);
+  object.lastLogDate = reader.readDateTimeOrNull(offsets[4]);
+  object.monthStartDay = reader.readLong(offsets[5]);
+  object.notificationsEnabled = reader.readBool(offsets[6]);
+  object.smsParsingEnabled = reader.readBool(offsets[7]);
+  object.streakDays = reader.readLong(offsets[8]);
+  object.themeMode = reader.readString(offsets[9]);
   return object;
 }
 
@@ -139,18 +146,20 @@ P _appSettingsDeserializeProp<P>(
     case 1:
       return (reader.readString(offset)) as P;
     case 2:
-      return (reader.readString(offset)) as P;
-    case 3:
-      return (reader.readDateTimeOrNull(offset)) as P;
-    case 4:
-      return (reader.readLong(offset)) as P;
-    case 5:
       return (reader.readBool(offset)) as P;
+    case 3:
+      return (reader.readString(offset)) as P;
+    case 4:
+      return (reader.readDateTimeOrNull(offset)) as P;
+    case 5:
+      return (reader.readLong(offset)) as P;
     case 6:
       return (reader.readBool(offset)) as P;
     case 7:
-      return (reader.readLong(offset)) as P;
+      return (reader.readBool(offset)) as P;
     case 8:
+      return (reader.readLong(offset)) as P;
+    case 9:
       return (reader.readString(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -517,6 +526,16 @@ extension AppSettingsQueryFilter
       return query.addFilterCondition(FilterCondition.greaterThan(
         property: r'defaultWallet',
         value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<AppSettings, AppSettings, QAfterFilterCondition>
+      envelopeBudgetingEnabledEqualTo(bool value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'envelopeBudgetingEnabled',
+        value: value,
       ));
     });
   }
@@ -1085,6 +1104,20 @@ extension AppSettingsQuerySortBy
     });
   }
 
+  QueryBuilder<AppSettings, AppSettings, QAfterSortBy>
+      sortByEnvelopeBudgetingEnabled() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'envelopeBudgetingEnabled', Sort.asc);
+    });
+  }
+
+  QueryBuilder<AppSettings, AppSettings, QAfterSortBy>
+      sortByEnvelopeBudgetingEnabledDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'envelopeBudgetingEnabled', Sort.desc);
+    });
+  }
+
   QueryBuilder<AppSettings, AppSettings, QAfterSortBy> sortByLanguage() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'language', Sort.asc);
@@ -1199,6 +1232,20 @@ extension AppSettingsQuerySortThenBy
       thenByDefaultWalletDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'defaultWallet', Sort.desc);
+    });
+  }
+
+  QueryBuilder<AppSettings, AppSettings, QAfterSortBy>
+      thenByEnvelopeBudgetingEnabled() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'envelopeBudgetingEnabled', Sort.asc);
+    });
+  }
+
+  QueryBuilder<AppSettings, AppSettings, QAfterSortBy>
+      thenByEnvelopeBudgetingEnabledDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'envelopeBudgetingEnabled', Sort.desc);
     });
   }
 
@@ -1321,6 +1368,13 @@ extension AppSettingsQueryWhereDistinct
     });
   }
 
+  QueryBuilder<AppSettings, AppSettings, QDistinct>
+      distinctByEnvelopeBudgetingEnabled() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'envelopeBudgetingEnabled');
+    });
+  }
+
   QueryBuilder<AppSettings, AppSettings, QDistinct> distinctByLanguage(
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
@@ -1385,6 +1439,13 @@ extension AppSettingsQueryProperty
   QueryBuilder<AppSettings, String, QQueryOperations> defaultWalletProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'defaultWallet');
+    });
+  }
+
+  QueryBuilder<AppSettings, bool, QQueryOperations>
+      envelopeBudgetingEnabledProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'envelopeBudgetingEnabled');
     });
   }
 

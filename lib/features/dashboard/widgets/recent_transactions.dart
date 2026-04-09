@@ -6,6 +6,7 @@ import '../../../providers/transaction_provider.dart';
 import '../../../providers/category_provider.dart';
 import '../../transactions/widgets/transaction_tile.dart';
 import '../../../shared/widgets/section_header.dart';
+import '../../../l10n/generated/app_localizations.dart';
 
 class RecentTransactions extends ConsumerWidget {
   const RecentTransactions({super.key});
@@ -15,13 +16,14 @@ class RecentTransactions extends ConsumerWidget {
     final recentAsync = ref.watch(recentTransactionsProvider);
     final categoriesAsync = ref.watch(allCategoriesProvider);
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    final l10n = AppLocalizations.of(context)!;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         SectionHeader(
-          title: 'آخر المعاملات',
-          actionText: 'عرض الكل',
+          title: l10n.recentTransactionsTitle,
+          actionText: l10n.viewAll,
           actionIcon: Icons.arrow_forward_ios_rounded,
           onAction: () {
             // Navigate to transactions - can be implemented later
@@ -89,7 +91,7 @@ class RecentTransactions extends ConsumerWidget {
                 padding: const EdgeInsets.all(AppSpacing.xl),
                 child: Center(
                   child: Text(
-                    'حدث خطأ في تحميل المعاملات',
+                    l10n.errorLoadingTransactions,
                     style: TextStyle(
                       fontFamily: 'Cairo',
                       color:
@@ -113,6 +115,8 @@ class _EmptyTransactions extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return Padding(
       padding: const EdgeInsets.symmetric(
         horizontal: AppSpacing.xl,
@@ -136,7 +140,7 @@ class _EmptyTransactions extends StatelessWidget {
           ),
           const SizedBox(height: AppSpacing.lg),
           Text(
-            'مفيش معاملات لسه',
+            l10n.emptyTransactionsYet,
             style: TextStyle(
               fontFamily: 'Cairo',
               fontSize: 15,
@@ -146,7 +150,7 @@ class _EmptyTransactions extends StatelessWidget {
           ),
           const SizedBox(height: AppSpacing.xs),
           Text(
-            'ابدأ بإضافة أول معاملة',
+            l10n.emptyTransactionsStart,
             style: TextStyle(
               fontFamily: 'Cairo',
               fontSize: 12,

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'l10n/generated/app_localizations.dart';
 import 'core/router/app_router.dart';
 import 'core/theme/app_colors.dart';
 import 'core/theme/app_theme.dart';
@@ -11,6 +13,7 @@ import 'features/budgets/budgets_screen.dart';
 import 'features/settings/settings_screen.dart';
 import 'features/onboarding/onboarding_screen.dart';
 import 'providers/theme_provider.dart' show themeProvider, AppThemeMode;
+import 'providers/locale_provider.dart';
 import 'main.dart' show navigatorKey;
 
 class FlowSpendApp extends ConsumerWidget {
@@ -21,6 +24,7 @@ class FlowSpendApp extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final appThemeMode = ref.watch(themeProvider);
+    final locale = ref.watch(localeProvider);
 
     return MaterialApp(
       title: 'FlowSpend',
@@ -29,19 +33,23 @@ class FlowSpendApp extends ConsumerWidget {
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
       themeMode: _getFlutterThemeMode(appThemeMode),
-      locale: const Locale('ar'),
+      locale: locale,
+      supportedLocales: AppLocalizations.supportedLocales,
+      localizationsDelegates: const [
+        AppLocalizations.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
       onGenerateRoute: AppRouter.generateRoute,
       home: showOnboarding ? _OnboardingWrapper() : const AppShell(),
       builder: (context, child) {
         // Wrap with AnimatedTheme for smooth theme transitions
-        return Directionality(
-          textDirection: TextDirection.rtl,
-          child: AnimatedTheme(
-            data: Theme.of(context),
-            duration: const Duration(milliseconds: 300),
-            curve: Curves.easeInOut,
-            child: child!,
-          ),
+        return AnimatedTheme(
+          data: Theme.of(context),
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.easeInOut,
+          child: child!,
         );
       },
     );
@@ -109,26 +117,26 @@ class _AppShellState extends State<AppShell> {
             child: BottomNavigationBar(
               currentIndex: _currentIndex,
               onTap: (index) => setState(() => _currentIndex = index),
-              items: const [
+              items: [
                 BottomNavigationBarItem(
-                  icon: Icon(Icons.home_rounded),
-                  label: 'الرئيسية',
+                  icon: const Icon(Icons.home_rounded),
+                  label: AppLocalizations.of(context)!.navHome,
                 ),
                 BottomNavigationBarItem(
-                  icon: Icon(Icons.receipt_long_rounded),
-                  label: 'المعاملات',
+                  icon: const Icon(Icons.receipt_long_rounded),
+                  label: AppLocalizations.of(context)!.navTransactions,
                 ),
                 BottomNavigationBarItem(
-                  icon: Icon(Icons.credit_card_rounded),
-                  label: 'الأقساط',
+                  icon: const Icon(Icons.credit_card_rounded),
+                  label: AppLocalizations.of(context)!.navInstallments,
                 ),
                 BottomNavigationBarItem(
-                  icon: Icon(Icons.pie_chart_rounded),
-                  label: 'الميزانية',
+                  icon: const Icon(Icons.pie_chart_rounded),
+                  label: AppLocalizations.of(context)!.navBudgets,
                 ),
                 BottomNavigationBarItem(
-                  icon: Icon(Icons.settings_rounded),
-                  label: 'الإعدادات',
+                  icon: const Icon(Icons.settings_rounded),
+                  label: AppLocalizations.of(context)!.navSettings,
                 ),
               ],
             ),

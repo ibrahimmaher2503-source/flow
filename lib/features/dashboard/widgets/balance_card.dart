@@ -6,6 +6,7 @@ import '../../../core/theme/app_spacing.dart';
 import '../../../core/utils/currency_formatter.dart';
 import '../../../providers/wallet_provider.dart';
 import '../../../providers/transaction_provider.dart';
+import '../../../l10n/generated/app_localizations.dart';
 
 class BalanceCard extends ConsumerStatefulWidget {
   const BalanceCard({super.key});
@@ -38,6 +39,7 @@ class _BalanceCardState extends ConsumerState<BalanceCard>
     final totalBalance = ref.watch(totalBalanceProvider);
     final income = ref.watch(monthlyIncomeProvider);
     final expense = ref.watch(monthlyExpenseProvider);
+    final l10n = AppLocalizations.of(context)!;
 
     return AnimatedBuilder(
       animation: _shimmerController,
@@ -107,9 +109,9 @@ class _BalanceCardState extends ConsumerState<BalanceCard>
                         ),
                       ),
                       const SizedBox(width: 8),
-                      const Text(
-                        'إجمالي الرصيد',
-                        style: TextStyle(
+                      Text(
+                        l10n.labelTotalBalanceFull,
+                        style: const TextStyle(
                           fontFamily: 'Cairo',
                           fontSize: 14,
                           fontWeight: FontWeight.w500,
@@ -143,7 +145,7 @@ class _BalanceCardState extends ConsumerState<BalanceCard>
                       children: [
                         Expanded(
                           child: _StatPill(
-                            label: 'دخل الشهر',
+                            label: l10n.labelMonthIncome,
                             value: income,
                             icon: Icons.arrow_downward_rounded,
                             color: AppColors.secondary,
@@ -158,7 +160,7 @@ class _BalanceCardState extends ConsumerState<BalanceCard>
                         ),
                         Expanded(
                           child: _StatPill(
-                            label: 'مصروف الشهر',
+                            label: l10n.labelMonthExpense,
                             value: expense,
                             icon: Icons.arrow_upward_rounded,
                             color: const Color(0xFFFF6B8A),

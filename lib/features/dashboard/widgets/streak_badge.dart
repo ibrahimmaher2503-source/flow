@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_spacing.dart';
 import '../../../providers/settings_provider.dart';
+import '../../../l10n/generated/app_localizations.dart';
 
 class StreakBadge extends ConsumerWidget {
   const StreakBadge({super.key});
@@ -11,6 +12,7 @@ class StreakBadge extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final settingsAsync = ref.watch(appSettingsProvider);
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    final l10n = AppLocalizations.of(context)!;
 
     return settingsAsync.when(
       data: (settings) {
@@ -64,7 +66,7 @@ class StreakBadge extends ConsumerWidget {
                         ),
                         const SizedBox(width: 4),
                         Text(
-                          'يوم متتالي',
+                          l10n.streakDaysConsecutive,
                           style: TextStyle(
                             fontFamily: 'Cairo',
                             fontSize: 14,
@@ -77,7 +79,7 @@ class StreakBadge extends ConsumerWidget {
                       ],
                     ),
                     Text(
-                      _getStreakMessage(settings.streakDays),
+                      _getStreakMessage(settings.streakDays, l10n),
                       style: TextStyle(
                         fontFamily: 'Cairo',
                         fontSize: 11,
@@ -111,7 +113,7 @@ class StreakBadge extends ConsumerWidget {
                       ),
                       const SizedBox(width: 2),
                       Text(
-                        _getMilestoneLabel(settings.streakDays),
+                        _getMilestoneLabel(settings.streakDays, l10n),
                         style: const TextStyle(
                           fontFamily: 'Cairo',
                           fontSize: 10,
@@ -131,18 +133,18 @@ class StreakBadge extends ConsumerWidget {
     );
   }
 
-  String _getStreakMessage(int days) {
-    if (days >= 30) return 'شهر كامل! أنت بطل';
-    if (days >= 14) return 'أسبوعين متواصلين! رائع';
-    if (days >= 7) return 'أسبوع كامل! ممتاز';
-    if (days >= 3) return 'بداية قوية! استمر';
-    return 'استمر في تسجيل مصاريفك!';
+  String _getStreakMessage(int days, AppLocalizations l10n) {
+    if (days >= 30) return l10n.streakMessage30;
+    if (days >= 14) return l10n.streakMessage14;
+    if (days >= 7) return l10n.streakMessage7;
+    if (days >= 3) return l10n.streakMessage3;
+    return l10n.streakMessageDefault;
   }
 
-  String _getMilestoneLabel(int days) {
-    if (days >= 30) return 'شهر';
-    if (days >= 14) return 'أسبوعين';
-    return 'أسبوع';
+  String _getMilestoneLabel(int days, AppLocalizations l10n) {
+    if (days >= 30) return l10n.streakMilestoneMonth;
+    if (days >= 14) return l10n.streakMilestone2Weeks;
+    return l10n.streakMilestoneWeek;
   }
 }
 

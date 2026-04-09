@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/theme/app_colors.dart';
 import '../../data/models/recurring_transaction_model.dart';
+import '../../l10n/generated/app_localizations.dart';
 import '../../providers/recurring_provider.dart';
 import '../../shared/widgets/empty_state.dart';
 import 'widgets/recurring_tile.dart';
@@ -11,16 +12,17 @@ class RecurringScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context)!;
     final recurringAsync = ref.watch(activeRecurringProvider);
 
     return Scaffold(
-      appBar: AppBar(title: const Text('المعاملات المتكررة')),
+      appBar: AppBar(title: Text(l10n.screenRecurring)),
       body: recurringAsync.when(
         data: (items) {
           if (items.isEmpty) {
-            return const EmptyState(
+            return EmptyState(
               icon: Icons.repeat,
-              message: 'مفيش معاملات متكررة\nأضف إيجار، اشتراكات، فواتير',
+              message: l10n.emptyRecurringTransactions,
             );
           }
           return ListView.builder(
@@ -49,6 +51,7 @@ class RecurringScreen extends ConsumerWidget {
 
   void _showEditDialog(
       BuildContext context, WidgetRef ref, RecurringTransaction recurring) {
+    final l10n = AppLocalizations.of(context)!;
     final isDark = Theme.of(context).brightness == Brightness.dark;
     showDialog(
       context: context,
@@ -68,8 +71,8 @@ class RecurringScreen extends ConsumerWidget {
               ref.invalidate(activeRecurringProvider);
               if (ctx.mounted) Navigator.pop(ctx);
             },
-            child: const Text('حذف',
-                style: TextStyle(
+            child: Text(l10n.buttonDelete,
+                style: const TextStyle(
                     fontFamily: 'Cairo', color: AppColors.danger)),
           ),
           TextButton(
@@ -81,15 +84,15 @@ class RecurringScreen extends ConsumerWidget {
               ref.invalidate(activeRecurringProvider);
             },
             child: Text(
-              recurring.isActive ? 'إيقاف' : 'تفعيل',
+              recurring.isActive ? l10n.pauseRecurring : l10n.activateRecurring,
               style: const TextStyle(
                   fontFamily: 'Cairo', color: AppColors.primary),
             ),
           ),
           TextButton(
             onPressed: () => Navigator.pop(ctx),
-            child: const Text('إغلاق',
-                style: TextStyle(fontFamily: 'Cairo')),
+            child: Text(l10n.buttonClose,
+                style: const TextStyle(fontFamily: 'Cairo')),
           ),
         ],
       ),
@@ -97,6 +100,7 @@ class RecurringScreen extends ConsumerWidget {
   }
 
   void _showAddDialog(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context)!;
     final nameController = TextEditingController();
     final amountController = TextEditingController();
     String type = 'expense';
@@ -110,7 +114,7 @@ class RecurringScreen extends ConsumerWidget {
       builder: (ctx) => StatefulBuilder(
         builder: (ctx, setDialogState) => AlertDialog(
           backgroundColor: isDark ? AppColors.surface : AppColors.lightSurface,
-          title: Text('إضافة معاملة متكررة',
+          title: Text(l10n.addRecurring,
               style: TextStyle(fontFamily: 'Cairo', color: isDark ? AppColors.textPrimary : AppColors.lightTextPrimary)),
           content: SingleChildScrollView(
             child: Column(
@@ -120,7 +124,7 @@ class RecurringScreen extends ConsumerWidget {
                   controller: nameController,
                   style: TextStyle(
                       fontFamily: 'Cairo', color: isDark ? AppColors.textPrimary : AppColors.lightTextPrimary),
-                  decoration: const InputDecoration(hintText: 'الاسم'),
+                  decoration: InputDecoration(hintText: l10n.name),
                 ),
                 const SizedBox(height: 8),
                 TextField(
@@ -128,17 +132,17 @@ class RecurringScreen extends ConsumerWidget {
                   keyboardType: TextInputType.number,
                   style: TextStyle(
                       fontFamily: 'Cairo', color: isDark ? AppColors.textPrimary : AppColors.lightTextPrimary),
-                  decoration: const InputDecoration(hintText: 'المبلغ'),
+                  decoration: InputDecoration(hintText: l10n.labelAmount),
                 ),
                 const SizedBox(height: 12),
 
                 // Type toggle
                 Row(
                   children: [
-                    _chip('مصروف', type == 'expense',
+                    _chip(l10n.transactionTypeExpense, type == 'expense',
                         () => setDialogState(() => type = 'expense'), isDark),
                     const SizedBox(width: 8),
-                    _chip('دخل', type == 'income',
+                    _chip(l10n.transactionTypeIncome, type == 'income',
                         () => setDialogState(() => type = 'income'), isDark),
                   ],
                 ),
@@ -150,7 +154,7 @@ class RecurringScreen extends ConsumerWidget {
                     return Padding(
                       padding: const EdgeInsetsDirectional.only(end: 8),
                       child: _chip(
-                        _freqLabel(f),
+                        _freqLabel(f, l10n),
                         frequency == f,
                         () => setDialogState(() => frequency = f),
                         isDark,
@@ -164,7 +168,7 @@ class RecurringScreen extends ConsumerWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text('تسجيل تلقائي',
+                    Text(l10n.autoRecord,
                         style: TextStyle(
                             fontFamily: 'Cairo', color: isDark ? AppColors.textPrimary : AppColors.lightTextPrimary)),
                     Switch(
@@ -180,7 +184,7 @@ class RecurringScreen extends ConsumerWidget {
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(ctx),
-              child: Text('إلغاء',
+              child: Text(l10n.buttonCancel,
                   style: TextStyle(
                       fontFamily: 'Cairo', color: isDark ? AppColors.textMuted : AppColors.lightTextMuted)),
             ),
@@ -203,8 +207,8 @@ class RecurringScreen extends ConsumerWidget {
                 ref.invalidate(activeRecurringProvider);
                 if (ctx.mounted) Navigator.pop(ctx);
               },
-              child: const Text('إضافة',
-                  style: TextStyle(
+              child: Text(l10n.buttonAdd,
+                  style: const TextStyle(
                       fontFamily: 'Cairo', color: AppColors.primary)),
             ),
           ],
@@ -239,16 +243,16 @@ class RecurringScreen extends ConsumerWidget {
     );
   }
 
-  String _freqLabel(String freq) {
+  String _freqLabel(String freq, AppLocalizations l10n) {
     switch (freq) {
       case 'daily':
-        return 'يومي';
+        return l10n.frequencyDaily;
       case 'weekly':
-        return 'أسبوعي';
+        return l10n.frequencyWeekly;
       case 'monthly':
-        return 'شهري';
+        return l10n.frequencyMonthly;
       case 'yearly':
-        return 'سنوي';
+        return l10n.frequencyYearly;
       default:
         return freq;
     }

@@ -10,6 +10,8 @@ import 'widgets/installment_summary_card.dart';
 import 'widgets/recent_transactions.dart';
 import 'widgets/upcoming_recurring.dart';
 import 'widgets/finance_score_card.dart';
+import 'widgets/safe_to_spend_card.dart';
+import 'widgets/forecast_mini_card.dart';
 
 class DashboardScreen extends ConsumerWidget {
   const DashboardScreen({super.key});
@@ -59,12 +61,23 @@ class DashboardScreen extends ConsumerWidget {
                         BalanceCard(),
                         SizedBox(height: AppSpacing.lg),
 
+                        // Safe-to-Spend Card
+                        SafeToSpendCard(),
+                        SizedBox(height: AppSpacing.md),
+
+                        // Forecast warning if any
+                        ForecastWarningBanner(),
+
                         // Streak badge (conditional)
                         StreakBadge(),
                         SizedBox(height: AppSpacing.lg),
 
                         // Finance Score
                         FinanceScoreCard(),
+                        SizedBox(height: AppSpacing.lg),
+
+                        // Cash Flow Forecast Mini
+                        ForecastMiniCard(),
                         SizedBox(height: AppSpacing.lg),
 
                         // Quick Stats row

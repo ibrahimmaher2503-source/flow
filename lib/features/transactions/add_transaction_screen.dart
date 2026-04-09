@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/theme/app_colors.dart';
+import '../../l10n/generated/app_localizations.dart';
 import '../../data/models/transaction_model.dart';
 import '../../data/models/category_model.dart';
 import '../../data/models/wallet_model.dart';
@@ -9,8 +10,12 @@ import '../../providers/transaction_provider.dart';
 import '../../providers/category_provider.dart';
 import '../../providers/wallet_provider.dart';
 import '../../providers/settings_provider.dart';
+import '../../providers/tag_provider.dart';
+import '../../providers/envelope_provider.dart';
+import '../../core/utils/currency_formatter.dart';
 import 'widgets/number_pad.dart';
 import 'widgets/category_grid.dart';
+import '../tags/widgets/tag_input_field.dart';
 
 class AddTransactionScreen extends ConsumerStatefulWidget {
   final Transaction? editTransaction;
@@ -30,6 +35,7 @@ class _AddTransactionScreenState extends ConsumerState<AddTransactionScreen> {
   Wallet? _selectedWallet;
   DateTime _date = DateTime.now();
   final _noteController = TextEditingController();
+  List<String> _selectedTags = [];
 
   bool get _showSubcategories =>
       _selectedCategory != null && _selectedCategory!.subcategories.isNotEmpty;
@@ -44,6 +50,7 @@ class _AddTransactionScreenState extends ConsumerState<AddTransactionScreen> {
       _date = t.date;
       _noteController.text = t.note ?? '';
       _selectedSubcategory = t.subcategory;
+      _selectedTags = List.from(t.tags);
       // Load category and wallet objects after frame
       WidgetsBinding.instance.addPostFrameCallback((_) {
         _loadEditData(t);
@@ -71,24 +78,42 @@ class _AddTransactionScreenState extends ConsumerState<AddTransactionScreen> {
   }
 
   Future<void> _save() async {
+    final l10n = AppLocalizations.of(context)!;
     final amount = double.tryParse(_amount);
     if (amount == null || amount <= 0) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('ادخل مبلغ صحيح')),
+        SnackBar(content: Text(l10n.errorInvalidAmount)),
       );
       return;
     }
     if (_selectedCategory == null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('اختار فئة')),
+        SnackBar(content: Text(l10n.errorSelectCategory)),
       );
       return;
     }
     if (_selectedWallet == null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('اختار محفظة')),
+        SnackBar(content: Text(l10n.errorSelectWallet)),
       );
       return;
+    }
+
+    // Check envelope overage for expenses
+    if (_type == TransactionType.expense) {
+      final settings = await ref.read(appSettingsProvider.future);
+      if (settings.envelopeBudgetingEnabled) {
+        final envelopeService = ref.read(envelopeServiceProvider);
+        final overageCheck = await envelopeService.checkOverage(
+          _selectedCategory!.name,
+          amount,
+        );
+
+        if (overageCheck.hasEnvelope && overageCheck.wouldOverspend && mounted) {
+          final proceed = await _showOverageWarning(overageCheck);
+          if (!proceed) return;
+        }
+      }
     }
 
     final repo = ref.read(transactionRepoProvider);
@@ -103,6 +128,7 @@ class _AddTransactionScreenState extends ConsumerState<AddTransactionScreen> {
       ..note = _noteController.text.isEmpty ? null : _noteController.text
       ..date = _date
       ..walletId = _selectedWallet!.id
+      ..tags = _selectedTags
       ..createdAt = widget.editTransaction?.createdAt ?? DateTime.now();
 
     if (widget.editTransaction != null) {
@@ -126,12 +152,138 @@ class _AddTransactionScreenState extends ConsumerState<AddTransactionScreen> {
     final settingsRepo = ref.read(settingsRepoProvider);
     await settingsRepo.updateStreak();
 
+    // Record tag usage
+    if (_selectedTags.isNotEmpty) {
+      final tagService = ref.read(tagServiceProvider);
+      await tagService.recordTagUsage(_selectedTags);
+    }
+
     if (mounted) {
       refreshTransactions(ref);
       refreshWallets(ref);
       refreshSettings(ref);
+      refreshTags(ref);
       Navigator.of(context).pop(true);
     }
+  }
+
+  Future<bool> _showOverageWarning(dynamic overageCheck) async {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
+    final result = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        backgroundColor: isDark ? AppColors.surface : AppColors.lightSurface,
+        icon: Icon(
+          Icons.warning_amber_rounded,
+          color: isDark ? AppColors.warning : AppColors.lightWarning,
+          size: 48,
+        ),
+        title: Text(
+          'تجاوز ميزانية الظرف',
+          style: TextStyle(
+            fontFamily: 'Cairo',
+            color: isDark ? AppColors.textPrimary : AppColors.lightTextPrimary,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'هذه المعاملة ستتجاوز ميزانية ظرف "${overageCheck.envelopeName}"',
+              style: TextStyle(
+                fontFamily: 'Cairo',
+                color: isDark ? AppColors.textSecondary : AppColors.lightTextSecondary,
+              ),
+            ),
+            const SizedBox(height: 16),
+            Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: isDark
+                    ? AppColors.danger.withValues(alpha: 0.1)
+                    : AppColors.lightDanger.withValues(alpha: 0.1),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'المتبقي حالياً',
+                        style: TextStyle(
+                          fontFamily: 'Cairo',
+                          fontSize: 13,
+                          color: isDark ? AppColors.textMuted : AppColors.lightTextMuted,
+                        ),
+                      ),
+                      Text(
+                        CurrencyFormatter.format(overageCheck.currentRemaining),
+                        style: TextStyle(
+                          fontFamily: 'Cairo',
+                          color: isDark ? AppColors.textPrimary : AppColors.lightTextPrimary,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 8),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'بعد المعاملة',
+                        style: TextStyle(
+                          fontFamily: 'Cairo',
+                          fontSize: 13,
+                          color: isDark ? AppColors.textMuted : AppColors.lightTextMuted,
+                        ),
+                      ),
+                      Text(
+                        CurrencyFormatter.format(overageCheck.afterRemaining),
+                        style: TextStyle(
+                          fontFamily: 'Cairo',
+                          color: isDark ? AppColors.danger : AppColors.lightDanger,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: Text(
+              'إلغاء',
+              style: TextStyle(
+                fontFamily: 'Cairo',
+                color: isDark ? AppColors.textMuted : AppColors.lightTextMuted,
+              ),
+            ),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(context, true),
+            child: Text(
+              'استمرار',
+              style: TextStyle(
+                fontFamily: 'Cairo',
+                color: isDark ? AppColors.warning : AppColors.lightWarning,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+
+    return result ?? false;
   }
 
   Future<void> _pickDate() async {
@@ -160,11 +312,12 @@ class _AddTransactionScreenState extends ConsumerState<AddTransactionScreen> {
   @override
   Widget build(BuildContext context) {
     final walletsAsync = ref.watch(walletsProvider);
+    final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
       appBar: AppBar(
         title: Text(
-            widget.editTransaction != null ? 'تعديل معاملة' : 'إضافة معاملة'),
+            widget.editTransaction != null ? l10n.screenEditTransaction : l10n.screenAddTransaction),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
@@ -194,10 +347,10 @@ class _AddTransactionScreenState extends ConsumerState<AddTransactionScreen> {
                               : Colors.transparent,
                           borderRadius: BorderRadius.circular(12),
                         ),
-                        child: const Text(
-                          'مصروف',
+                        child: Text(
+                          l10n.transactionTypeExpense,
                           textAlign: TextAlign.center,
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontFamily: 'Cairo',
                             fontWeight: FontWeight.w600,
                             color: Colors.white,
@@ -221,10 +374,10 @@ class _AddTransactionScreenState extends ConsumerState<AddTransactionScreen> {
                               : Colors.transparent,
                           borderRadius: BorderRadius.circular(12),
                         ),
-                        child: const Text(
-                          'دخل',
+                        child: Text(
+                          l10n.transactionTypeIncome,
                           textAlign: TextAlign.center,
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontFamily: 'Cairo',
                             fontWeight: FontWeight.w600,
                             color: Colors.white,
@@ -259,8 +412,8 @@ class _AddTransactionScreenState extends ConsumerState<AddTransactionScreen> {
                     ),
                   ),
                   Text(
-                    'جنيه مصري',
-                    style: TextStyle(
+                    l10n.transactionCurrency,
+                    style: const TextStyle(
                       fontFamily: 'Cairo',
                       fontSize: 14,
                       color: AppColors.textMuted,
@@ -281,9 +434,9 @@ class _AddTransactionScreenState extends ConsumerState<AddTransactionScreen> {
             const SizedBox(height: 20),
 
             // Category grid
-            const Text(
-              'الفئة',
-              style: TextStyle(
+            Text(
+              l10n.labelCategory,
+              style: const TextStyle(
                 fontFamily: 'Cairo',
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
@@ -345,9 +498,9 @@ class _AddTransactionScreenState extends ConsumerState<AddTransactionScreen> {
             const SizedBox(height: 20),
 
             // Wallet selector
-            const Text(
-              'المحفظة',
-              style: TextStyle(
+            Text(
+              l10n.labelWallet,
+              style: const TextStyle(
                 fontFamily: 'Cairo',
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
@@ -433,11 +586,19 @@ class _AddTransactionScreenState extends ConsumerState<AddTransactionScreen> {
             TextField(
               controller: _noteController,
               style: const TextStyle(fontFamily: 'Cairo', color: Colors.white),
-              decoration: const InputDecoration(
-                hintText: 'ملاحظة (اختياري)',
-                prefixIcon:
-                    Icon(Icons.note, color: AppColors.textMuted, size: 20),
+              decoration: InputDecoration(
+                hintText: l10n.labelNote,
+                prefixIcon: const Icon(Icons.note, color: AppColors.textMuted, size: 20),
               ),
+            ),
+
+            const SizedBox(height: 16),
+
+            // Tags
+            TagInputField(
+              selectedTags: _selectedTags,
+              onTagsChanged: (tags) => setState(() => _selectedTags = tags),
+              category: _selectedCategory?.name,
             ),
 
             const SizedBox(height: 24),
@@ -462,7 +623,7 @@ class _AddTransactionScreenState extends ConsumerState<AddTransactionScreen> {
                     ),
                   ),
                   child: Text(
-                    widget.editTransaction != null ? 'حفظ التعديل' : 'إضافة',
+                    widget.editTransaction != null ? l10n.buttonSaveEdit : l10n.buttonAdd,
                     style: const TextStyle(
                       fontFamily: 'Cairo',
                       fontSize: 18,

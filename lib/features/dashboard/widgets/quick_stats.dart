@@ -5,6 +5,7 @@ import '../../../core/theme/app_spacing.dart';
 import '../../../core/utils/currency_formatter.dart';
 import '../../../providers/stats_provider.dart';
 import '../../../providers/installment_provider.dart';
+import '../../../l10n/generated/app_localizations.dart';
 
 class QuickStats extends ConsumerWidget {
   const QuickStats({super.key});
@@ -15,47 +16,53 @@ class QuickStats extends ConsumerWidget {
     final topCat = ref.watch(topCategoryProvider);
     final interestPaid = ref.watch(totalInterestPaidProvider);
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    final l10n = AppLocalizations.of(context)!;
+
+    // M3 semantic colors for light/dark themes
+    final warningColor = isDark ? AppColors.warning : AppColors.lightWarning;
+    final accentColor = isDark ? AppColors.accent : AppColors.lightAccent;
+    final installmentColor = isDark ? AppColors.installment : AppColors.lightInstallment;
 
     return Row(
       children: [
         Expanded(
           child: _QuickStatCard(
-            label: 'متوسط يومي',
+            label: l10n.dailyAverage,
             value: dailyAvg.when(
               data: (v) => CurrencyFormatter.formatCompact(v),
               loading: () => '...',
               error: (_, __) => '--',
             ),
             icon: Icons.show_chart_rounded,
-            color: AppColors.warning,
+            color: warningColor,
             isDark: isDark,
           ),
         ),
         const SizedBox(width: AppSpacing.sm),
         Expanded(
           child: _QuickStatCard(
-            label: 'أعلى فئة',
+            label: l10n.topCategory,
             value: topCat.when(
-              data: (v) => v ?? 'لا يوجد',
+              data: (v) => v ?? l10n.noData,
               loading: () => '...',
               error: (_, __) => '--',
             ),
             icon: Icons.pie_chart_rounded,
-            color: AppColors.accent,
+            color: accentColor,
             isDark: isDark,
           ),
         ),
         const SizedBox(width: AppSpacing.sm),
         Expanded(
           child: _QuickStatCard(
-            label: 'فوائد مدفوعة',
+            label: l10n.interestPaid,
             value: interestPaid.when(
               data: (v) => CurrencyFormatter.formatCompact(v),
               loading: () => '...',
               error: (_, __) => '--',
             ),
             icon: Icons.percent_rounded,
-            color: AppColors.installment,
+            color: installmentColor,
             isDark: isDark,
           ),
         ),
@@ -120,6 +127,17 @@ class _QuickStatCardState extends State<_QuickStatCard>
 
   @override
   Widget build(BuildContext context) {
+    // For light theme, use surface containers with subtle accent
+    final bgColor = widget.isDark
+        ? widget.color.withValues(alpha: 0.12)
+        : AppColors.lightSurfaceContainerLow;
+    final borderColor = widget.isDark
+        ? widget.color.withValues(alpha: 0.2)
+        : widget.color.withValues(alpha: 0.15);
+    final iconBgColor = widget.isDark
+        ? widget.color.withValues(alpha: 0.2)
+        : widget.color.withValues(alpha: 0.12);
+
     return GestureDetector(
       onTapDown: _onTapDown,
       onTapUp: _onTapUp,
@@ -138,49 +156,28 @@ class _QuickStatCardState extends State<_QuickStatCard>
             horizontal: AppSpacing.sm,
           ),
           decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: widget.isDark
-                  ? [
-                      widget.color.withValues(alpha: 0.15),
-                      widget.color.withValues(alpha: 0.05),
-                    ]
-                  : [
-                      widget.color.withValues(alpha: 0.1),
-                      widget.color.withValues(alpha: 0.03),
-                    ],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-            ),
+            color: bgColor,
             borderRadius: BorderRadius.circular(AppSpacing.radiusLg),
-            border: Border.all(
-              color: widget.color.withValues(
-                alpha: widget.isDark ? 0.2 : 0.15,
-              ),
-            ),
-            boxShadow: [
-              BoxShadow(
-                color: widget.color.withValues(alpha: widget.isDark ? 0.1 : 0.05),
-                blurRadius: 12,
-                offset: const Offset(0, 4),
-              ),
-            ],
+            border: Border.all(color: borderColor, width: 0.5),
+            boxShadow: widget.isDark
+                ? [
+                    BoxShadow(
+                      color: widget.color.withValues(alpha: 0.1),
+                      blurRadius: 16,
+                      offset: const Offset(0, 4),
+                    ),
+                  ]
+                : AppColors.lightShadowSubtle,
           ),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              // Icon with gradient background
+              // Icon with subtle background
               Container(
                 width: 40,
                 height: 40,
                 decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [
-                      widget.color.withValues(alpha: 0.25),
-                      widget.color.withValues(alpha: 0.1),
-                    ],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                  ),
+                  color: iconBgColor,
                   borderRadius: BorderRadius.circular(AppSpacing.radiusMd),
                 ),
                 child: Icon(
@@ -198,7 +195,7 @@ class _QuickStatCardState extends State<_QuickStatCard>
                   fontFamily: 'Cairo',
                   fontSize: 14,
                   fontWeight: FontWeight.w700,
-                  color: widget.color,
+                  color: widget.isDark ? widget.color : AppColors.lightTextPrimary,
                   height: 1.2,
                 ),
                 maxLines: 1,

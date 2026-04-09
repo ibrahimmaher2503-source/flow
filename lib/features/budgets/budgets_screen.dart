@@ -5,6 +5,7 @@ import '../../data/models/budget_model.dart';
 import '../../providers/budget_provider.dart';
 import '../../providers/category_provider.dart';
 import '../../shared/widgets/empty_state.dart';
+import '../../l10n/generated/app_localizations.dart';
 import 'widgets/budget_progress_card.dart';
 
 class BudgetsScreen extends ConsumerWidget {
@@ -14,15 +15,16 @@ class BudgetsScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final budgetsAsync = ref.watch(activeBudgetsProvider);
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
-      appBar: AppBar(title: const Text('الميزانية')),
+      appBar: AppBar(title: Text(l10n.navBudgets)),
       body: budgetsAsync.when(
         data: (budgets) {
           if (budgets.isEmpty) {
-            return const EmptyState(
+            return EmptyState(
               icon: Icons.pie_chart,
-              message: 'مفيش ميزانيات محددة\nحدد ميزانية لكل فئة',
+              message: l10n.emptyBudgets,
             );
           }
           return ListView.builder(
@@ -38,14 +40,14 @@ class BudgetsScreen extends ConsumerWidget {
                       context: context,
                       builder: (ctx) => AlertDialog(
                         backgroundColor: isDark ? AppColors.surface : AppColors.lightSurface,
-                        title: Text('حذف الميزانية؟',
+                        title: Text(l10n.deleteBudget,
                             style: TextStyle(
                                 fontFamily: 'Cairo', color: isDark ? AppColors.textPrimary : AppColors.lightTextPrimary)),
                         actions: [
                           TextButton(
                             onPressed: () => Navigator.pop(ctx, false),
-                            child: const Text('لا',
-                                style: TextStyle(fontFamily: 'Cairo')),
+                            child: Text(l10n.buttonNo,
+                                style: const TextStyle(fontFamily: 'Cairo')),
                           ),
                           TextButton(
                             onPressed: () => Navigator.pop(ctx, true),

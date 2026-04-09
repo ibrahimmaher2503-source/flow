@@ -1,27 +1,28 @@
 import 'package:flutter/material.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_spacing.dart';
+import '../../../l10n/generated/app_localizations.dart';
 
 /// Premium dashboard header with personalized greeting
 class DashboardHeader extends StatelessWidget {
   const DashboardHeader({super.key});
 
-  String _getGreeting() {
+  String _getGreeting(AppLocalizations l10n) {
     final hour = DateTime.now().hour;
-    if (hour < 12) return 'صباح الخير';
-    if (hour < 17) return 'مساء الخير';
-    return 'مساء الخير';
+    if (hour < 12) return l10n.greetingMorning;
+    return l10n.greetingEvening;
   }
 
-  String _getMotivation() {
+  String _getMotivation(AppLocalizations l10n) {
     final hour = DateTime.now().hour;
-    if (hour < 12) return 'يوم جديد، فرصة جديدة للادخار';
-    if (hour < 17) return 'تابع إنجازاتك المالية';
-    return 'راجع مصاريفك اليوم';
+    if (hour < 12) return l10n.motivationMorning;
+    if (hour < 17) return l10n.motivationAfternoon;
+    return l10n.motivationEvening;
   }
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final textColor = isDark ? Colors.white : AppColors.lightTextPrimary;
     final mutedColor = isDark ? AppColors.textSecondary : AppColors.lightTextSecondary;
@@ -66,7 +67,7 @@ class DashboardHeader extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  _getGreeting(),
+                  _getGreeting(l10n),
                   style: TextStyle(
                     fontFamily: 'Cairo',
                     fontSize: 22,
@@ -77,7 +78,7 @@ class DashboardHeader extends StatelessWidget {
                 ),
                 const SizedBox(height: 2),
                 Text(
-                  _getMotivation(),
+                  _getMotivation(l10n),
                   style: TextStyle(
                     fontFamily: 'Cairo',
                     fontSize: 13,

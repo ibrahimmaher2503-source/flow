@@ -54,49 +54,63 @@ class _AppButtonState extends State<AppButton>
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final primaryColor = isDark ? AppColors.primary : AppColors.lightPrimary;
+    final onPrimaryColor = isDark ? Colors.white : AppColors.lightOnPrimary;
     final defaultGradient = isDark ? AppColors.primaryGradient : AppColors.lightPrimaryGradient;
+    final isDisabled = widget.onPressed == null && !widget.isLoading;
+
+    // M3 disabled state colors
+    final disabledBgColor = isDark
+        ? AppColors.surface.withValues(alpha: 0.38)
+        : AppColors.lightSurfaceContainerHighest;
+    final disabledFgColor = isDark
+        ? AppColors.textMuted
+        : AppColors.lightTextDisabled;
 
     return GestureDetector(
-      onTapDown: (_) => _controller.forward(),
-      onTapUp: (_) {
+      onTapDown: isDisabled ? null : (_) => _controller.forward(),
+      onTapUp: isDisabled ? null : (_) {
         _controller.reverse();
         widget.onPressed?.call();
       },
-      onTapCancel: () => _controller.reverse(),
+      onTapCancel: isDisabled ? null : () => _controller.reverse(),
       child: AnimatedBuilder(
         animation: _controller,
         builder: (context, child) => Transform.scale(
           scale: _scaleAnimation.value,
-          child: Container(
-            height: 54,
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 200),
+            height: 56, // M3 standard height
             width: double.infinity,
             decoration: BoxDecoration(
-              gradient: widget.gradient ?? defaultGradient,
-              borderRadius: BorderRadius.circular(16),
-              boxShadow: [
-                // Primary shadow with animated opacity
-                BoxShadow(
-                  color: primaryColor.withValues(alpha: 0.35 * _shadowAnimation.value),
-                  blurRadius: 16 * _shadowAnimation.value,
-                  offset: Offset(0, 6 * _shadowAnimation.value),
-                ),
-                // Secondary ambient shadow for depth
-                if (!isDark)
-                  BoxShadow(
-                    color: primaryColor.withValues(alpha: 0.15 * _shadowAnimation.value),
-                    blurRadius: 24 * _shadowAnimation.value,
-                    offset: Offset(0, 8 * _shadowAnimation.value),
-                    spreadRadius: 2,
-                  ),
-              ],
+              gradient: isDisabled ? null : (widget.gradient ?? defaultGradient),
+              color: isDisabled ? disabledBgColor : null,
+              borderRadius: BorderRadius.circular(20), // M3 full-rounded
+              boxShadow: isDisabled
+                  ? null
+                  : [
+                      // M3 tonal shadow - colored glow
+                      BoxShadow(
+                        color: primaryColor.withValues(alpha: (isDark ? 0.25 : 0.20) * _shadowAnimation.value),
+                        blurRadius: 12 * _shadowAnimation.value,
+                        offset: Offset(0, 4 * _shadowAnimation.value),
+                      ),
+                      // M3 ambient shadow - soft depth
+                      if (!isDark)
+                        BoxShadow(
+                          color: AppColors.lightShadow.withValues(alpha: _shadowAnimation.value),
+                          blurRadius: 24 * _shadowAnimation.value,
+                          offset: Offset(0, 8 * _shadowAnimation.value),
+                          spreadRadius: -4,
+                        ),
+                    ],
             ),
             child: Center(
               child: widget.isLoading
-                  ? const SizedBox(
+                  ? SizedBox(
                       height: 24,
                       width: 24,
                       child: CircularProgressIndicator(
-                        color: Colors.white,
+                        color: isDisabled ? disabledFgColor : onPrimaryColor,
                         strokeWidth: 2.5,
                       ),
                     )
@@ -104,17 +118,21 @@ class _AppButtonState extends State<AppButton>
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         if (widget.icon != null) ...[
-                          Icon(widget.icon, color: Colors.white, size: 20),
+                          Icon(
+                            widget.icon,
+                            color: isDisabled ? disabledFgColor : onPrimaryColor,
+                            size: 20,
+                          ),
                           const SizedBox(width: 8),
                         ],
                         Text(
                           widget.label,
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontFamily: 'Cairo',
-                            fontSize: 17,
-                            fontWeight: FontWeight.w700,
-                            color: Colors.white,
-                            letterSpacing: 0.3,
+                            fontSize: 16, // M3 label large
+                            fontWeight: FontWeight.w500,
+                            color: isDisabled ? disabledFgColor : onPrimaryColor,
+                            letterSpacing: 0.1,
                           ),
                         ),
                       ],

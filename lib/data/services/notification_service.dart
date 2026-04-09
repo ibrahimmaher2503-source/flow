@@ -106,4 +106,71 @@ class NotificationService {
       payload: 'sms:$id', // Payload format for deep linking
     );
   }
+
+  /// Show envelope low balance warning (20% remaining)
+  static Future<void> showEnvelopeLowWarning({
+    required String envelopeName,
+    required double remaining,
+    required double allocated,
+  }) async {
+    final percent = ((remaining / allocated) * 100).round();
+    final remainingStr = remaining.toStringAsFixed(remaining.truncateToDouble() == remaining ? 0 : 2);
+
+    await show(
+      id: 'envelope_low_$envelopeName'.hashCode,
+      title: 'ظرف قارب على النفاد',
+      body: 'ظرف "$envelopeName" فاضل فيه $remainingStr جنيه ($percent%)',
+      payload: 'envelope:low',
+    );
+  }
+
+  /// Show envelope empty warning (0% remaining)
+  static Future<void> showEnvelopeEmptyWarning({
+    required String envelopeName,
+    required double overspent,
+  }) async {
+    final overspentStr = overspent.abs().toStringAsFixed(overspent.abs().truncateToDouble() == overspent.abs() ? 0 : 2);
+
+    String body;
+    if (overspent < 0) {
+      body = 'ظرف "$envelopeName" نفد! تجاوزت بـ $overspentStr جنيه';
+    } else {
+      body = 'ظرف "$envelopeName" نفد! خلاص مفيش رصيد';
+    }
+
+    await show(
+      id: 'envelope_empty_$envelopeName'.hashCode,
+      title: 'ظرف نفد',
+      body: body,
+      payload: 'envelope:empty',
+    );
+  }
+
+  /// Show envelope health summary notification
+  static Future<void> showEnvelopesSummary({
+    required int healthyCount,
+    required int warningCount,
+    required int emptyCount,
+  }) async {
+    if (warningCount == 0 && emptyCount == 0) {
+      await show(
+        id: 'envelope_summary'.hashCode,
+        title: 'حالة الأظرف',
+        body: 'كل الأظرف ($healthyCount) بخير 💚',
+        payload: 'envelope:summary',
+      );
+    } else {
+      final parts = <String>[];
+      if (emptyCount > 0) parts.add('$emptyCount نفدوا');
+      if (warningCount > 0) parts.add('$warningCount قاربين');
+      if (healthyCount > 0) parts.add('$healthyCount بخير');
+
+      await show(
+        id: 'envelope_summary'.hashCode,
+        title: 'حالة الأظرف',
+        body: parts.join(' • '),
+        payload: 'envelope:summary',
+      );
+    }
+  }
 }

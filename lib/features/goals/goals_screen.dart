@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/theme/app_colors.dart';
 import '../../data/models/savings_goal_model.dart';
+import '../../l10n/generated/app_localizations.dart';
 import '../../providers/goal_provider.dart';
 import '../../shared/widgets/empty_state.dart';
 import 'widgets/goal_card.dart';
@@ -11,16 +12,17 @@ class GoalsScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context)!;
     final goalsAsync = ref.watch(activeGoalsProvider);
 
     return Scaffold(
-      appBar: AppBar(title: const Text('أهداف التوفير')),
+      appBar: AppBar(title: Text(l10n.screenGoals)),
       body: goalsAsync.when(
         data: (goals) {
           if (goals.isEmpty) {
-            return const EmptyState(
+            return EmptyState(
               icon: Icons.savings,
-              message: 'مفيش أهداف توفير\nحدد هدف وابدأ ادخر',
+              message: l10n.emptyGoals,
             );
           }
           return ListView.builder(
@@ -51,25 +53,26 @@ class GoalsScreen extends ConsumerWidget {
 
   void _showContributeDialog(
       BuildContext context, WidgetRef ref, SavingsGoal goal) {
+    final l10n = AppLocalizations.of(context)!;
     final controller = TextEditingController();
     final isDark = Theme.of(context).brightness == Brightness.dark;
     showDialog<void>(
       context: context,
       builder: (ctx) => AlertDialog(
         backgroundColor: isDark ? AppColors.surface : AppColors.lightSurface,
-        title: Text('إضافة مبلغ لـ ${goal.name}',
+        title: Text(l10n.addContributionToGoal(goal.name),
             style: TextStyle(fontFamily: 'Cairo', color: isDark ? AppColors.textPrimary : AppColors.lightTextPrimary)),
         content: TextField(
           controller: controller,
           keyboardType: TextInputType.number,
           style: TextStyle(fontFamily: 'Cairo', color: isDark ? AppColors.textPrimary : AppColors.lightTextPrimary),
-          decoration: const InputDecoration(hintText: 'المبلغ'),
+          decoration: InputDecoration(hintText: l10n.labelAmount),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx),
-            child: const Text('إلغاء',
-                style: TextStyle(fontFamily: 'Cairo')),
+            child: Text(l10n.buttonCancel,
+                style: const TextStyle(fontFamily: 'Cairo')),
           ),
           TextButton(
             onPressed: () async {
@@ -81,8 +84,8 @@ class GoalsScreen extends ConsumerWidget {
               refreshGoals(ref);
               if (ctx.mounted) Navigator.pop(ctx);
             },
-            child: const Text('إضافة',
-                style: TextStyle(
+            child: Text(l10n.buttonAdd,
+                style: const TextStyle(
                     fontFamily: 'Cairo', color: AppColors.primary)),
           ),
         ],
@@ -91,6 +94,7 @@ class GoalsScreen extends ConsumerWidget {
   }
 
   void _showAddGoalDialog(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context)!;
     final nameController = TextEditingController();
     final targetController = TextEditingController();
     final isDark = Theme.of(context).brightness == Brightness.dark;
@@ -99,7 +103,7 @@ class GoalsScreen extends ConsumerWidget {
       context: context,
       builder: (ctx) => AlertDialog(
         backgroundColor: isDark ? AppColors.surface : AppColors.lightSurface,
-        title: Text('هدف توفير جديد',
+        title: Text(l10n.addNewGoal,
             style: TextStyle(fontFamily: 'Cairo', color: isDark ? AppColors.textPrimary : AppColors.lightTextPrimary)),
         content: Column(
           mainAxisSize: MainAxisSize.min,
@@ -108,7 +112,7 @@ class GoalsScreen extends ConsumerWidget {
               controller: nameController,
               style:
                   TextStyle(fontFamily: 'Cairo', color: isDark ? AppColors.textPrimary : AppColors.lightTextPrimary),
-              decoration: const InputDecoration(hintText: 'اسم الهدف'),
+              decoration: InputDecoration(hintText: l10n.goalName),
             ),
             const SizedBox(height: 8),
             TextField(
@@ -116,16 +120,15 @@ class GoalsScreen extends ConsumerWidget {
               keyboardType: TextInputType.number,
               style:
                   TextStyle(fontFamily: 'Cairo', color: isDark ? AppColors.textPrimary : AppColors.lightTextPrimary),
-              decoration:
-                  const InputDecoration(hintText: 'المبلغ المطلوب'),
+              decoration: InputDecoration(hintText: l10n.goalTarget),
             ),
           ],
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx),
-            child: const Text('إلغاء',
-                style: TextStyle(fontFamily: 'Cairo')),
+            child: Text(l10n.buttonCancel,
+                style: const TextStyle(fontFamily: 'Cairo')),
           ),
           TextButton(
             onPressed: () async {
@@ -139,8 +142,8 @@ class GoalsScreen extends ConsumerWidget {
               refreshGoals(ref);
               if (ctx.mounted) Navigator.pop(ctx);
             },
-            child: const Text('إضافة',
-                style: TextStyle(
+            child: Text(l10n.buttonAdd,
+                style: const TextStyle(
                     fontFamily: 'Cairo', color: AppColors.primary)),
           ),
         ],

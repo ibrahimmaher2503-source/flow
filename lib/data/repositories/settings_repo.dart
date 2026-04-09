@@ -59,4 +59,21 @@ class SettingsRepo {
       }
     });
   }
+
+  /// Get the user's current language preference
+  Future<String> getLanguage() async {
+    final settings = await isar.appSettings.get(0);
+    return settings?.language ?? 'ar';
+  }
+
+  /// Update the user's language preference
+  /// [langCode] must be one of: 'ar', 'en'
+  Future<void> setLanguage(String langCode) async {
+    assert(langCode == 'ar' || langCode == 'en');
+    await isar.writeTxn(() async {
+      final settings = await isar.appSettings.get(0) ?? AppSettings();
+      settings.language = langCode;
+      await isar.appSettings.put(settings);
+    });
+  }
 }

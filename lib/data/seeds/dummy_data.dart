@@ -4,6 +4,7 @@ import '../models/wallet_model.dart';
 import '../models/budget_model.dart';
 import '../models/savings_goal_model.dart';
 import '../models/recurring_transaction_model.dart';
+import '../models/installment_plan_model.dart';
 import '../../core/constants/app_constants.dart';
 
 class DummyData {
@@ -231,5 +232,134 @@ class DummyData {
       ..startDate = DateTime.now().subtract(Duration(days: 30))
       ..isActive = true
       ..nextDueDate = DateTime.now().add(Duration(days: 20)),
+  ];
+
+  /// Sample installment plans for testing
+  static List<InstallmentPlan> get dummyInstallments => [
+    // Active iPhone installment - سهولة (provider 1)
+    InstallmentPlan()
+      ..itemName = 'آيفون 15 برو ماكس'
+      ..category = 'إلكترونيات'
+      ..providerId = 1
+      ..originalPrice = 55000.00
+      ..totalWithInterest = 61600.00
+      ..totalInstallments = 12
+      ..monthlyAmount = 5133.33
+      ..firstPaymentDate = DateTime.now().subtract(Duration(days: 90))
+      ..dayOfMonth = 15
+      ..paidInstallments = 3
+      ..paidAmount = 15400.00
+      ..status = 'active'
+      ..walletId = 2
+      ..autoAdd = true
+      ..createdAt = DateTime.now().subtract(Duration(days: 95)),
+
+    // Active laptop installment - فاليو (provider 2)
+    InstallmentPlan()
+      ..itemName = 'لابتوب ماك بوك برو'
+      ..category = 'إلكترونيات'
+      ..providerId = 2
+      ..originalPrice = 75000.00
+      ..totalWithInterest = 82500.00
+      ..totalInstallments = 18
+      ..monthlyAmount = 4583.33
+      ..firstPaymentDate = DateTime.now().subtract(Duration(days: 60))
+      ..dayOfMonth = 1
+      ..paidInstallments = 2
+      ..paidAmount = 9166.66
+      ..status = 'active'
+      ..walletId = 2
+      ..autoAdd = false
+      ..createdAt = DateTime.now().subtract(Duration(days: 65)),
+
+    // Active furniture installment - كونتكت (provider 3)
+    InstallmentPlan()
+      ..itemName = 'أثاث غرفة النوم'
+      ..category = 'أثاث ومنزل'
+      ..providerId = 3
+      ..originalPrice = 35000.00
+      ..totalWithInterest = 38500.00
+      ..totalInstallments = 10
+      ..monthlyAmount = 3850.00
+      ..firstPaymentDate = DateTime.now().subtract(Duration(days: 150))
+      ..dayOfMonth = 20
+      ..paidInstallments = 5
+      ..paidAmount = 19250.00
+      ..status = 'active'
+      ..walletId = 1
+      ..autoAdd = true
+      ..createdAt = DateTime.now().subtract(Duration(days: 155)),
+
+    // Active AC installment - بريميم (provider 4)
+    InstallmentPlan()
+      ..itemName = 'تكييف سبليت 2.25 حصان'
+      ..category = 'أجهزة منزلية'
+      ..providerId = 4
+      ..originalPrice = 28000.00
+      ..totalWithInterest = 30800.00
+      ..totalInstallments = 6
+      ..monthlyAmount = 5133.33
+      ..firstPaymentDate = DateTime.now().subtract(Duration(days: 30))
+      ..dayOfMonth = 10
+      ..paidInstallments = 1
+      ..paidAmount = 5133.33
+      ..status = 'active'
+      ..walletId = 2
+      ..autoAdd = false
+      ..createdAt = DateTime.now().subtract(Duration(days: 35)),
+
+    // Overdue installment - أمان (provider 5)
+    InstallmentPlan()
+      ..itemName = 'جوال سامسونج S24'
+      ..category = 'إلكترونيات'
+      ..providerId = 5
+      ..originalPrice = 42000.00
+      ..totalWithInterest = 46200.00
+      ..totalInstallments = 12
+      ..monthlyAmount = 3850.00
+      ..firstPaymentDate = DateTime.now().subtract(Duration(days: 120))
+      ..dayOfMonth = 5
+      ..paidInstallments = 3
+      ..paidAmount = 11550.00
+      ..status = 'overdue'
+      ..walletId = 1
+      ..autoAdd = false
+      ..createdAt = DateTime.now().subtract(Duration(days: 125)),
+
+    // Completed installment - كريدت كارد (provider 6)
+    InstallmentPlan()
+      ..itemName = 'غسالة أوتوماتيك'
+      ..category = 'أجهزة منزلية'
+      ..providerId = 6
+      ..originalPrice = 15000.00
+      ..totalWithInterest = 16500.00
+      ..totalInstallments = 6
+      ..monthlyAmount = 2750.00
+      ..firstPaymentDate = DateTime.now().subtract(Duration(days: 200))
+      ..dayOfMonth = 25
+      ..paidInstallments = 6
+      ..paidAmount = 16500.00
+      ..status = 'completed'
+      ..walletId = 2
+      ..autoAdd = true
+      ..createdAt = DateTime.now().subtract(Duration(days: 210)),
+
+    // Completed installment - سهولة (provider 1)
+    InstallmentPlan()
+      ..itemName = 'سماعات AirPods Pro'
+      ..category = 'إلكترونيات'
+      ..providerId = 1
+      ..originalPrice = 8000.00
+      ..totalWithInterest = 8800.00
+      ..totalInstallments = 4
+      ..monthlyAmount = 2200.00
+      ..firstPaymentDate = DateTime.now().subtract(Duration(days: 150))
+      ..dayOfMonth = 15
+      ..paidInstallments = 4
+      ..paidAmount = 8800.00
+      ..status = 'completed'
+      ..walletId = 1
+      ..autoAdd = false
+      ..createdAt = DateTime.now().subtract(Duration(days: 155)),
   ];
 }

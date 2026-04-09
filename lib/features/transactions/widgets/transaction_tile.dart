@@ -5,6 +5,7 @@ import '../../../core/utils/extensions.dart';
 import '../../../core/utils/icon_resolver.dart';
 import '../../../core/utils/currency_formatter.dart';
 import '../../../data/models/transaction_model.dart';
+import '../../tags/widgets/tag_chip.dart';
 
 class TransactionTile extends StatelessWidget {
   final Transaction transaction;
@@ -133,6 +134,14 @@ class TransactionTile extends StatelessWidget {
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),
+                    if (transaction.tags.isNotEmpty) ...[
+                      const SizedBox(height: 4),
+                      TagChipRow(
+                        tags: transaction.tags,
+                        maxVisible: 2,
+                        compact: true,
+                      ),
+                    ],
                   ],
                 ),
               ),

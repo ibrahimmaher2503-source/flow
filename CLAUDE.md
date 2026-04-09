@@ -95,15 +95,3 @@ Simple named-route system in `lib/core/router/app_router.dart`. The app shell (`
 ### Installments
 
 `InstallmentService` handles payment recording and debt calculations. `InstallmentCalculator` (in `lib/core/utils/`) computes schedules. Avoid N+1 queries — batch-fetch providers as done in `debtByProvider()`.
-
-
-- Get crash logs: `adb logcat -d -s AndroidRuntime:E Flutter:E`
-- Clear logs: `adb logcat -c`
-- Filter by package: `adb logcat -d | grep "com.yourapp"`
-
-## Android Emulator Debug
-- Screenshot: use mobile-mcp `take_screenshot`
-- Logcat errors: `adb logcat -d *:E | head -50`
-- Flutter errors: `adb logcat -d | grep -E "Flutter|Exception|Error"`
-- Hot reload after fix: `flutter hot-reload` or press `r` in terminal
-- Device: 
